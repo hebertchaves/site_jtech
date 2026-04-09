@@ -94,19 +94,7 @@ export function ScrollToTop({ showThreshold = 100 }: ScrollToTopProps) {
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-            />
-            
-            {/* Seta para cima (aparece no hover) */}
-            <motion.path
-              d="M12 20L12 14M12 14L9 17M12 14L15 17"
-              stroke="#E30613"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              initial={{ opacity: 0 }}
-              whileHover={{ opacity: 1 }}
-              transition={{ duration: 0.2 }}
-            />
+            />       
           </svg>
           
           {/* Texto de hint (opcional) */}

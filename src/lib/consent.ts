@@ -42,3 +42,19 @@ export function hasConsent(category: ConsentCategory): boolean {
 export function shouldShowConsentBanner(): boolean {
   return getConsentPreferences() === null
 }
+
+export function hasConsentDecision(): boolean {
+  return getConsentPreferences() !== null
+}
+
+export function acceptAllConsent(): void {
+  saveConsentPreferences({ necessary: true, analytics: true, marketing: true })
+}
+
+export function rejectAllConsent(): void {
+  saveConsentPreferences({ necessary: true, analytics: false, marketing: false })
+}
+
+export function setConsentPreferences(prefs: { analytics: boolean; marketing: boolean }): void {
+  saveConsentPreferences({ necessary: true, ...prefs })
+}

@@ -40,3 +40,7 @@ export function pushDataLayer(event: Record<string, unknown>): void {
   window.dataLayer = window.dataLayer || []
   window.dataLayer.push(event)
 }
+
+export function pushToDataLayer(event: string, data?: Record<string, unknown>): void {
+  pushDataLayer({ event, ...data })
+}

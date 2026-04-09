@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { ArrowRight, ChevronLeft, ChevronRight, Lightbulb, Users, Heart, Shield, Leaf } from "lucide-react"
-import { Lang, t } from "../lib/i18n"
+import { Lang, t, buildPath } from "../lib/i18n"
 import { PreWhatsAppModal } from "../components/forms/PreWhatsAppModal"
 import { Container } from "../components/layout/Container"
 import { Button } from "../components/ui/button"
@@ -877,7 +877,7 @@ export default function HomePage({ lang }: HomePageProps) {
               <div 
                 key={idx} 
                 className="rounded-lg overflow-hidden hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02]"
-                onClick={() => (window.location.hash = `#/${lang}/conteudo/${post.slug}`)}
+                onClick={() => (window.location.hash = buildPath(lang, getRoute("post", lang, { slug: post.slug })))}
               >
                 <ImageWithFallback
                   src={post.image}
@@ -908,7 +908,7 @@ export default function HomePage({ lang }: HomePageProps) {
             <Button
               size="lg"
               className="bg-[#E30613] hover:bg-[#C10511]"
-              onClick={() => (window.location.hash = `#/${lang}/conteudo`)}
+              onClick={() => (window.location.hash = buildPath(lang, getRoute("content", lang)))}
             >
               {t(lang, "home.content.cta")}
             </Button>

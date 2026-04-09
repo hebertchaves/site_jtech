@@ -24,6 +24,18 @@
     margin: 0;
     padding: 0;
   }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold leading-tight;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl font-bold leading-tight text-gray-600;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl font-semibold leading-snug;
+  }
 }
 
 @layer components {

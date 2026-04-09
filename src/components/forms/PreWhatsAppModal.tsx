@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Dialog, DialogHeader, DialogBody } from "../ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogBody } from "../ui/dialog"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import { Button } from "../ui/button"
@@ -41,13 +41,13 @@ export function PreWhatsAppModal({ open, onClose, lang }: PreWhatsAppModalProps)
   }
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogHeader
-        title={t(lang, "prewhatsapp.title")}
-        subtitle={t(lang, "prewhatsapp.subtitle")}
-        onClose={onClose}
-      />
-      <DialogBody>
+    <Dialog open={open} onOpenChange={(o) => { if (!o) onClose() }}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{t(lang, "prewhatsapp.title")}</DialogTitle>
+          <DialogDescription>{t(lang, "prewhatsapp.subtitle")}</DialogDescription>
+        </DialogHeader>
+        <DialogBody>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="name">{t(lang, "prewhatsapp.name")} *</Label>
@@ -113,7 +113,8 @@ export function PreWhatsAppModal({ open, onClose, lang }: PreWhatsAppModalProps)
             </Button>
           </div>
         </form>
-      </DialogBody>
+        </DialogBody>
+      </DialogContent>
     </Dialog>
   )
 }

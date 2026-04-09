@@ -128,3 +128,13 @@ async function submitMock(payload: LeadPayload): Promise<{ success: boolean; err
   console.log("Lead submitted (MOCK):", payload)
   return { success: true }
 }
+
+export async function submitPreWhatsAppLead(
+  data: Omit<LeadInput, "form_type" | "form_name"> & { source?: string },
+  lang: Lang = "pt"
+): Promise<{ success: boolean; error?: string }> {
+  return submitLead(
+    { ...data, form_type: "pre_whatsapp", form_name: data.source ?? "pre-whatsapp" },
+    lang
+  )
+}

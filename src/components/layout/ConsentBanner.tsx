@@ -1,139 +1,195 @@
 import { useState, useEffect } from "react"
-import { Lang } from "../../lib/i18n"
-import { LGPD_TEXTS } from "../../lib/lgpd"
+import { X } from "lucide-react"
+import { Lang, t } from "../../lib/i18n"
 import {
-  hasConsentDecision,
-  acceptAllConsent,
-  rejectAllConsent,
-  setConsentPreferences,
+  shouldShowConsentBanner,
+  saveConsentPreferences,
+  ConsentPreferences,
 } from "../../lib/consent"
-import { getRoute } from "../../lib/routes"
-import { buildPath } from "../../lib/i18n"
+import { Button } from "../ui/button"
+import { Checkbox } from "../ui/checkbox"
+import { Label } from "../ui/label"
 
 interface ConsentBannerProps {
   lang: Lang
 }
 
 export function ConsentBanner({ lang }: ConsentBannerProps) {
-  const [visible, setVisible] = useState(false)
-  const [showCustomize, setShowCustomize] = useState(false)
-  const [analytics, setAnalytics] = useState(true)
-  const [marketing, setMarketing] = useState(true)
-
-  const texts = LGPD_TEXTS[lang] || LGPD_TEXTS.pt
+  const [show, setShow] = useState(false)
+  const [showDetails, setShowDetails] = useState(false)
+  const [preferences, setPreferences] = useState<ConsentPreferences>({
+    necessary: true,
+    analytics: false,
+    marketing: false,
+  })
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!hasConsentDecision()) {
-        setVisible(true)
-      }
-    }, 1000)
-    return () => clearTimeout(timer)
+    setShow(shouldShowConsentBanner())
   }, [])
 
-  if (!visible) return null
+  if (!show) return null
 
   const handleAcceptAll = () => {
-    acceptAllConsent()
-    setVisible(false)
+    const allConsent: ConsentPreferences = {
+      necessary: true,
+      analytics: true,
+      marketing: true,
+    }
+    saveConsentPreferences(allConsent)
+    setShow(false)
   }
 
   const handleRejectAll = () => {
-    rejectAllConsent()
-    setVisible(false)
+    const minimalConsent: ConsentPreferences = {
+      necessary: true,
+      analytics: false,
+      marketing: false,
+    }
+    saveConsentPreferences(minimalConsent)
+    setShow(false)
   }
 
   const handleSavePreferences = () => {
-    setConsentPreferences({ analytics, marketing })
-    setVisible(false)
+    saveConsentPreferences(preferences)
+    setShow(false)
   }
 
+  const consentText = {
+    pt: {
+      title: "Privacidade e Cookies",
+      description:
+        "Usamos cookies para melhorar sua experiência, analisar o tráfego e personalizar conteúdo. Você pode gerenciar suas preferências abaixo.",
+      necessary: "Necessários",
+      necessaryDesc: "Essenciais para o funcionamento do site",
+      analytics: "Analíticos",
+      analyticsDesc: "Nos ajudam a entender como você usa o site",
+      marketing: "Marketing",
+      marketingDesc: "Utilizados para mostrar anúncios relevantes",
+      acceptAll: "Aceitar Todos",
+      rejectAll: "Rejeitar Todos",
+      customize: "Personalizar",
+      save: "Salvar Preferências",
+    },
+    es: {
+      title: "Privacidad y Cookies",
+      description:
+        "Usamos cookies para mejorar su experiencia, analizar el tráfico y personalizar contenido. Puede gestionar sus preferencias abajo.",
+      necessary: "Necesarias",
+      necessaryDesc: "Esenciales para el funcionamiento del sitio",
+      analytics: "Analíticas",
+      analyticsDesc: "Nos ayudan a entender cómo usa el sitio",
+      marketing: "Marketing",
+      marketingDesc: "Utilizadas para mostrar anuncios relevantes",
+      acceptAll: "Aceptar Todas",
+      rejectAll: "Rechazar Todas",
+      customize: "Personalizar",
+      save: "Guardar Preferencias",
+    },
+    en: {
+      title: "Privacy and Cookies",
+      description:
+        "We use cookies to improve your experience, analyze traffic and personalize content. You can manage your preferences below.",
+      necessary: "Necessary",
+      necessaryDesc: "Essential for the site to function",
+      analytics: "Analytics",
+      analyticsDesc: "Help us understand how you use the site",
+      marketing: "Marketing",
+      marketingDesc: "Used to show relevant ads",
+      acceptAll: "Accept All",
+      rejectAll: "Reject All",
+      customize: "Customize",
+      save: "Save Preferences",
+    },
+    fr: {
+      title: "Confidentialité et Cookies",
+      description:
+        "Nous utilisons des cookies pour améliorer votre expérience, analyser le trafic et personnaliser le contenu. Vous pouvez gérer vos préférences ci-dessous.",
+      necessary: "Nécessaires",
+      necessaryDesc: "Essentiels au fonctionnement du site",
+      analytics: "Analytiques",
+      analyticsDesc: "Nous aident à comprendre comment vous utilisez le site",
+      marketing: "Marketing",
+      marketingDesc: "Utilisés pour afficher des publicités pertinentes",
+      acceptAll: "Accepter Tout",
+      rejectAll: "Rejeter Tout",
+      customize: "Personnaliser",
+      save: "Enregistrer les Préférences",
+    },
+  }
+
+  const text = consentText[lang]
+
   return (
-    <div
-      className="fixed bottom-0 left-0 right-0 z-50 bg-[#0B0B0B] text-white shadow-2xl"
-      role="dialog"
-      aria-label="Consentimento de cookies"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        {!showCustomize ? (
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-            <div className="flex-1">
-              <p className="font-semibold mb-1">{texts.title}</p>
-              <p className="text-sm text-white/70 leading-relaxed">{texts.description}{" "}
-                <a
-                  href={buildPath(lang, getRoute("privacy", lang))}
-                  className="text-[#E30613] hover:underline"
-                >
-                  {texts.privacyLink}
-                </a>
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2 flex-shrink-0">
-              <button
-                onClick={() => setShowCustomize(true)}
-                className="px-4 py-2 text-sm border border-white/30 rounded hover:bg-white/10 transition-colors"
-              >
-                {texts.customize}
-              </button>
-              <button
-                onClick={handleRejectAll}
-                className="px-4 py-2 text-sm border border-white/30 rounded hover:bg-white/10 transition-colors"
-              >
-                {texts.rejectAll}
-              </button>
-              <button
-                onClick={handleAcceptAll}
-                className="px-4 py-2 text-sm bg-[#E30613] hover:bg-[#C10511] rounded font-semibold transition-colors"
-              >
-                {texts.acceptAll}
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <p className="font-semibold">{texts.customize}</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={analytics}
-                  onChange={(e) => setAnalytics(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded"
-                />
-                <div>
-                  <p className="font-medium text-sm">{texts.analytics}</p>
-                  <p className="text-xs text-white/60">{texts.analyticsDesc}</p>
+    <div className="fixed bottom-0 left-0 right-0 z-[9998] bg-white border-t border-gray-200 shadow-lg">
+      <div className="max-w-7xl mx-auto p-6">
+        <button
+          onClick={handleRejectAll}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+          aria-label="Close"
+        >
+          <X className="h-5 w-5" />
+        </button>
+
+        <div className="pr-12">
+          <h3 className="text-lg mb-2">{text.title}</h3>
+          <p className="text-sm text-gray-600 mb-4">{text.description}</p>
+
+          {showDetails && (
+            <div className="space-y-4 mb-4 p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3">
+                <Checkbox checked disabled />
+                <div className="flex-1">
+                  <Label>{text.necessary}</Label>
+                  <p className="text-xs text-gray-600">{text.necessaryDesc}</p>
                 </div>
-              </label>
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={marketing}
-                  onChange={(e) => setMarketing(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded"
+              </div>
+
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  checked={preferences.analytics}
+                  onCheckedChange={(checked) =>
+                    setPreferences({ ...preferences, analytics: checked as boolean })
+                  }
                 />
-                <div>
-                  <p className="font-medium text-sm">{texts.marketing}</p>
-                  <p className="text-xs text-white/60">{texts.marketingDesc}</p>
+                <div className="flex-1">
+                  <Label>{text.analytics}</Label>
+                  <p className="text-xs text-gray-600">{text.analyticsDesc}</p>
                 </div>
-              </label>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  checked={preferences.marketing}
+                  onCheckedChange={(checked) =>
+                    setPreferences({ ...preferences, marketing: checked as boolean })
+                  }
+                />
+                <div className="flex-1">
+                  <Label>{text.marketing}</Label>
+                  <p className="text-xs text-gray-600">{text.marketingDesc}</p>
+                </div>
+              </div>
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setShowCustomize(false)}
-                className="px-4 py-2 text-sm border border-white/30 rounded hover:bg-white/10 transition-colors"
-              >
-                {LGPD_TEXTS.pt.rejectAll}
-              </button>
-              <button
-                onClick={handleSavePreferences}
-                className="px-4 py-2 text-sm bg-[#E30613] hover:bg-[#C10511] rounded font-semibold transition-colors"
-              >
-                {texts.save}
-              </button>
-            </div>
+          )}
+
+          <div className="flex flex-wrap gap-3">
+            <Button onClick={handleAcceptAll} variant="default">
+              {text.acceptAll}
+            </Button>
+            <Button onClick={handleRejectAll} variant="outline">
+              {text.rejectAll}
+            </Button>
+            {!showDetails ? (
+              <Button onClick={() => setShowDetails(true)} variant="ghost">
+                {text.customize}
+              </Button>
+            ) : (
+              <Button onClick={handleSavePreferences} variant="dark">
+                {text.save}
+              </Button>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   )

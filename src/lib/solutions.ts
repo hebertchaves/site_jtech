@@ -28,6 +28,10 @@ export function getSolutionBySlug(slug: string): Solution | undefined {
   return SOLUTIONS.find((s) => s.slug === slug)
 }
 
+export function isProduct(solution: Solution): boolean {
+  return solution.category === "product"
+}
+
 export function getProductsForLang(lang: Lang) {
   return [
     { name: "Sansys Pay", slug: "sansys-pay" },

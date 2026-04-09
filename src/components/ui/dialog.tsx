@@ -5,10 +5,11 @@ import { cn } from "../../lib/utils"
 interface DialogProps {
   open?: boolean
   onOpenChange?: (open: boolean) => void
+  onClose?: () => void
   children: React.ReactNode
 }
 
-const Dialog = ({ open, onOpenChange, children }: DialogProps) => {
+const Dialog = ({ open, onOpenChange, onClose, children }: DialogProps) => {
   const [isOpen, setIsOpen] = React.useState(open ?? false)
 
   React.useEffect(() => {
@@ -20,6 +21,7 @@ const Dialog = ({ open, onOpenChange, children }: DialogProps) => {
   const handleOpenChange = (newOpen: boolean) => {
     setIsOpen(newOpen)
     onOpenChange?.(newOpen)
+    if (!newOpen) onClose?.()
   }
 
   return (
@@ -96,14 +98,34 @@ const DialogContent = React.forwardRef<
 })
 DialogContent.displayName = "DialogContent"
 
-const DialogHeader = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+interface DialogHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+  title?: string
+  subtitle?: string
+  onClose?: () => void
+}
+
+const DialogHeader = ({ className, title, subtitle, onClose, children, ...props }: DialogHeaderProps) => (
   <div
     className={cn("flex flex-col space-y-1.5 text-center sm:text-left mb-4", className)}
     {...props}
-  />
+  >
+    {(title || onClose) && (
+      <div className="flex items-start justify-between gap-4">
+        {title && <h2 className="text-lg font-semibold leading-none tracking-tight">{title}</h2>}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="ml-auto rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-[#E30613] focus:ring-offset-2"
+            aria-label="Fechar"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
+      </div>
+    )}
+    {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
+    {children}
+  </div>
 )
 DialogHeader.displayName = "DialogHeader"
 
@@ -131,6 +153,14 @@ const DialogDescription = React.forwardRef<
 ))
 DialogDescription.displayName = "DialogDescription"
 
+const DialogBody = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn("py-2", className)} {...props} />
+)
+DialogBody.displayName = "DialogBody"
+
 export {
   Dialog,
   DialogTrigger,
@@ -138,4 +168,5 @@ export {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogBody,
 }

@@ -20,3 +20,5 @@ export function getContentProvider(): ContentProvider {
   console.log('[getContentProvider] Using MockContentProvider')
   return new MockContentProvider()
 }
+
+export const contentProvider = getContentProvider()

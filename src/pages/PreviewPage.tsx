@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { getCurrentLangFromHash } from "../lib/i18n"
+import { getCurrentLangFromHash, buildPath } from "../lib/i18n"
+import { getRoute } from "../lib/routes"
 
 /**
  * PreviewPage - Handles preview token and creates HttpOnly cookie session
@@ -26,7 +27,7 @@ export function PreviewPage() {
     
     if (!queryString) {
       console.error('Preview: Missing query params')
-      window.location.hash = `#/${lang}/conteudo`
+      window.location.hash = buildPath(lang, getRoute("content", lang))
       return
     }
 
@@ -40,7 +41,7 @@ export function PreviewPage() {
 
     if (!token || !slug) {
       console.error('Preview: Missing token or slug')
-      window.location.hash = `#/${lang}/conteudo`
+      window.location.hash = buildPath(lang, getRoute("content", lang))
       return
     }
 
@@ -82,9 +83,9 @@ export function PreviewPage() {
         setIsLoading(false)
         
         if (contentType === 'ebook') {
-          window.location.hash = `#/${lang}/ebooks/${slug}`
+          window.location.hash = buildPath(lang, getRoute("ebookDetail", lang, { slug }))
         } else {
-          window.location.hash = `#/${lang}/conteudo/${slug}`
+          window.location.hash = buildPath(lang, getRoute("post", lang, { slug }))
         }
       })
       .catch((err) => {
@@ -106,7 +107,7 @@ export function PreviewPage() {
           <h2 className="text-xl mb-2">Erro no Preview</h2>
           <p className="text-gray-600 mb-4">{error}</p>
           <button
-            onClick={() => window.location.hash = '#/pt/conteudo'}
+            onClick={() => { const l = getCurrentLangFromHash(); window.location.hash = buildPath(l, getRoute("content", l)) }}
             className="px-4 py-2 bg-jtech-red text-white rounded hover:bg-red-700"
           >
             Voltar para Blog

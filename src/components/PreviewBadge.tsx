@@ -1,5 +1,6 @@
 import { X, Eye } from "lucide-react"
-import { getCurrentLangFromHash } from "../lib/i18n"
+import { getCurrentLangFromHash, buildPath } from "../lib/i18n"
+import { getRoute } from "../lib/routes"
 import { getContentProvider } from "../providers"
 
 interface PreviewBadgeProps {
@@ -24,7 +25,7 @@ export function PreviewBadge({ className = "" }: PreviewBadgeProps) {
 
     // Get current lang and redirect to content listing
     const lang = getCurrentLangFromHash()
-    window.location.hash = `#/${lang}/conteudo`
+    window.location.hash = buildPath(lang, getRoute("content", lang))
     
     // Force reload to fetch published version
     window.location.reload()

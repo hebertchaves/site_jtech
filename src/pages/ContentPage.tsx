@@ -121,7 +121,7 @@ export function ContentPage({ lang }: ContentPageProps) {
   const videos = [
     { thumbnail: "https://conteudo.sansys.app/site/img/jtech-conteudo-tecnologia.webp", videoUrl: "https://www.youtube.com/live/kU9Ug3t9thE" },
     { thumbnail: "https://conteudo.sansys.app/site/img/jtech-conteudo-corporativo.webp", videoUrl: "https://www.youtube.com/watch?v=euZ3-0wLFDY&t=1s" },
-    { thumbnail: "https://conteudo.sansys.app/site/img/jtech-conteudo-colaboração.webp", videoUrl: "https://mail.google.com/mail/u/0/#chat/dm/6jpqNsAAAAE" },
+    { thumbnail: "https://conteudo.sansys.app/site/img/jtech-conteudo-colaboração.webp", videoUrl: "https://www.youtube.com/watch?v=Yh8swdfkOIY" },
   ]
 
   // Funções de navegação
