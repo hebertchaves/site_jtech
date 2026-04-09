@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --jtech-black: #0B0B0B;
+    --jtech-red: #E30613;
+    --jtech-red-dark: #C10511;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Archivo', sans-serif;
+    background-color: #ffffff;
+    color: #0B0B0B;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@layer components {
+  .container-jtech {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn-primary {
+    @apply bg-[#E30613] hover:bg-[#C10511] text-white font-semibold py-3 px-6 rounded transition-colors duration-200;
+  }
+
+  .btn-outline {
+    @apply border-2 border-[#E30613] text-[#E30613] hover:bg-[#E30613] hover:text-white font-semibold py-3 px-6 rounded transition-colors duration-200;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-[#0B0B0B] mb-4;
+  }
+
+  .section-subtitle {
+    @apply text-lg text-gray-600 mb-8;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Carousel smooth transition */
+  .carousel-track {
+    will-change: transform;
+  }
+}
+
+/* Custom focus styles */
+*:focus-visible {
+  outline: 2px solid #E30613;
+  outline-offset: 2px;
+}
+
+/* Smooth page transitions */
+main > * {
+  animation: fadeInPage 0.2s ease-in-out;
+}
+
+@keyframes fadeInPage {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
