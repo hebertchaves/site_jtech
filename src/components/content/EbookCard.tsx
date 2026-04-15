@@ -34,7 +34,7 @@ export function EbookCard({ ebook, lang }: EbookCardProps) {
             {ebook.pages} {t(lang, "ebooks.pages")}
           </p>
         )}
-        <h3 className="font-bold text-[#0B0B0B] text-base leading-snug mb-2 line-clamp-3 flex-1">
+        <h3 className="font-bold text-gray-600 text-base leading-snug mb-2 line-clamp-3 flex-1">
           {ebook.title}
         </h3>
         <a

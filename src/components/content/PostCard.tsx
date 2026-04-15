@@ -34,7 +34,7 @@ export function PostCard({ post, lang }: PostCardProps) {
         </div>
       </div>
       <div className="p-5 flex flex-col flex-1">
-        <h3 className="font-bold text-[#0B0B0B] text-lg leading-snug mb-2 line-clamp-2">
+        <h3 className="font-bold text-gray-600 text-lg leading-snug mb-2 line-clamp-2">
           {post.title}
         </h3>
         <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-1 line-clamp-3">

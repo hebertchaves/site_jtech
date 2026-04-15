@@ -43,8 +43,13 @@ export default [
               'Set CORS_ORIGIN env variable with comma-separated origins.'
             );
           }
-          // Development fallback
-          return ['http://localhost:5173', 'http://localhost:3000'];
+          // Development fallback — include common Vite ports
+          return [
+            'http://localhost:5173',
+            'http://localhost:5174',
+            'http://localhost:5175',
+            'http://localhost:3000',
+          ];
         }
         
         return allowedOrigins;

@@ -1,8 +1,8 @@
 // Transport configuration
 export const LEADS_TRANSPORT: "n8n_webhook" | "mock" = "n8n_webhook"
-// ✅ FIX: Use "mock" no Figma (Strapi precisa rodar externamente)
-// Quando rodar Strapi localmente ou em produção, mudar para "strapi"
-export const CONTENT_TRANSPORT: "strapi" | "mock" = "mock"
+// "strapi" = usa StrapiContentProvider (requer Strapi rodando)
+// "mock"   = usa dados estáticos locais (para Figma ou sem backend)
+export const CONTENT_TRANSPORT: "strapi" | "mock" = "strapi"
 
 // n8n Webhook URLs - Replace with your actual n8n instance URLs
 export const N8N_LEADS_WEBHOOK_URL = "https://SEU_N8N/webhook/jtech/leads"

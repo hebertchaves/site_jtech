@@ -215,7 +215,7 @@ export function ContactPage({ lang }: ContactPageProps) {
                         <p className="text-sm text-gray-600">
                           {t(lang, "contact.form.sending.to")}
                         </p>
-                        <p className="font-medium text-gray-900">
+                        <p className="font-medium text-gray-600">
                           {selectedReason === "customer" && t(lang, "contact.reason.customer")}
                           {selectedReason === "sales" && t(lang, "contact.reason.sales")}
                           {selectedReason === "other" && t(lang, "contact.reason.other")}

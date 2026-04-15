@@ -31,7 +31,7 @@ export function ProductCard({ product, lang, featured = false }: ProductCardProp
         className={`font-bold text-lg mb-2 transition-colors duration-300 ${
           featured
             ? "text-white"
-            : "text-[#0B0B0B] group-hover:text-[#E30613]"
+            : "text-gray-600 group-hover:text-[#E30613]"
         }`}
       >
         {product.name}

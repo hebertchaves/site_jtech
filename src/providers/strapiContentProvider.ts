@@ -39,18 +39,20 @@ export class StrapiContentProvider implements ContentProvider {
   }
 
   /**
-   * Build Strapi API URL with query params
+   * Build Strapi API URL with query params.
+   * When baseURL is empty, paths are relative to the current origin (Vite proxy handles forwarding).
    */
   private buildURL(
     path: string,
     params: Record<string, string | number> = {}
   ): string {
-    const url = new URL(path, this.baseURL)
-    
+    const base = this.baseURL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173')
+    const url = new URL(path, base)
+
     Object.entries(params).forEach(([key, value]) => {
       url.searchParams.append(key, String(value))
     })
-    
+
     return url.toString()
   }
 
@@ -99,14 +101,13 @@ export class StrapiContentProvider implements ContentProvider {
   /**
    * Get latest published posts (3 for gate)
    */
-  async getPosts(lang: Lang): Promise<Post[]> {
+  async getPosts(lang: Lang, limit: number = 3): Promise<Post[]> {
     const locale = mapLocaleToStrapi(lang)
-    
-    // ✅ M3 FIX: Optimized fields/populate to reduce payload
+
     const url = this.buildURL('/api/posts', {
       locale,
       'sort[0]': 'publishedAt:desc',
-      'pagination[limit]': 3,
+      'pagination[limit]': limit,
       // Fields: only what's needed for listing
       'fields[0]': 'title',
       'fields[1]': 'slug',
@@ -207,24 +208,17 @@ export class StrapiContentProvider implements ContentProvider {
   async getEbooks(lang: Lang): Promise<Ebook[]> {
     const locale = mapLocaleToStrapi(lang)
     
-    // ✅ M3 FIX: Optimized fields/populate to reduce payload
     const url = this.buildURL('/api/ebooks', {
       locale,
       'sort[0]': 'publishedAt:desc',
       'pagination[limit]': 100,
-      // Fields: only what's needed for listing
       'fields[0]': 'title',
       'fields[1]': 'slug',
       'fields[2]': 'description',
       'fields[3]': 'pages',
       'fields[4]': 'category',
-      // Populate all images
       'populate[image][fields][0]': 'url',
       'populate[image][fields][1]': 'alternativeText',
-      'populate[thumbnailImage][fields][0]': 'url',
-      'populate[thumbnailImage][fields][1]': 'alternativeText',
-      'populate[heroImage][fields][0]': 'url',
-      'populate[heroImage][fields][1]': 'alternativeText',
     })
 
     const response = await this.fetchStrapi<StrapiResponse<StrapiEbook[]>>(url)
@@ -251,10 +245,6 @@ export class StrapiContentProvider implements ContentProvider {
       locale,
       'populate[image][fields][0]': 'url',
       'populate[image][fields][1]': 'alternativeText',
-      'populate[thumbnailImage][fields][0]': 'url',
-      'populate[thumbnailImage][fields][1]': 'alternativeText',
-      'populate[heroImage][fields][0]': 'url',
-      'populate[heroImage][fields][1]': 'alternativeText',
     })
 
     try {
@@ -292,7 +282,8 @@ export class StrapiContentProvider implements ContentProvider {
       const fallbackUrl = this.buildURL('/api/ebooks', {
         'filters[slug][$eq]': slug,
         locale,
-        'populate[0]': 'image',
+        'populate[image][fields][0]': 'url',
+        'populate[image][fields][1]': 'alternativeText',
       })
 
       const fallbackResponse = await this.fetchStrapi<StrapiResponse<StrapiEbook[]>>(fallbackUrl)

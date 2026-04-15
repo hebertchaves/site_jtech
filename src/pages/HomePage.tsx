@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { ArrowRight, ChevronLeft, ChevronRight, Lightbulb, Users, Heart, Shield, Leaf } from "lucide-react"
 import { Lang, t, buildPath } from "../lib/i18n"
+import { getPostBySlug } from "../data/posts"
 import { PreWhatsAppModal } from "../components/forms/PreWhatsAppModal"
 import { Container } from "../components/layout/Container"
 import { Button } from "../components/ui/button"
@@ -153,26 +154,22 @@ export default function HomePage({ lang }: HomePageProps) {
     { numero: "+2.5mil", label: t(lang, "home.metrics.support") },
   ]
 
-  const blogPosts = [
-    { 
-      badge: t(lang, "home.content.blog.badge"), 
-      title: t(lang, "home.content.post1.title"), 
-      image: "https://conteudo.sansys.app/site/img/blog-sansys-waste-controle-inteligente-residuos-sustentabilidade.webp",
-      slug: "inovacao-sustentabilidade-saneamento"
-    },
-    { 
-      badge: t(lang, "home.content.blog.badge"), 
-      title: t(lang, "home.content.post2.title"), 
-      image: "https://conteudo.sansys.app/site/img/blog-sansys-water-inteligencia-artificial-big-data-gestao-agua.webp",
-      slug: "inteligencia-artificial-big-data-gestao-agua"
-    },
-    { 
-      badge: t(lang, "home.content.blog.badge"), 
-      title: t(lang, "home.content.post3.title"), 
-      image: "https://conteudo.sansys.app/site/img/blog-sansys-water-gestao-agua-inovacao-crise-hidrica.webp",
-      slug: "gestao-agua-inovacao-crise-hidrica"
-    },
+  const blogPostSlugs = [
+    "inovacao-sustentabilidade-saneamento",
+    "inteligencia-artificial-big-data-gestao-agua",
+    "gestao-agua-inovacao-crise-hidrica",
   ]
+
+  const blogPosts = blogPostSlugs.map((slug) => {
+    const post = getPostBySlug(slug)
+    return {
+      badge: t(lang, "home.content.blog.badge"),
+      title: post?.title[lang] || post?.title.pt || "",
+      excerpt: post?.excerpt[lang] || post?.excerpt.pt || "",
+      image: post?.image || "",
+      slug,
+    }
+  })
 
   const nextProduct = () => {
     setProductCarouselIndex((prev) => prev + 1)
@@ -874,28 +871,28 @@ export default function HomePage({ lang }: HomePageProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {blogPosts.map((post, idx) => (
-              <div 
-                key={idx} 
-                className="rounded-lg overflow-hidden hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02]"
+              <div
+                key={idx}
+                className="rounded-lg overflow-hidden hover:shadow-lg transition-all cursor-pointer transform hover:scale-[1.02] flex flex-col h-full"
                 onClick={() => (window.location.hash = buildPath(lang, getRoute("post", lang, { slug: post.slug })))}
               >
                 <ImageWithFallback
                   src={post.image}
                   alt={post.title}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-48 object-cover flex-shrink-0"
                 />
-                <div className="p-6 bg-white">
-                  <span className="inline-block bg-[#E30613] text-white text-xs px-3 py-1 rounded-full mb-3">
+                <div className="p-6 bg-white flex flex-col flex-1">
+                  <span className="inline-block bg-[#E30613] text-white text-xs px-3 py-1 rounded-full mb-3 self-start">
                     {post.badge}
                   </span>
                   <h3 className="text-xl mb-4 text-gray-700">{post.title}</h3>
-                  <p className="text-gray-700 text-sm mb-4">
-                    {t(lang, "home.content.post.description")}
+                  <p className="text-gray-700 text-sm">
+                    {post.excerpt}
                   </p>
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-[#E30613] hover:text-[#C10511] hover:bg-transparent p-0 h-auto"
+                    className="text-[#E30613] hover:text-[#C10511] hover:bg-transparent p-0 h-auto mt-auto self-start"
                   >
                     {t(lang, "common.readmore")} →
                   </Button>

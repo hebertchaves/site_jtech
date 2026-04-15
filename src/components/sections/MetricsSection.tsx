@@ -44,7 +44,7 @@ export function MetricsSection({ lang }: MetricsSectionProps) {
                     <Icon className="h-8 w-8 text-white" />
                   </div>
                 </div>
-                <div className="text-4xl mb-2 text-[#0B0B0B]">{metric.value}</div>
+                <div className="text-4xl mb-2 text-gray-600">{metric.value}</div>
                 <div className="text-gray-600">{metric.label[lang]}</div>
               </div>
             )

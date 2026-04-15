@@ -72,7 +72,7 @@ export function AllPostsPage({ lang }: AllPostsPageProps) {
       try {
         console.log('[AllPostsPage] Fetching all posts...')
         const provider = getContentProvider()
-        const postsData = await provider.getPosts(lang)
+        const postsData = await provider.getPosts(lang, 100)
         console.log('[AllPostsPage] Posts fetched:', postsData.length)
         
         setPosts(postsData)
@@ -180,7 +180,7 @@ export function AllPostsPage({ lang }: AllPostsPageProps) {
           Banner principal da página de Blog
           ==================================== */}
       <section
-        className="relative py-20 bg-[#0B0B0B] text-white flex items-center justify-center"
+        className="relative bg-[#0B0B0B] text-white pt-32 pb-20 min-h-[500px] flex items-center justify-center"
         style={{
           backgroundImage: "url('https://conteudo.sansys.app/site/img/jtech-background-blog-todo-conteudo.webp')",
           backgroundSize: "cover",
@@ -209,28 +209,9 @@ export function AllPostsPage({ lang }: AllPostsPageProps) {
           ==================================== */}
       <section className="py-8 bg-white border-b">
         <Container>
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-            {/* Busca */}
-            <div className="relative w-full md:w-96">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                type="text"
-                placeholder={t(lang, "content.posts.search_placeholder") || "Buscar artigos..."}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-
-            {/* Contador de resultados */}
-            <div className="text-sm text-gray-600">
-              {filteredPosts.length} {filteredPosts.length === 1 ? "artigo encontrado" : "artigos encontrados"}
-            </div>
-          </div>
-
-          {/* Filtros de categoria */}
-          <div className="flex flex-wrap gap-2 mt-6">
-            <div className="flex items-center gap-2 mr-2">
+          {/* Filtros de categoria + busca na mesma linha */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-2 mr-2 flex-shrink-0">
               <Filter className="h-4 w-4 text-gray-500" />
               <span className="text-sm text-gray-600">{t(lang, "content.posts.filter_by") || "Filtrar por"}:</span>
             </div>
@@ -243,7 +224,7 @@ export function AllPostsPage({ lang }: AllPostsPageProps) {
                 className={
                   selectedCategory === cat.slug
                     ? "bg-[#E30613] hover:bg-[#C10511] text-white"
-                    : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                    : "border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-700"
                 }
               >
                 {cat.name}
@@ -258,6 +239,18 @@ export function AllPostsPage({ lang }: AllPostsPageProps) {
                 )}
               </Button>
             ))}
+
+            {/* Busca */}
+            <div className="relative ml-auto flex-shrink-0 w-full sm:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                type="text"
+                placeholder={t(lang, "content.posts.search_placeholder") || "Buscar artigos..."}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
           </div>
         </Container>
       </section>
@@ -310,10 +303,10 @@ export function AllPostsPage({ lang }: AllPostsPageProps) {
                 {currentPosts.map((post, idx) => (
                   <div
                     key={post.id || idx}
-                    className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all cursor-pointer group"
+                    className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all cursor-pointer group flex flex-col"
                     onClick={() => navigateToPost(post.slug)}
                   >
-                    <div className="relative h-48 overflow-hidden">
+                    <div className="relative h-48 overflow-hidden flex-shrink-0">
                       <ImageWithFallback
                         src={post.image}
                         alt={typeof post.title === 'object' ? post.title[lang] : post.title}
@@ -325,8 +318,8 @@ export function AllPostsPage({ lang }: AllPostsPageProps) {
                         </span>
                       </div>
                     </div>
-                    
-                    <div className="p-6">
+
+                    <div className="p-6 flex flex-col flex-1">
                       <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
                         <span>{formatDate(post.publishedAt)}</span>
                         {post.readTime && (
@@ -336,16 +329,16 @@ export function AllPostsPage({ lang }: AllPostsPageProps) {
                           </>
                         )}
                       </div>
-                      
+
                       <h3 className="text-xl mb-2 line-clamp-2 group-hover:text-[#E30613] transition-colors">
                         {typeof post.title === 'object' ? post.title[lang] : post.title}
                       </h3>
-                      
+
                       <p className="text-gray-600 text-sm line-clamp-3 mb-4">
                         {typeof post.excerpt === 'object' ? post.excerpt[lang] : post.excerpt}
                       </p>
-                      
-                      <div className="flex items-center justify-between">
+
+                      <div className="flex items-center justify-between mt-auto">
                         <span className="text-sm text-gray-500">{post.author || "Jtech"}</span>
                         <span className="text-[#E30613] text-sm group-hover:underline">
                           {t(lang, "content.readmore") || "Ler mais"} →

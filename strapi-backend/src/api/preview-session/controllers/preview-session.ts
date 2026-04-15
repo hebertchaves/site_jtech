@@ -85,7 +85,7 @@ export default {
         'api::preview-token.preview-token',
         previewToken.id,
         {
-          data: { usedAt: new Date() },
+          data: { usedAt: new Date() } as any,
         }
       );
 

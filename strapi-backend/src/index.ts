@@ -39,23 +39,33 @@ export default {
 
     // ============================================
     // i18n CONFIGURATION
+    // No Strapi 5, i18n é nativo no core (não mais plugin separado)
     // ============================================
-    const i18nService = strapi.plugin('i18n').service('locales');
-    
-    const existingLocales = await i18nService.find();
-    const requiredLocales = [
-      { code: 'pt-BR', name: 'Portuguese (Brazil)' },
-      { code: 'en', name: 'English' },
-      { code: 'es', name: 'Spanish' },
-      { code: 'fr', name: 'French' },
-    ];
+    try {
+      const i18nService = strapi.plugin('i18n')?.service('locales');
 
-    for (const locale of requiredLocales) {
-      const exists = existingLocales.find((l) => l.code === locale.code);
-      if (!exists) {
-        await i18nService.create(locale);
-        strapi.log.info(`Created locale: ${locale.name} (${locale.code})`);
+      if (i18nService) {
+        const existingLocales = await i18nService.find();
+        const requiredLocales = [
+          { code: 'pt-BR', name: 'Portuguese (Brazil)' },
+          { code: 'en', name: 'English' },
+          { code: 'es', name: 'Spanish' },
+          { code: 'fr', name: 'French' },
+        ];
+
+        for (const locale of requiredLocales) {
+          const exists = existingLocales.find((l: { code: string }) => l.code === locale.code);
+          if (!exists) {
+            await i18nService.create(locale);
+            strapi.log.info(`Created locale: ${locale.name} (${locale.code})`);
+          }
+        }
+        strapi.log.info('i18n locales configured ✅');
+      } else {
+        strapi.log.warn('i18n plugin não disponível — configure locales manualmente no painel admin');
       }
+    } catch (err) {
+      strapi.log.warn('Aviso ao configurar locales i18n:', err);
     }
 
     // ============================================

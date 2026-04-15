@@ -70,10 +70,6 @@ const translations: Translations = {
     "home.content.section.title": "Conteúdos que ajudam sua empresa\na entender tendências e conceitos",
     "home.content.blog.badge": "Blog",
     "home.content.cta": "Acesse nossa área de conteúdo",
-    "home.content.post1.title": "Inovação e sustentabilidade",
-    "home.content.post2.title": "Artificial & Big Data",
-    "home.content.post3.title": "Gestão de Água",
-    "home.content.post.description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
     
     // HomePage - Nossa Abrangência
     "home.coverage.title": "Nossa Abrangência",
@@ -445,10 +441,6 @@ const translations: Translations = {
     "home.content.section.title": "Contenidos que ayudan a su empresa\na entender tendencias y conceptos",
     "home.content.blog.badge": "Blog",
     "home.content.cta": "Acceda a nuestra área de contenido",
-    "home.content.post1.title": "Innovación y sostenibilidad",
-    "home.content.post2.title": "Inteligencia Artificial & Big Data",
-    "home.content.post3.title": "Gestión del Agua",
-    "home.content.post.description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
     
     // HomePage - Nossa Abrangência
     "home.coverage.title": "Nuestra Abrangencia",
@@ -820,10 +812,6 @@ const translations: Translations = {
     "home.content.section.title": "Content that helps your company\nunderstand trends and concepts",
     "home.content.blog.badge": "Blog",
     "home.content.cta": "Access our content area",
-    "home.content.post1.title": "Innovation and sustainability",
-    "home.content.post2.title": "Artificial Intelligence & Big Data",
-    "home.content.post3.title": "Water Management",
-    "home.content.post.description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
     
     // HomePage - Nossa Abrangência
     "home.coverage.title": "Our Reach",
@@ -1195,10 +1183,6 @@ const translations: Translations = {
     "home.content.section.title": "Contenus qui aident votre entreprise\nà comprendre les tendances et concepts",
     "home.content.blog.badge": "Blog",
     "home.content.cta": "Accédez à notre espace de contenu",
-    "home.content.post1.title": "Innovation et durabilité",
-    "home.content.post2.title": "Intelligence Artificielle & Big Data",
-    "home.content.post3.title": "Gestion de l'Eau",
-    "home.content.post.description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
     
     // HomePage - Nossa Abrangência
     "home.coverage.title": "Notre Portée",

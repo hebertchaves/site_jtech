@@ -183,7 +183,7 @@ export default {
         {
           data: {
             usedAt: new Date(),
-          },
+          } as any,
         }
       );
 

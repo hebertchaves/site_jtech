@@ -3,7 +3,7 @@ import { getAttribution } from "./utm"
 import { ENVIRONMENT } from "./endpoints"
 
 // Substituir pelo número oficial da Jtech
-const WHATSAPP_NUMBER = "5511999999999"
+const WHATSAPP_NUMBER = "5548992256034"
 
 export interface WhatsAppMessageData {
   product?: string

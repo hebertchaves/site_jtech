@@ -3,23 +3,26 @@ import { Post } from "../data/posts"
 import { Ebook } from "../data/ebooks"
 
 /**
- * Strapi API Response Interfaces
+ * Strapi 5 API Response Interfaces
+ * Strapi 5 uses flat objects — no `.attributes` wrapper.
  */
 export interface StrapiMedia {
   id: number
-  attributes: {
-    name: string
-    url: string
-    formats?: {
-      thumbnail?: { url: string }
-      small?: { url: string }
-      medium?: { url: string }
-      large?: { url: string }
-    }
+  documentId: string
+  url: string
+  name?: string
+  alternativeText?: string
+  formats?: {
+    thumbnail?: { url: string }
+    small?: { url: string }
+    medium?: { url: string }
+    large?: { url: string }
   }
 }
 
-export interface StrapiPostAttributes {
+export interface StrapiPost {
+  id: number
+  documentId: string
   title: string
   slug: string
   excerpt: string
@@ -27,35 +30,24 @@ export interface StrapiPostAttributes {
   publishedAt: string
   readTime?: number
   locale: string
-  image?: {
-    data: StrapiMedia | null
-  }
+  image?: StrapiMedia | null
   category?: {
-    data: {
-      id: number
-      attributes: {
-        name: string
-        slug: string
-      }
-    } | null
-  }
+    id: number
+    documentId: string
+    name: string
+    slug: string
+  } | null
   author?: {
-    data: {
-      id: number
-      attributes: {
-        name: string
-        slug: string
-      }
-    } | null
-  }
+    id: number
+    documentId: string
+    name: string
+    slug?: string
+  } | null
 }
 
-export interface StrapiPost {
+export interface StrapiEbook {
   id: number
-  attributes: StrapiPostAttributes
-}
-
-export interface StrapiEbookAttributes {
+  documentId: string
   title: string
   slug: string
   description: string
@@ -66,20 +58,9 @@ export interface StrapiEbookAttributes {
   downloadUrl?: string
   ctaType?: 'RD_FORM' | 'DIRECT_DOWNLOAD' | 'EXTERNAL_LINK'
   rdFormUrl?: string
-  image?: {
-    data: StrapiMedia | null
-  }
-  thumbnailImage?: {
-    data: StrapiMedia | null
-  }
-  heroImage?: {
-    data: StrapiMedia | null
-  }
-}
-
-export interface StrapiEbook {
-  id: number
-  attributes: StrapiEbookAttributes
+  image?: StrapiMedia | null
+  thumbnailImage?: StrapiMedia | null
+  heroImage?: StrapiMedia | null
 }
 
 export interface StrapiResponse<T> {
@@ -146,70 +127,69 @@ export function mapLocaleToStrapi(lang: Lang): string {
 
 /**
  * Transform single Strapi Post to frontend Post
- * 
+ *
+ * Strapi 5 returns flat objects — fields are directly on the item (no .attributes).
  * Frontend expects multilingual Record<Lang, string> for title/excerpt/content,
  * but we fetch per locale from Strapi, so we just populate the requested lang.
  */
 export function transformStrapiPost(strapiPost: StrapiPost, lang: Lang): Post {
-  const attr = strapiPost.attributes
-  
   // Create empty multilingual objects
   const title: Record<Lang, string> = { pt: '', en: '', es: '', fr: '' }
   const excerpt: Record<Lang, string> = { pt: '', en: '', es: '', fr: '' }
   const content: Record<Lang, string> = { pt: '', en: '', es: '', fr: '' }
-  
+
   // Populate only the current lang (we don't fetch all translations)
-  title[lang] = attr.title || ''
-  excerpt[lang] = attr.excerpt || ''
-  content[lang] = attr.content || ''
-  
+  title[lang] = strapiPost.title || ''
+  excerpt[lang] = strapiPost.excerpt || ''
+  content[lang] = strapiPost.content || ''
+
   return {
     id: strapiPost.id.toString(),
-    slug: attr.slug,
+    slug: strapiPost.slug,
     title,
     excerpt,
     content,
-    category: attr.category?.data?.attributes.name || '',
-    author: attr.author?.data?.attributes.name || '',
-    publishedAt: attr.publishedAt || new Date().toISOString(),
-    image: getStrapiMediaURL(attr.image?.data?.attributes.url),
-    readTime: attr.readTime || 5,
+    category: strapiPost.category?.name || '',
+    author: strapiPost.author?.name || '',
+    publishedAt: strapiPost.publishedAt || new Date().toISOString(),
+    image: getStrapiMediaURL(strapiPost.image?.url),
+    readTime: strapiPost.readTime || 5,
   }
 }
 
 /**
  * Transform single Strapi Ebook to frontend Ebook
+ *
+ * Strapi 5 returns flat objects — fields are directly on the item (no .attributes).
  */
 export function transformStrapiEbook(strapiEbook: StrapiEbook, lang: Lang): Ebook {
-  const attr = strapiEbook.attributes
-  
   // Create empty multilingual objects
   const title: Record<Lang, string> = { pt: '', en: '', es: '', fr: '' }
   const description: Record<Lang, string> = { pt: '', en: '', es: '', fr: '' }
   const content: Record<Lang, string> = { pt: '', en: '', es: '', fr: '' }
-  
+
   // Populate only the current lang
-  title[lang] = attr.title || ''
-  description[lang] = attr.description || ''
-  content[lang] = attr.content || ''
-  
-  // Get image URLs with fallback logic
-  const thumbnailUrl = getStrapiMediaURL(attr.thumbnailImage?.data?.attributes.url)
-  const heroUrl = getStrapiMediaURL(attr.heroImage?.data?.attributes.url)
-  const imageUrl = getStrapiMediaURL(attr.image?.data?.attributes.url)
-  
+  title[lang] = strapiEbook.title || ''
+  description[lang] = strapiEbook.description || ''
+  content[lang] = strapiEbook.content || ''
+
+  // Get image URLs with fallback logic (Strapi 5: media is flat, not { data: { attributes: {} } })
+  const thumbnailUrl = getStrapiMediaURL(strapiEbook.thumbnailImage?.url)
+  const heroUrl = getStrapiMediaURL(strapiEbook.heroImage?.url)
+  const imageUrl = getStrapiMediaURL(strapiEbook.image?.url)
+
   return {
     id: strapiEbook.id.toString(),
-    slug: attr.slug,
+    slug: strapiEbook.slug,
     title,
     description,
     content,
-    category: attr.category || '',
-    pages: attr.pages || 1,
-    image: imageUrl, // Legacy fallback
-    thumbnailImage: thumbnailUrl || imageUrl, // Fallback to legacy image
-    heroImage: heroUrl || imageUrl, // Fallback to legacy image
-    downloadUrl: attr.downloadUrl,
+    category: strapiEbook.category || '',
+    pages: strapiEbook.pages || 1,
+    image: imageUrl,
+    thumbnailImage: thumbnailUrl || imageUrl,
+    heroImage: heroUrl || imageUrl,
+    downloadUrl: strapiEbook.downloadUrl,
   }
 }
 
