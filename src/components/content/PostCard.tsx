@@ -15,10 +15,10 @@ export function PostCard({ post, lang }: PostCardProps) {
   return (
     <article className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 flex flex-col">
       <div className="relative h-48 overflow-hidden bg-gray-100">
-        {!imgError && post.coverImage ? (
+        {!imgError && post.image ? (
           <img
-            src={post.coverImage}
-            alt={post.title}
+            src={post.image}
+            alt={post.title[lang]}
             className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
             onError={() => setImgError(true)}
           />
@@ -35,10 +35,10 @@ export function PostCard({ post, lang }: PostCardProps) {
       </div>
       <div className="p-5 flex flex-col flex-1">
         <h3 className="font-bold text-gray-600 text-lg leading-snug mb-2 line-clamp-2">
-          {post.title}
+          {post.title[lang]}
         </h3>
         <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-1 line-clamp-3">
-          {post.excerpt}
+          {post.excerpt[lang]}
         </p>
         <a
           href={buildPath(lang, getRoute("post", lang, { slug: post.slug }))}

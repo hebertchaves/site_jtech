@@ -73,6 +73,7 @@ export function EbooksPage({ lang }: EbooksPageProps) {
           name: formData.name,
           email: formData.email,
           form_type: "ebook",
+          form_name: "ebooks-page",
           product_interest: selectedEbook?.title[lang],
         },
         lang

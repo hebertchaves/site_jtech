@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { ArrowRight, CheckCircle } from "lucide-react"
 import { Lang, t } from "../lib/i18n"
-import { getSolutionBySlug, isProduct } from "../lib/solutions"
+import { products } from "../data/products"
 import { Hero } from "../components/sections/Hero"
 import { PreWhatsAppModal } from "../components/forms/PreWhatsAppModal"
 import { Container } from "../components/layout/Container"
@@ -18,7 +18,7 @@ export function SolutionDetailPage({ lang, slug }: SolutionDetailPageProps) {
   const [whatsappModalOpen, setWhatsappModalOpen] = useState(false)
   
   // Busca em produtos e módulos
-  const solution = getSolutionBySlug(slug)
+  const solution = products.find(p => p.slug === slug)
 
   if (!solution) {
     return (
@@ -28,8 +28,6 @@ export function SolutionDetailPage({ lang, slug }: SolutionDetailPageProps) {
       </Container>
     )
   }
-
-  const solutionType = isProduct(solution) ? 'Produto' : 'Módulo'
 
   return (
     <>
@@ -53,7 +51,7 @@ export function SolutionDetailPage({ lang, slug }: SolutionDetailPageProps) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Description */}
             <div>
-              <h2 className="mb-0 font-extralight">Sobre o {solutionType}</h2>
+              <h2 className="mb-0 font-extralight">Sobre o Produto</h2>
               <p className="text-gray-600 text-2xl mb-6">{solution.description[lang]}</p>
               
               <Button
@@ -126,9 +124,8 @@ export function SolutionDetailPage({ lang, slug }: SolutionDetailPageProps) {
 
       <PreWhatsAppModal
         lang={lang}
-        productInterest={solution.name[lang]}
         open={whatsappModalOpen}
-        onOpenChange={setWhatsappModalOpen}
+        onClose={() => setWhatsappModalOpen(false)}
       />
 
       {/* Componente de Scroll to Top com mouse animado */}

@@ -98,6 +98,7 @@ export function EbookDetailPage({ lang, slug }: EbookDetailPageProps) {
           name: formData.name,
           email: formData.email,
           form_type: "ebook",
+          form_name: "ebook-detail",
           product_interest: ebook.title[lang],
           // ✅ LGPD: Include consent data
           ...consentData,
@@ -225,8 +226,7 @@ export function EbookDetailPage({ lang, slug }: EbookDetailPageProps) {
             <EbookConsentCheckbox
               lang={lang}
               checked={consentGiven}
-              onCheckedChange={setConsentGiven}
-              required={true}
+              onChange={setConsentGiven}
             />
 
             <Button type="submit" className="w-full" disabled={formLoading}>

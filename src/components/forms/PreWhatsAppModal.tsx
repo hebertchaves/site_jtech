@@ -28,14 +28,15 @@ export function PreWhatsAppModal({ open, onClose, lang }: PreWhatsAppModalProps)
 
     try {
       await submitPreWhatsAppLead({ ...form, source: "pre-whatsapp" })
-      trackFormSubmit("pre_whatsapp", { company: form.company })
+      trackFormSubmit("pre_whatsapp", "pre-whatsapp-modal")
     } catch {
       // silently continue
     }
 
     onClose()
     openWhatsApp(
-      `Olá! Meu nome é ${form.name}, da empresa ${form.company}. Gostaria de saber mais sobre as soluções Jtech.`
+      { product: form.company, page: "modal", language: lang },
+      lang
     )
     setLoading(false)
   }

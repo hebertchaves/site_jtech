@@ -916,7 +916,7 @@ export default function HomePage({ lang }: HomePageProps) {
       <PreWhatsAppModal
         lang={lang}
         open={whatsappModalOpen}
-        onOpenChange={setWhatsappModalOpen}
+        onClose={() => setWhatsappModalOpen(false)}
       />
 
       {/* Componente de Scroll to Top com mouse animado */}

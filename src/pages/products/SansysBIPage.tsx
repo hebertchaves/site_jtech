@@ -529,7 +529,7 @@ export function SansysBIPage({ lang }: SansysBIPageProps) {
 
       {/* Modal WhatsApp */}
       <PreWhatsAppModal
-        isOpen={whatsappModalOpen}
+        open={whatsappModalOpen}
         onClose={() => setWhatsappModalOpen(false)}
         lang={lang}
       />

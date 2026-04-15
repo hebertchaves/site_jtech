@@ -468,7 +468,7 @@ export function SansysWaterPage({ lang }: SansysWaterPageProps) {
 
       {/* Modal WhatsApp */}
       <PreWhatsAppModal
-        isOpen={whatsappModalOpen}
+        open={whatsappModalOpen}
         onClose={() => setWhatsappModalOpen(false)}
         lang={lang}
       />

@@ -335,7 +335,7 @@ export function ContentPage({ lang }: ContentPageProps) {
                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                       />
                       <span className="absolute top-4 left-4 bg-[#E30613] text-white text-xs px-3 py-1 rounded-full">
-                        {post.category || post.badge || "Artigo"}
+                        {post.category || "Artigo"}
                       </span>
                     </div>
                     <div className="md:col-span-2 p-6 flex flex-col justify-start">
@@ -343,7 +343,7 @@ export function ContentPage({ lang }: ContentPageProps) {
                         {typeof post.title === 'object' ? post.title[lang] : post.title}
                       </h4>
                       <p className="text-gray-600 mb-4 line-clamp-2">
-                        {typeof post.excerpt === 'object' ? post.excerpt[lang] : (post.excerpt || post.text)}
+                        {post.excerpt[lang]}
                       </p>
                       <div>
                         <Button 

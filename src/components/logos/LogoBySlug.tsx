@@ -15,10 +15,12 @@ import { SansysGISLogo } from "./SansysGISLogo"
 interface LogoBySlugProps {
   slug: string
   className?: string
-  variant?: "default" | "white" | "dark"
+  variant?: "default" | "white" | "dark" | "colored"
+  color?: string
 }
 
-const LOGO_MAP: Record<string, React.ComponentType<{ className?: string; variant?: string }>> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const LOGO_MAP: Record<string, React.ComponentType<any>> = {
   "sansys-water": SansysWaterLogo,
   "sansys-pay": SansysPayLogo,
   "sansys-flow": SansysFlowLogo,
@@ -34,7 +36,7 @@ const LOGO_MAP: Record<string, React.ComponentType<{ className?: string; variant
   "sansys-gis": SansysGISLogo,
 }
 
-export function LogoBySlug({ slug, className, variant = "default" }: LogoBySlugProps) {
+export function LogoBySlug({ slug, className, variant = "default", color }: LogoBySlugProps) {
   const LogoComponent = LOGO_MAP[slug]
 
   if (!LogoComponent) {
@@ -45,5 +47,5 @@ export function LogoBySlug({ slug, className, variant = "default" }: LogoBySlugP
     )
   }
 
-  return <LogoComponent className={className} variant={variant} />
+  return <LogoComponent className={className} variant={variant} color={color} />
 }

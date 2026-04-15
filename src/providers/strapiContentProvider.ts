@@ -89,7 +89,7 @@ export class StrapiContentProvider implements ContentProvider {
       clearTimeout(timeoutId)
       
       // Handle timeout
-      if (error.name === 'AbortError') {
+      if ((error as Error).name === 'AbortError') {
         console.error('Strapi request timed out after 5s:', url)
         throw new Error('Request timeout')
       }

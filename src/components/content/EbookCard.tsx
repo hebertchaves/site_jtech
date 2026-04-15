@@ -15,10 +15,10 @@ export function EbookCard({ ebook, lang }: EbookCardProps) {
   return (
     <article className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 flex flex-col">
       <div className="relative h-56 overflow-hidden bg-gray-100">
-        {!imgError && ebook.coverImage ? (
+        {!imgError && (ebook.thumbnailImage || ebook.image) ? (
           <img
-            src={ebook.coverImage}
-            alt={ebook.title}
+            src={ebook.thumbnailImage || ebook.image}
+            alt={ebook.title[lang]}
             className="w-full h-full object-cover"
             onError={() => setImgError(true)}
           />
@@ -35,7 +35,7 @@ export function EbookCard({ ebook, lang }: EbookCardProps) {
           </p>
         )}
         <h3 className="font-bold text-gray-600 text-base leading-snug mb-2 line-clamp-3 flex-1">
-          {ebook.title}
+          {ebook.title[lang]}
         </h3>
         <a
           href={buildPath(lang, getRoute("ebookDetail", lang, { slug: ebook.slug }))}
