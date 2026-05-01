@@ -5,8 +5,8 @@ export const LEADS_TRANSPORT: "n8n_webhook" | "mock" = "n8n_webhook"
 export const CONTENT_TRANSPORT: "strapi" | "mock" = "strapi"
 
 // n8n Webhook URLs - Replace with your actual n8n instance URLs
-export const N8N_LEADS_WEBHOOK_URL = "https://SEU_N8N/webhook/jtech/leads"
-export const N8N_CONTENT_WEBHOOK_URL = "https://SEU_N8N/webhook/jtech/content"
+export const N8N_LEADS_WEBHOOK_URL = "https://n8n.jtech.com.br/webhook-test/a6d72fc2-72d7-4a74-ad39-f8110d25bd4d"
+export const N8N_CONTENT_WEBHOOK_URL = "https://n8n.jtech.com.br/webhook-test/cc35da21-d044-45a1-88c5-b4952ac754cf"
 
 // Strapi CMS URL - Configured via VITE_CMS_URL environment variable
 // Default: http://localhost:1337 (dev) or https://conteudo.jtech.com.br (prod)

@@ -604,7 +604,7 @@ export default function HomePage({ lang }: HomePageProps) {
                     backgroundClip: 'text',
                   }}
                 >
-                  2.5mil
+                  4.5 mil
                 </div>
                 <div className="text-gray-600 text-xl leading-tight mt-2">
                   {t(lang, "home.metrics.users.line1")}<br />{t(lang, "home.metrics.users.line2")}
@@ -670,12 +670,11 @@ export default function HomePage({ lang }: HomePageProps) {
                     backgroundClip: 'text',
                   }}
                 >
-                  350mil
+                  300 mi
                 </div>
                 <div className="text-gray-600 text-xl leading-tight mt-2">
                   {t(lang, "home.metrics.revenue.line1")}<br />
                   {t(lang, "home.metrics.revenue.line2")}
-                  {t(lang, "home.metrics.revenue.line3") && <><br />{t(lang, "home.metrics.revenue.line3")}</>}
                 </div>
               </div>
             </div>
@@ -704,7 +703,7 @@ export default function HomePage({ lang }: HomePageProps) {
                     backgroundClip: 'text',
                   }}
                 >
-                  150
+                  107
                 </div>
                 <div className="text-gray-600 text-xl leading-tight mt-2">
                   {t(lang, "home.metrics.clients.line1")}<br />
@@ -738,7 +737,7 @@ export default function HomePage({ lang }: HomePageProps) {
                     backgroundClip: 'text',
                   }}
                 >
-                  2.5mil
+                  2.8 mil
                 </div>
                 <div className="text-gray-600 text-xl leading-tight mt-2">
                   {t(lang, "home.metrics.support.line1")}<br />{t(lang, "home.metrics.support.line2")}
