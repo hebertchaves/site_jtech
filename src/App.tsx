@@ -20,7 +20,6 @@ import { ConsentBanner } from "./components/layout/ConsentBanner"
 import HomePage from "./pages/HomePage"
 import { AboutPage } from "./pages/AboutPage"
 import { SolutionsPage } from "./pages/SolutionsPage"
-import { SolutionDetailPage } from "./pages/SolutionDetailPage"
 import { ContentPage } from "./pages/ContentPage"
 import { AllPostsPage } from "./pages/AllPostsPage"
 import { PostPage } from "./pages/PostPage"
@@ -30,11 +29,6 @@ import { PreviewPage } from "./pages/PreviewPage"
 import { ContactPage } from "./pages/ContactPage"
 import { PrivacyPage } from "./pages/PrivacyPage"
 import { TermsPage } from "./pages/TermsPage"
-
-// Custom Product Pages (Hybrid Approach - Opção 1)
-import { SansysPayPage } from "./pages/products/SansysPayPage"
-import { SansysWaterPage } from "./pages/products/SansysWaterPage"
-import { SansysBIPage } from "./pages/products/SansysBIPage"
 
 export default function App() {
   const [currentLang, setCurrentLang] = useState<Lang>(defaultLang)
@@ -129,20 +123,8 @@ export default function App() {
         return <AboutPage lang={currentLang} />
       case "solutions":
         return <SolutionsPage lang={currentLang} />
-      case "solutionDetail": {
-        const customPages: Record<string, React.ComponentType<{ lang: Lang }>> = {
-          'sansys-pay': SansysPayPage,
-          'sansys-water': SansysWaterPage,
-          'sansys-bi': SansysBIPage,
-        }
-
-        const slug = params.slug || ""
-        const CustomPage = customPages[slug]
-
-        return CustomPage
-          ? <CustomPage lang={currentLang} />
-          : <SolutionDetailPage lang={currentLang} slug={slug} />
-      }
+      case "solutionDetail":
+        return <SolutionsPage lang={currentLang} />
       case "content":
         return <ContentPage lang={currentLang} />
       case "allPosts":

@@ -40,7 +40,7 @@ export function ProductCard({ product, lang, featured = false }: ProductCardProp
         {product.shortDescription[lang]}
       </p>
       <a
-        href={buildPath(lang, getRoute("solutionDetail", lang, { slug: product.slug }))}
+        href={`#/${lang}${getRoute("solutions", lang)}?produto=${product.slug}`}
         className={`inline-flex items-center gap-1 text-sm font-semibold transition-colors ${
           featured
             ? "text-[#E30613] hover:text-red-400"

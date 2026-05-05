@@ -59,6 +59,28 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
     return () => window.removeEventListener('resize', updateOffset)
   }, [])
 
+  // Ler ?produto= da URL e navegar direto ao produto no carrossel
+  useEffect(() => {
+    const readProductParam = () => {
+      const hash = window.location.hash
+      const queryStart = hash.indexOf('?')
+      if (queryStart === -1) return
+      const params = new URLSearchParams(hash.slice(queryStart + 1))
+      const slug = params.get('produto')
+      if (!slug) return
+      const slugs = [
+        "sansys-water","sansys-pay","sansys-waste","sansys-agency",
+        "sansys-hub","sansys-flow","sansys-reader","sansys-gis",
+      ]
+      const idx = slugs.indexOf(slug)
+      if (idx !== -1) setProductIndex(idx)
+    }
+
+    readProductParam()
+    window.addEventListener('hashchange', readProductParam)
+    return () => window.removeEventListener('hashchange', readProductParam)
+  }, [])
+
   // Dados dos produtos
   const produtos = [
     {

@@ -16,7 +16,8 @@ const translations: Translations = {
     "nav.content": "Conteúdo",
     "nav.contact": "Contato",
     "nav.careers": "Carreiras",
-    
+    "nav.all_solutions": "Ver todas as soluções",
+
     // HomePage - Hero
     "home.hero.title1": "Transformando",
     "home.hero.title2": "desafios em",
@@ -386,7 +387,8 @@ const translations: Translations = {
     "nav.content": "Contenido",
     "nav.contact": "Contacto",
     "nav.careers": "Carreras",
-    
+    "nav.all_solutions": "Ver todas las soluciones",
+
     // HomePage - Hero
     "home.hero.title1": "Transformando",
     "home.hero.title2": "desafíos en",
@@ -756,7 +758,8 @@ const translations: Translations = {
     "nav.content": "Content",
     "nav.contact": "Contact",
     "nav.careers": "Careers",
-    
+    "nav.all_solutions": "View all solutions",
+
     // HomePage - Hero
     "home.hero.title1": "Transforming",
     "home.hero.title2": "challenges into",
@@ -1126,7 +1129,8 @@ const translations: Translations = {
     "nav.content": "Contenu",
     "nav.contact": "Contact",
     "nav.careers": "Postes vacants",
-    
+    "nav.all_solutions": "Voir toutes les solutions",
+
     // HomePage - Hero
     "home.hero.title1": "Transformer",
     "home.hero.title2": "les défis en",

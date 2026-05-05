@@ -1,10 +1,21 @@
-import { useState, useEffect } from "react"
-import { Menu, X } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
+import { Menu, X, ChevronDown } from "lucide-react"
 import { Lang, t } from "../../lib/i18n"
 import { getRoute } from "../../lib/routes"
 import { Container } from "./Container"
 import { LanguageSwitcher } from "./LanguageSwitcher"
 import { Button } from "../ui/button"
+
+const SOLUTION_PRODUCTS = [
+  { slug: "sansys-water",  name: "Sansys Water"  },
+  { slug: "sansys-pay",    name: "Sansys Pay"    },
+  { slug: "sansys-waste",  name: "Sansys Waste"  },
+  { slug: "sansys-agency", name: "Sansys Agency" },
+  { slug: "sansys-hub",    name: "Sansys Hub"    },
+  { slug: "sansys-flow",   name: "Sansys Flow"   },
+  { slug: "sansys-reader", name: "Sansys Reader" },
+  { slug: "sansys-gis",    name: "Sansys GIS"    },
+]
 
 interface HeaderProps {
   lang: Lang
@@ -47,6 +58,19 @@ export function Header({ lang }: HeaderProps) {
   const [currentPath, setCurrentPath] = useState("")
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const [solutionsDropdownOpen, setSolutionsDropdownOpen] = useState(false)
+  const [mobileSolutionsOpen, setMobileSolutionsOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setSolutionsDropdownOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
 
   // Auto-hide header on scroll down, show on scroll up
   useEffect(() => {
@@ -146,14 +170,61 @@ export function Header({ lang }: HeaderProps) {
               <nav className="hidden lg:flex items-center gap-8">
                 {navigation.map((item) => {
                   const active = isActive(item.href)
+                  const isSolutions = item.href.includes(getRoute("solutions", lang))
+
+                  if (isSolutions) {
+                    return (
+                      <div key={item.name} className="relative" ref={dropdownRef}>
+                        <button
+                          onClick={() => setSolutionsDropdownOpen((o) => !o)}
+                          className={`flex items-center gap-1 text-white text-base lowercase relative group transition-all duration-300 ${
+                            active ? "translate-y-[-3px]" : "hover:translate-y-[-3px]"
+                          }`}
+                          style={{ fontStretch: "condensed" }}
+                          aria-expanded={solutionsDropdownOpen}
+                        >
+                          <span>{item.name.toLowerCase()}</span>
+                          <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${solutionsDropdownOpen ? "rotate-180" : ""}`} />
+                          <span className={`absolute bottom-0 left-0 h-0.5 bg-[#E30613] transition-all duration-300 ${active ? "w-full" : "w-0 group-hover:w-full"}`}></span>
+                        </button>
+
+                        {solutionsDropdownOpen && (
+                          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-48 rounded-md overflow-hidden shadow-xl z-50"
+                            style={{ backgroundColor: "rgba(11,11,11,0.97)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                            {/* Link para a página de soluções */}
+                            <a
+                              href={item.href}
+                              onClick={() => setSolutionsDropdownOpen(false)}
+                              className="block px-4 py-2 text-xs text-gray-400 hover:text-white hover:bg-white/5 border-b border-white/10 lowercase"
+                              style={{ fontStretch: "condensed" }}
+                            >
+                              {t(lang, "nav.all_solutions")}
+                            </a>
+                            {SOLUTION_PRODUCTS.map((p) => (
+                              <a
+                                key={p.slug}
+                                href={`${item.href}?produto=${p.slug}`}
+                                onClick={() => setSolutionsDropdownOpen(false)}
+                                className="block px-4 py-2.5 text-sm text-white hover:text-[#E30613] hover:bg-white/5 transition-colors lowercase"
+                                style={{ fontStretch: "condensed" }}
+                              >
+                                {p.name.toLowerCase()}
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  }
+
                   return (
                     <a
                       key={item.name}
                       href={active ? undefined : item.href}
                       onClick={(e) => active && e.preventDefault()}
                       className={`text-white text-base lowercase relative group transition-all duration-300 ${
-                        active 
-                          ? "translate-y-[-3px] cursor-default" 
+                        active
+                          ? "translate-y-[-3px] cursor-default"
                           : "hover:translate-y-[-3px] cursor-pointer"
                       }`}
                       style={{ fontStretch: "condensed" }}
@@ -163,8 +234,8 @@ export function Header({ lang }: HeaderProps) {
                         {item.name.toLowerCase()}
                       </span>
                       <span className={`absolute bottom-0 left-0 h-0.5 bg-[#E30613] transition-all duration-300 ${
-                        active 
-                          ? "w-full" 
+                        active
+                          ? "w-full"
                           : "w-0 group-hover:w-full"
                       }`}></span>
                     </a>
@@ -223,6 +294,38 @@ export function Header({ lang }: HeaderProps) {
             <nav className="flex flex-col items-center gap-6 mb-7">
               {navigation.map((item) => {
                 const active = isActive(item.href)
+                const isSolutions = item.href.includes(getRoute("solutions", lang))
+
+                if (isSolutions) {
+                  return (
+                    <div key={item.name} className="flex flex-col items-center gap-3">
+                      <button
+                        onClick={() => setMobileSolutionsOpen((o) => !o)}
+                        className="flex items-center gap-1 text-white text-xl lowercase"
+                        style={{ fontStretch: "condensed" }}
+                      >
+                        <span>{item.name.toLowerCase()}</span>
+                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${mobileSolutionsOpen ? "rotate-180" : ""}`} />
+                      </button>
+                      {mobileSolutionsOpen && (
+                        <div className="flex flex-col items-center gap-2">
+                          {SOLUTION_PRODUCTS.map((p) => (
+                            <a
+                              key={p.slug}
+                              href={`${item.href}?produto=${p.slug}`}
+                              onClick={() => { setMobileMenuOpen(false); setMobileSolutionsOpen(false) }}
+                              className="text-gray-300 hover:text-[#E30613] text-base lowercase transition-colors"
+                              style={{ fontStretch: "condensed" }}
+                            >
+                              {p.name.toLowerCase()}
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )
+                }
+
                 return (
                   <a
                     key={item.name}
@@ -244,8 +347,8 @@ export function Header({ lang }: HeaderProps) {
                       {item.name.toLowerCase()}
                     </span>
                     <span className={`absolute bottom-0 left-0 h-0.5 bg-[#E30613] transition-all duration-300 ${
-                      active 
-                        ? "w-full" 
+                      active
+                        ? "w-full"
                         : "w-0 group-hover:w-full"
                     }`}></span>
                   </a>

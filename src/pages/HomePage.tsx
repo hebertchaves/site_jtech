@@ -446,7 +446,7 @@ export default function HomePage({ lang }: HomePageProps) {
                               } else {
                                 // Usar getRoute para garantir tradução correta da URL
                                 const solutionsPath = getRoute("solutions", lang)
-                                window.location.hash = `#/${lang}${solutionsPath}/${produto.slug}`
+                                window.location.hash = `#/${lang}${solutionsPath}?produto=${produto.slug}`
                               }
                             }}
                           >
@@ -481,7 +481,7 @@ export default function HomePage({ lang }: HomePageProps) {
                                 onClick={(e) => {
                                   e.stopPropagation()
                                   const solutionsPath = getRoute("solutions", lang)
-                                  window.location.hash = `#/${lang}${solutionsPath}/${produto.slug}`
+                                  window.location.hash = `#/${lang}${solutionsPath}?produto=${produto.slug}`
                                 }}
                               >
                                 {t(lang, "home.products.cta")}

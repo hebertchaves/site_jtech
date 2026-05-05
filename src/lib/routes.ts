@@ -4,12 +4,6 @@ export const routes = {
   home: { pt: "/", es: "/", en: "/", fr: "/" },
   about: { pt: "/quem-somos", es: "/quienes-somos", en: "/about-us", fr: "/a-propos" },
   solutions: { pt: "/solucoes", es: "/soluciones", en: "/solutions", fr: "/solutions" },
-  solutionDetail: {
-    pt: "/solucoes/:slug",
-    es: "/soluciones/:slug",
-    en: "/solutions/:slug",
-    fr: "/solutions/:slug",
-  },
   content: { pt: "/conteudo", es: "/contenido", en: "/content", fr: "/contenu" },
   allPosts: { pt: "/artigos", es: "/articulos", en: "/articles", fr: "/articles" },
   post: {
