@@ -30,3 +30,19 @@ dist-ssr
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
+
+# TypeScript build info
+tsconfig.tsbuildinfo
+
+# Strapi backend
+strapi-backend/node_modules
+strapi-backend/dist
+strapi-backend/.strapi
+strapi-backend/.tmp
+strapi-backend/.env
+strapi-backend/.strapi-updater.json
+strapi-backend/public/uploads
+
+# Archives
+*.zip

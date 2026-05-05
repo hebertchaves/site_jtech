@@ -127,6 +127,70 @@ export default {
     strapi.log.info('Preview cleanup cron job scheduled (hourly) ✅');
 
     // ============================================
+    // PUBLIC ROLE PERMISSIONS (Auto-configure)
+    // Garante que o frontend consiga acessar a API sem autenticação.
+    // Permissões ficam no banco (tabela up_permissions), então
+    // se o DB for recriado elas se perdem. Este bloco recria
+    // automaticamente em cada boot.
+    // ============================================
+    try {
+      const publicRole = await strapi
+        .query('plugin::users-permissions.role')
+        .findOne({ where: { type: 'public' } });
+
+      if (publicRole) {
+        // Buscar permissões existentes da role pública de uma vez
+        const existingPerms = await strapi
+          .query('plugin::users-permissions.permission')
+          .findMany({ where: { role: { id: publicRole.id } } });
+
+        const existingActions = new Set(existingPerms.map((p: any) => p.action));
+
+        const requiredActions = [
+          'api::post.post.find',
+          'api::post.post.findOne',
+          'api::ebook.ebook.find',
+          'api::ebook.ebook.findOne',
+          'api::category.category.find',
+          'api::category.category.findOne',
+          'api::author.author.find',
+          'api::author.author.findOne',
+        ];
+
+        const missingActions = requiredActions.filter(a => !existingActions.has(a));
+
+        if (missingActions.length > 0) {
+          for (const action of missingActions) {
+            await strapi
+              .query('plugin::users-permissions.permission')
+              .create({ data: { action, role: publicRole.id } });
+            strapi.log.info(`Public permission granted: ${action}`);
+          }
+
+          // Forçar recarga do cache de permissões do plugin users-permissions
+          // para que as novas permissões tenham efeito imediato (sem restart)
+          try {
+            const usersPermService = strapi.plugin('users-permissions').service('users-permissions');
+            if (usersPermService?.initialize) {
+              await usersPermService.initialize();
+              strapi.log.info('Users-permissions cache reloaded after granting permissions');
+            }
+          } catch (cacheErr) {
+            strapi.log.warn('Could not reload permissions cache — restart may be needed:', cacheErr);
+          }
+
+          strapi.log.info(`Created ${missingActions.length} missing public permissions ✅`);
+        } else {
+          strapi.log.info('Public API permissions already configured ✅');
+        }
+      } else {
+        strapi.log.warn('Public role not found — permissions must be configured manually');
+      }
+    } catch (error) {
+      strapi.log.warn('Could not auto-configure public permissions:', error);
+    }
+
+    // ============================================
     // ONE-TIME CLEANUP on Startup
     // ============================================
     try {
