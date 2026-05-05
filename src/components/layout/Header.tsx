@@ -191,15 +191,6 @@ export function Header({ lang }: HeaderProps) {
                         {solutionsDropdownOpen && (
                           <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-48 rounded-md overflow-hidden shadow-xl z-50"
                             style={{ backgroundColor: "rgba(11,11,11,0.97)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                            {/* Link para a página de soluções */}
-                            <a
-                              href={item.href}
-                              onClick={() => setSolutionsDropdownOpen(false)}
-                              className="block px-4 py-2 text-xs text-gray-400 hover:text-white hover:bg-white/5 border-b border-white/10 lowercase"
-                              style={{ fontStretch: "condensed" }}
-                            >
-                              {t(lang, "nav.all_solutions")}
-                            </a>
                             {SOLUTION_PRODUCTS.map((p) => (
                               <a
                                 key={p.slug}
