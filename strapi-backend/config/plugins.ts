@@ -32,6 +32,8 @@ export default ({ env }) => {
         config: {
           provider: 'aws-s3',
           providerOptions: {
+            baseUrl: env('CDN_URL'),
+            rootPath: env('AWS_BUCKET_PREFIX', 'uploads-strapi'),
             s3Options: {
               region: env('AWS_REGION', 'us-east-1'),
               ...credentials,

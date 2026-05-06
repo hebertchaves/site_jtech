@@ -1,4 +1,13 @@
-export default [
+export default ({ env }) => {
+  const awsBucket = env('AWS_BUCKET', '');
+  const awsRegion = env('AWS_REGION', 'us-east-1');
+  const cdnUrl = env('CDN_URL', '');
+  const cdnOrigin = cdnUrl ? cdnUrl.replace(/^https?:\/\//, '') : '';
+  const s3Origin = awsBucket
+    ? `${awsBucket}.s3.${awsRegion}.amazonaws.com`
+    : '';
+
+  return [
   'strapi::logger',
   'strapi::errors',
   {
@@ -14,6 +23,8 @@ export default [
             'blob:',
             'dl.airtable.com',
             'res.cloudinary.com',
+            ...(s3Origin ? [s3Origin] : []),
+            ...(cdnOrigin ? [cdnOrigin] : []),
           ],
           'media-src': [
             "'self'",
@@ -21,6 +32,8 @@ export default [
             'blob:',
             'dl.airtable.com',
             'res.cloudinary.com',
+            ...(s3Origin ? [s3Origin] : []),
+            ...(cdnOrigin ? [cdnOrigin] : []),
           ],
           upgradeInsecureRequests: null,
         },
@@ -76,3 +89,4 @@ export default [
   },
   'strapi::public',
 ];
+};
