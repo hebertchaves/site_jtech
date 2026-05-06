@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "preview_tokens",
+  "info": {
+    "singularName": "preview-token",
+    "pluralName": "preview-tokens",
+    "displayName": "Preview Token",
+    "description": "Tokens for secure content preview"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "tokenHash": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "contentType": {
+      "type": "enumeration",
+      "enum": ["post", "ebook"],
+      "required": true
+    },
+    "slug": {
+      "type": "string",
+      "required": true
+    },
+    "locale": {
+      "type": "string",
+      "required": true
+    },
+    "expiresAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "usedAt": {
+      "type": "datetime",
+      "required": false
+    },
+    "createdBy": {
+      "type": "string",
+      "required": false
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "preview_sessions",
+  "info": {
+    "singularName": "preview-session",
+    "pluralName": "preview-sessions",
+    "displayName": "Preview Session",
+    "description": "Active preview sessions with HttpOnly cookie-based auth"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "sessionId": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "contentType": {
+      "type": "enumeration",
+      "enum": ["post", "ebook"],
+      "required": true
+    },
+    "slug": {
+      "type": "string",
+      "required": true
+    },
+    "locale": {
+      "type": "string",
+      "required": true,
+      "default": "pt-BR"
+    },
+    "expiresAt": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}
