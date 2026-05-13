@@ -12,6 +12,8 @@ export interface Ebook {
   thumbnailImage?: string // Imagem para cards/listagens
   heroImage?: string // Imagem para página de detalhes (hero/apresentação)
   downloadUrl?: string
+  ctaType?: 'RD_FORM' | 'DIRECT_DOWNLOAD' | 'EXTERNAL_LINK'
+  rdFormUrl?: string
 }
 
 export const ebooks: Ebook[] = [
