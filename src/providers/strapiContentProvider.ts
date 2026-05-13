@@ -217,8 +217,13 @@ export class StrapiContentProvider implements ContentProvider {
       'fields[2]': 'description',
       'fields[3]': 'pages',
       'fields[4]': 'category',
+      'fields[5]': 'downloadUrl',
+      'fields[6]': 'ctaType',
+      'fields[7]': 'rdFormUrl',
       'populate[image][fields][0]': 'url',
       'populate[image][fields][1]': 'alternativeText',
+      'populate[thumbnailImage][fields][0]': 'url',
+      'populate[thumbnailImage][fields][1]': 'alternativeText',
     })
 
     const response = await this.fetchStrapi<StrapiResponse<StrapiEbook[]>>(url)
@@ -243,8 +248,21 @@ export class StrapiContentProvider implements ContentProvider {
     const url = this.buildURL('/api/ebooks', {
       'filters[slug][$eq]': slug,
       locale,
+      'fields[0]': 'title',
+      'fields[1]': 'slug',
+      'fields[2]': 'description',
+      'fields[3]': 'content',
+      'fields[4]': 'pages',
+      'fields[5]': 'category',
+      'fields[6]': 'downloadUrl',
+      'fields[7]': 'ctaType',
+      'fields[8]': 'rdFormUrl',
       'populate[image][fields][0]': 'url',
       'populate[image][fields][1]': 'alternativeText',
+      'populate[thumbnailImage][fields][0]': 'url',
+      'populate[thumbnailImage][fields][1]': 'alternativeText',
+      'populate[heroImage][fields][0]': 'url',
+      'populate[heroImage][fields][1]': 'alternativeText',
     })
 
     try {
