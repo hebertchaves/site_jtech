@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Plus } from "lucide-react"
 import { Lang, t } from "../lib/i18n"
 import { getRoute } from "../lib/routes"
-import { ebooks, Ebook } from "../data/ebooks"
+import { Ebook } from "../data/ebooks"
 import { Hero } from "../components/sections/Hero"
 import { Container } from "../components/layout/Container"
 import { submitLead } from "../lib/leads"
@@ -12,6 +12,7 @@ import { Input } from "../components/ui/input"
 import { Label } from "../components/ui/label"
 import { Button } from "../components/ui/button"
 import { ScrollToTop } from "../components/ScrollToTop"
+import { getContentProvider } from "../providers"
 
 function ImageWithFallback(props: any) {
   const [currentSrc, setCurrentSrc] = useState(props.src)
@@ -48,10 +49,23 @@ interface EbooksPageProps {
 }
 
 export function EbooksPage({ lang }: EbooksPageProps) {
+  const [ebooks, setEbooks] = useState<Ebook[]>([])
+  const [ebooksLoading, setEbooksLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedEbook, setSelectedEbook] = useState<Ebook | null>(null)
   const [formData, setFormData] = useState({ name: "", email: "" })
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const provider = getContentProvider()
+    provider.getEbooks(lang)
+      .then(setEbooks)
+      .catch((err) => {
+        console.error('Error fetching ebooks:', err)
+        setEbooks([])
+      })
+      .finally(() => setEbooksLoading(false))
+  }, [lang])
 
   const navigateToEbook = (slug: string) => {
     const detailRoute = getRoute("ebookDetail", lang, { slug })
@@ -112,6 +126,13 @@ export function EbooksPage({ lang }: EbooksPageProps) {
           ==================================== */}
       <section className="py-16 bg-white">
         <Container>
+          {ebooksLoading ? (
+            <div className="flex items-center justify-center min-h-[300px]">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#E30613]"></div>
+            </div>
+          ) : ebooks.length === 0 ? (
+            <p className="text-center text-gray-500 py-16">Nenhum e-book disponível no momento.</p>
+          ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {ebooks.map((ebook, idx) => {
               return (
@@ -136,6 +157,7 @@ export function EbooksPage({ lang }: EbooksPageProps) {
               )
             })}
           </div>
+          )}
         </Container>
       </section>
 
