@@ -76,22 +76,40 @@ export function EbookDetailPage({ lang, slug }: EbookDetailPageProps) {
     )
   }
 
+  const triggerDownload = (eb: Ebook) => {
+    const ctaType = eb.ctaType || (eb.downloadUrl ? 'DIRECT_DOWNLOAD' : undefined)
+    if (ctaType === 'RD_FORM' && eb.rdFormUrl) {
+      window.open(eb.rdFormUrl, '_blank', 'noopener,noreferrer')
+    } else if (ctaType === 'EXTERNAL_LINK' && eb.downloadUrl) {
+      window.open(eb.downloadUrl, '_blank', 'noopener,noreferrer')
+    } else if (eb.downloadUrl) {
+      const link = document.createElement('a')
+      link.href = eb.downloadUrl
+      link.download = eb.slug + '.pdf'
+      link.target = '_blank'
+      link.rel = 'noopener noreferrer'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     // ✅ LGPD: Validate consent before submission
     const validation = validateConsent(consentGiven)
     if (!validation.valid) {
       alert(validation.error)
       return
     }
-    
+
     setFormLoading(true)
 
     try {
       // ✅ LGPD: Create consent data
       const consentData = createConsentData(lang)
-      
+
       // Submit lead with consent information
       await submitLead(
         {
@@ -107,12 +125,12 @@ export function EbookDetailPage({ lang, slug }: EbookDetailPageProps) {
       )
 
       trackFormSubmit("ebook", "Ebook Download Form")
-      
-      alert(`Download iniciado: ${ebook.title[lang]}`)
-      
+
       setModalOpen(false)
       setFormData({ name: "", email: "" })
-      setConsentGiven(false) // Reset consent
+      setConsentGiven(false)
+
+      triggerDownload(ebook)
     } catch (error) {
       console.error("Error submitting ebook form:", error)
     } finally {
