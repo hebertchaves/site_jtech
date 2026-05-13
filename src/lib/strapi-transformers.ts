@@ -190,6 +190,8 @@ export function transformStrapiEbook(strapiEbook: StrapiEbook, lang: Lang): Eboo
     thumbnailImage: thumbnailUrl || imageUrl,
     heroImage: heroUrl || imageUrl,
     downloadUrl: strapiEbook.downloadUrl,
+    ctaType: strapiEbook.ctaType,
+    rdFormUrl: strapiEbook.rdFormUrl,
   }
 }
 
