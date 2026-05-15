@@ -705,11 +705,11 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                           ))}
                         </div>
                         <div className="flex flex-col gap-2">
-                          <Button variant="outline" size="sm" className="border-[#E30613] text-[#E30613] hover:bg-[#E30613] hover:text-white w-full" onClick={() => setWhatsappModalOpen(true)}>
-                            {produto.slug !== 'sansys-water' ? "Fale com um de nossos especialistas" : t(lang, "solutions.cta.practice")}
+                          <Button size="sm" className="bg-[#E30613] hover:bg-[#C10511] text-white w-full" onClick={() => setWhatsappModalOpen(true)}>
+                            Fale com um de nossos especialistas
                           </Button>
-                          <Button size="sm" className="bg-[#E30613] hover:bg-[#C10511] flex items-center justify-center gap-2 w-full" onClick={() => window.location.hash = `#/${lang}/${solutionsPath}/${produto.slug}`}>
-                            {t(lang, "solutions.cta.know")} <ChevronDown className="h-4 w-4" />
+                          <Button size="sm" variant="ghost" className="text-[#E30613] hover:bg-[#E30613]/10 flex items-center justify-center gap-2 w-full text-[19px] font-semibold tracking-wide" onClick={() => document.getElementById('product-detail')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+                            SAIBA MAIS <ChevronDown className="h-4 w-4 arrow-bounce" />
                           </Button>
                         </div>
                       </div>
@@ -741,12 +741,12 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                     <ImageWithFallback src={currentProduct.image} alt={currentProduct.title} className="w-full rounded-lg aspect-video object-contain" style={{ transform: 'scale(1.3)' }} />
                   </div>
                 </div>
-                <div className="flex justify-center gap-4">
-                  <Button variant="outline" className="border-[#E30613] text-[#E30613] hover:bg-[#E30613] hover:text-white min-w-[200px]" onClick={() => setWhatsappModalOpen(true)}>
-                    {isWater ? t(lang, "solutions.cta.practice") : "Fale com um de nossos especialistas"}
+                <div className="flex flex-col items-center gap-3">
+                  <Button className="bg-[#E30613] hover:bg-[#C10511] text-white min-w-[200px]" onClick={() => setWhatsappModalOpen(true)}>
+                    Fale com um de nossos especialistas
                   </Button>
-                  <Button className="bg-[#E30613] hover:bg-[#C10511] flex items-center gap-2 min-w-[200px]" onClick={() => window.location.hash = `#/${lang}/${solutionsPath}/${currentProduct.slug}`}>
-                    {t(lang, "solutions.cta.know")} <ChevronDown className="h-4 w-4" />
+                  <Button variant="ghost" className="text-[#E30613] hover:bg-[#E30613]/10 flex items-center gap-2 min-w-[200px] text-[19px] font-semibold tracking-wide" onClick={() => document.getElementById('product-detail')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+                    SAIBA MAIS <ChevronDown className="h-4 w-4 arrow-bounce" />
                   </Button>
                 </div>
               </div>
@@ -771,12 +771,15 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
           .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
           .scrollbar-hide::-webkit-scrollbar { display: none; }
           .line-clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+          @keyframes arrowBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+          .arrow-bounce { animation: arrowBounce 1.2s ease-in-out infinite; }
         `}</style>
       </section>
 
       {/* ── CONTEÚDO DINÂMICO (muda com o carrossel) ─────────────────────────── */}
       <AnimatePresence mode="wait">
         <motion.div
+          id="product-detail"
           key={currentProduct.slug}
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
