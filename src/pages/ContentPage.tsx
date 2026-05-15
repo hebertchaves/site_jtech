@@ -68,13 +68,22 @@ export function ContentPage({ lang }: ContentPageProps) {
       try {
         const provider = getContentProvider()
         
-        const [postsData, ebooksData] = await Promise.all([
+        const [postsResult, ebooksResult] = await Promise.allSettled([
           provider.getPosts(lang),
           provider.getEbooks(lang)
         ])
-        
-        setPosts(postsData.slice(0, 3)) // Mostrar apenas 3 posts iniciais
-        setEbooks(ebooksData.slice(0, 3)) // Mostrar apenas 3 ebooks
+
+        if (postsResult.status === 'fulfilled') {
+          setPosts(postsResult.value.slice(0, 3))
+        } else {
+          console.error('Error fetching posts:', postsResult.reason)
+        }
+
+        if (ebooksResult.status === 'fulfilled') {
+          setEbooks(ebooksResult.value.slice(0, 3))
+        } else {
+          console.error('Error fetching ebooks:', ebooksResult.reason)
+        }
       } catch (error) {
         console.error('Error fetching content:', error)
       } finally {

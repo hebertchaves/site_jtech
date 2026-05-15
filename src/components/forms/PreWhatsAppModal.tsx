@@ -35,7 +35,15 @@ export function PreWhatsAppModal({ open, onClose, lang }: PreWhatsAppModalProps)
 
     onClose()
     openWhatsApp(
-      { product: form.company, page: "modal", language: lang },
+      {
+        name: form.name,
+        email: form.email,
+        company: form.company,
+        role: form.role,
+        phone: form.phone,
+        page: "modal",
+        language: lang,
+      },
       lang
     )
     setLoading(false)

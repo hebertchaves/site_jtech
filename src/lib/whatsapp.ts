@@ -1,61 +1,61 @@
 import { Lang } from "./i18n"
-import { getAttribution } from "./utm"
-import { ENVIRONMENT } from "./endpoints"
 
 // Substituir pelo número oficial da Jtech
 const WHATSAPP_NUMBER = "5548992256034"
 
 export interface WhatsAppMessageData {
-  product?: string
+  name?: string
+  email?: string
+  company?: string
+  role?: string
+  phone?: string
   page: string
   language: Lang
-  name?: string
-}
-
-function cleanPagePath(): string {
-  const { pathname, hash } = window.location
-  return `${pathname}${hash || ""}`
 }
 
 export function buildWhatsAppMessage(
   data: WhatsAppMessageData,
   lang: Lang
 ): string {
-  const attribution = getAttribution()
-  const pagePath = cleanPagePath()
-  const timestamp = new Date().toISOString()
+  const messages: Record<Lang, string> = {
+    pt: `Olá!
+Gostaria de receber mais informações sobre as soluções da Jtech
 
-  const baseMessage = {
-    pt: `Olá! Meu nome é ${data.name || "[Nome]"}.
-Tenho interesse em ${data.product || "suas soluções"}.
-Gostaria de receber mais informações.`,
+Meu nome: ${data.name || ""}
+Meu e-mail: ${data.email || ""}
+Minha empresa: ${data.company || ""}
+Meu Cargo: ${data.role || ""}
+Meu telefone: ${data.phone || ""}`,
 
-    es: `¡Hola! Mi nombre es ${data.name || "[Nombre]"}.
-Estoy interesado(a) en ${data.product || "sus soluciones"}.
-Me gustaría recibir más información.`,
+    es: `¡Hola!
+Me gustaría recibir más información sobre las soluciones de Jtech
 
-    en: `Hello! My name is ${data.name || "[Name]"}.
-I'm interested in ${data.product || "your solutions"}.
-I would like more information.`,
+Mi nombre: ${data.name || ""}
+Mi correo: ${data.email || ""}
+Mi empresa: ${data.company || ""}
+Mi cargo: ${data.role || ""}
+Mi teléfono: ${data.phone || ""}`,
 
-    fr: `Bonjour! Je m'appelle ${data.name || "[Nom]"}.
-Je suis intéressé(e) par ${data.product || "vos solutions"}.
-J’aimerais recevoir plus d’informations.`,
+    en: `Hello!
+I would like to receive more information about Jtech’s solutions
+
+My name: ${data.name || ""}
+My email: ${data.email || ""}
+My company: ${data.company || ""}
+My role: ${data.role || ""}
+My phone: ${data.phone || ""}`,
+
+    fr: `Bonjour!
+Je souhaite recevoir plus d’informations sur les solutions Jtech
+
+Mon nom: ${data.name || ""}
+Mon email: ${data.email || ""}
+Mon entreprise: ${data.company || ""}
+Mon poste: ${data.role || ""}
+Mon téléphone: ${data.phone || ""}`,
   }
 
-  const technicalBlock = `
-
-———
-📍 Página: ${pagePath}
-🌎 Idioma: ${lang}
-📦 Produto: ${data.product || "N/A"}
-🕒 Timestamp: ${timestamp}
-🌱 UTM Source: ${attribution.utm_source || "N/A"}
-📣 UTM Campaign: ${attribution.utm_campaign || "N/A"}
-🖥 Ambiente: ${ENVIRONMENT}
-`
-
-  return baseMessage[lang] + technicalBlock
+  return messages[lang] ?? messages.pt
 }
 
 export function getWhatsAppURL(
