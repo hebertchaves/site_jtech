@@ -785,7 +785,24 @@ export interface ApiProductCtaConfigProductCtaConfig
       'api::product-cta-config.product-cta-config'
     > &
       Schema.Attribute.Private;
-    productSlug: Schema.Attribute.String &
+    productSlug: Schema.Attribute.Enumeration<
+      [
+        'homepage',
+        'sansys-water',
+        'sansys-pay',
+        'sansys-waste',
+        'sansys-agency',
+        'sansys-hub',
+        'sansys-flow',
+        'sansys-reader',
+        'sansys-gis',
+        'sansys-bi',
+        'sansys-smart-meter',
+        'sansys-omnichannel',
+        'sansys-antifraude',
+        'sansys-critica-leitura',
+      ]
+    > &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
     publishedAt: Schema.Attribute.DateTime;

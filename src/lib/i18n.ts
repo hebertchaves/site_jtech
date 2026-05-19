@@ -342,6 +342,7 @@ const translations: Translations = {
     "prewhatsapp.role": "Cargo",
     "prewhatsapp.phone": "Telefone",
     "prewhatsapp.cta": "Continuar para WhatsApp",
+    "prewhatsapp.cta_rd": "Enviar",
     "prewhatsapp.close": "Fechar",
     
     // Privacy Page
@@ -713,6 +714,7 @@ const translations: Translations = {
     "prewhatsapp.role": "Cargo",
     "prewhatsapp.phone": "Teléfono",
     "prewhatsapp.cta": "Continuar a WhatsApp",
+    "prewhatsapp.cta_rd": "Enviar",
     "prewhatsapp.close": "Cerrar",
     
     // Privacy Page
@@ -1084,6 +1086,7 @@ const translations: Translations = {
     "prewhatsapp.role": "Role/Position",
     "prewhatsapp.phone": "Phone",
     "prewhatsapp.cta": "Continue to WhatsApp",
+    "prewhatsapp.cta_rd": "Submit",
     "prewhatsapp.close": "Close",
     
     // Privacy Page
@@ -1455,6 +1458,7 @@ const translations: Translations = {
     "prewhatsapp.role": "Poste",
     "prewhatsapp.phone": "Téléphone",
     "prewhatsapp.cta": "Continuer vers WhatsApp",
+    "prewhatsapp.cta_rd": "Envoyer",
     "prewhatsapp.close": "Fermer",
     
     // Privacy Page

@@ -12,7 +12,23 @@
   },
   "attributes": {
     "productSlug": {
-      "type": "string",
+      "type": "enumeration",
+      "enum": [
+        "homepage",
+        "sansys-water",
+        "sansys-pay",
+        "sansys-waste",
+        "sansys-agency",
+        "sansys-hub",
+        "sansys-flow",
+        "sansys-reader",
+        "sansys-gis",
+        "sansys-bi",
+        "sansys-smart-meter",
+        "sansys-omnichannel",
+        "sansys-antifraude",
+        "sansys-critica-leitura"
+      ],
       "required": true,
       "unique": true
     },

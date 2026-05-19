@@ -63,10 +63,26 @@ export interface StrapiEbook {
   heroImage?: StrapiMedia | null
 }
 
+export type ProductSlug =
+  | 'homepage'
+  | 'sansys-water'
+  | 'sansys-pay'
+  | 'sansys-waste'
+  | 'sansys-agency'
+  | 'sansys-hub'
+  | 'sansys-flow'
+  | 'sansys-reader'
+  | 'sansys-gis'
+  | 'sansys-bi'
+  | 'sansys-smart-meter'
+  | 'sansys-omnichannel'
+  | 'sansys-antifraude'
+  | 'sansys-critica-leitura'
+
 export interface StrapiProductCTAConfig {
   id: number
   documentId: string
-  productSlug: string
+  productSlug: ProductSlug
   rdFormUrl: string
   ctaLabel?: string
 }

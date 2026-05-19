@@ -473,7 +473,13 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
   }, [])
 
   useEffect(() => {
-    getContentProvider().getProductCTAConfigs().then(setCTAConfigs).catch(() => {})
+    getContentProvider()
+      .getProductCTAConfigs()
+      .then(configs => {
+        console.log('[CTA] configs carregados:', configs)
+        setCTAConfigs(configs)
+      })
+      .catch(err => console.warn('[CTA] falha ao carregar configs:', err))
   }, [])
 
   // Navegar direto para um produto via ?produto= na URL
@@ -647,6 +653,9 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
     setWhatsappModalOpen(true)
   }
 
+  const ctaLabel = (slug: string, fallback: string) =>
+    ctaConfigs[slug]?.ctaLabel ?? fallback
+
   return (
     <>
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
@@ -719,7 +728,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                         </div>
                         <div className="flex flex-col gap-2">
                           <Button size="sm" className="bg-[#E30613] hover:bg-[#C10511] text-white w-full" onClick={() => openCTA(produto.slug)}>
-                            Fale com um de nossos especialistas
+                            {ctaLabel(produto.slug, 'Fale com um de nossos especialistas')}
                           </Button>
                           <Button size="sm" variant="ghost" className="text-[#E30613] hover:bg-[#E30613]/10 flex items-center justify-center gap-2 w-full text-[19px] font-semibold tracking-wide" onClick={() => document.getElementById('product-detail')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
                             SAIBA MAIS <ChevronDown className="h-4 w-4 arrow-bounce" />
@@ -756,7 +765,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                 </div>
                 <div className="flex flex-col items-center gap-3">
                   <Button className="bg-[#E30613] hover:bg-[#C10511] text-white min-w-[200px]" onClick={() => openCTA(currentProduct.slug)}>
-                    Fale com um de nossos especialistas
+                    {ctaLabel(currentProduct.slug, 'Fale com um de nossos especialistas')}
                   </Button>
                   <Button variant="ghost" className="text-[#E30613] hover:bg-[#E30613]/10 flex items-center gap-2 min-w-[200px] text-[19px] font-semibold tracking-wide" onClick={() => document.getElementById('product-detail')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
                     SAIBA MAIS <ChevronDown className="h-4 w-4 arrow-bounce" />
@@ -901,7 +910,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                                 <p className="text-lg text-gray-700 leading-relaxed">{md.fullDescription}</p>
                                 <div className="flex justify-center">
                                   <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => openCTA(modulos[moduloIndex].slug)}>
-                                    Fale com um de nossos especialistas
+                                    {ctaLabel(modulos[moduloIndex].slug, 'Fale com um de nossos especialistas')}
                                   </Button>
                                 </div>
                               </div>
@@ -973,7 +982,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                               <h2 className="text-3xl md:text-4xl font-extralight text-white mb-4">{md.ctaTitle}</h2>
                               <p className="text-gray-300 text-lg mb-8 leading-relaxed">{md.ctaSubtitle}</p>
                               <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => openCTA(modulos[moduloIndex].slug)}>
-                                Entrar em contato
+                                {ctaLabel(modulos[moduloIndex].slug, 'Entrar em contato')}
                               </Button>
                             </div>
                           </Container>
@@ -1045,7 +1054,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                   </div>
                   <div className="text-center">
                     <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => openCTA(currentProduct.slug)}>
-                      Fale com um de nossos especialistas
+                      {ctaLabel(currentProduct.slug, 'Fale com um de nossos especialistas')}
                     </Button>
                   </div>
                 </Container>
@@ -1079,7 +1088,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                     <h2 className="text-3xl md:text-4xl font-extralight text-white mb-4">{detail.ctaTitle}</h2>
                     <p className="text-gray-300 text-lg mb-8 leading-relaxed">{detail.ctaSubtitle}</p>
                     <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => openCTA(currentProduct.slug)}>
-                      Entrar em contato
+                      {ctaLabel(currentProduct.slug, 'Entrar em contato')}
                     </Button>
                   </div>
                 </Container>

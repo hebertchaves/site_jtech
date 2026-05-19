@@ -125,7 +125,7 @@ export function PreWhatsAppModal({ open, onClose, lang, rdFormUrl }: PreWhatsApp
               {t(lang, "prewhatsapp.close")}
             </Button>
             <Button type="submit" className="flex-1" disabled={loading}>
-              {loading ? t(lang, "common.loading") : t(lang, "prewhatsapp.cta")}
+              {loading ? t(lang, "common.loading") : rdFormUrl ? t(lang, "prewhatsapp.cta_rd") : t(lang, "prewhatsapp.cta")}
             </Button>
           </div>
         </form>
