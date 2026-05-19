@@ -8,6 +8,8 @@ import { calculateBannerOffset } from "../lib/banner-alignment"
 import { ScrollToTop } from "../components/ScrollToTop"
 import { motion, AnimatePresence } from "motion/react"
 import { LogoBySlug } from "../components/logos"
+import { getContentProvider } from "../providers"
+import { ProductCTAConfig } from "../providers/contentProvider"
 
 interface SolutionsPageProps {
   lang: Lang
@@ -454,6 +456,8 @@ const moduleDetails: Record<string, ModuleDetail> = {
 
 export function SolutionsPage({ lang }: SolutionsPageProps) {
   const [whatsappModalOpen, setWhatsappModalOpen] = useState(false)
+  const [activeCTAConfig, setActiveCTAConfig] = useState<ProductCTAConfig | null>(null)
+  const [ctaConfigs, setCTAConfigs] = useState<Record<string, ProductCTAConfig>>({})
   const [moduloIndex, setModuloIndex] = useState(0)
   const [bannerOffset, setBannerOffset] = useState(0)
   const [productIndex, setProductIndex] = useState(0)
@@ -466,6 +470,10 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
     updateOffset()
     window.addEventListener('resize', updateOffset)
     return () => window.removeEventListener('resize', updateOffset)
+  }, [])
+
+  useEffect(() => {
+    getContentProvider().getProductCTAConfigs().then(setCTAConfigs).catch(() => {})
   }, [])
 
   // Navegar direto para um produto via ?produto= na URL
@@ -634,6 +642,11 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
   const isWater = currentProduct.slug === 'sansys-water'
   const solutionsPath = lang === 'pt' ? 'solucoes' : lang === 'es' ? 'soluciones' : 'solutions'
 
+  const openCTA = (slug: string) => {
+    setActiveCTAConfig(ctaConfigs[slug] ?? null)
+    setWhatsappModalOpen(true)
+  }
+
   return (
     <>
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
@@ -705,7 +718,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                           ))}
                         </div>
                         <div className="flex flex-col gap-2">
-                          <Button size="sm" className="bg-[#E30613] hover:bg-[#C10511] text-white w-full" onClick={() => setWhatsappModalOpen(true)}>
+                          <Button size="sm" className="bg-[#E30613] hover:bg-[#C10511] text-white w-full" onClick={() => openCTA(produto.slug)}>
                             Fale com um de nossos especialistas
                           </Button>
                           <Button size="sm" variant="ghost" className="text-[#E30613] hover:bg-[#E30613]/10 flex items-center justify-center gap-2 w-full text-[19px] font-semibold tracking-wide" onClick={() => document.getElementById('product-detail')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
@@ -742,7 +755,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-3">
-                  <Button className="bg-[#E30613] hover:bg-[#C10511] text-white min-w-[200px]" onClick={() => setWhatsappModalOpen(true)}>
+                  <Button className="bg-[#E30613] hover:bg-[#C10511] text-white min-w-[200px]" onClick={() => openCTA(currentProduct.slug)}>
                     Fale com um de nossos especialistas
                   </Button>
                   <Button variant="ghost" className="text-[#E30613] hover:bg-[#E30613]/10 flex items-center gap-2 min-w-[200px] text-[19px] font-semibold tracking-wide" onClick={() => document.getElementById('product-detail')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
@@ -887,7 +900,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                                 </div>
                                 <p className="text-lg text-gray-700 leading-relaxed">{md.fullDescription}</p>
                                 <div className="flex justify-center">
-                                  <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => setWhatsappModalOpen(true)}>
+                                  <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => openCTA(modulos[moduloIndex].slug)}>
                                     Fale com um de nossos especialistas
                                   </Button>
                                 </div>
@@ -959,7 +972,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                             <div className="text-center max-w-3xl mx-auto">
                               <h2 className="text-3xl md:text-4xl font-extralight text-white mb-4">{md.ctaTitle}</h2>
                               <p className="text-gray-300 text-lg mb-8 leading-relaxed">{md.ctaSubtitle}</p>
-                              <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => setWhatsappModalOpen(true)}>
+                              <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => openCTA(modulos[moduloIndex].slug)}>
                                 Entrar em contato
                               </Button>
                             </div>
@@ -1031,7 +1044,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                     ))}
                   </div>
                   <div className="text-center">
-                    <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => setWhatsappModalOpen(true)}>
+                    <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => openCTA(currentProduct.slug)}>
                       Fale com um de nossos especialistas
                     </Button>
                   </div>
@@ -1065,7 +1078,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                   <div className="text-center max-w-3xl mx-auto">
                     <h2 className="text-3xl md:text-4xl font-extralight text-white mb-4">{detail.ctaTitle}</h2>
                     <p className="text-gray-300 text-lg mb-8 leading-relaxed">{detail.ctaSubtitle}</p>
-                    <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => setWhatsappModalOpen(true)}>
+                    <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => openCTA(currentProduct.slug)}>
                       Entrar em contato
                     </Button>
                   </div>
@@ -1076,7 +1089,12 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
         </motion.div>
       </AnimatePresence>
 
-      <PreWhatsAppModal lang={lang} open={whatsappModalOpen} onClose={() => setWhatsappModalOpen(false)} />
+      <PreWhatsAppModal
+        lang={lang}
+        open={whatsappModalOpen}
+        onClose={() => { setWhatsappModalOpen(false); setActiveCTAConfig(null) }}
+        rdFormUrl={activeCTAConfig?.rdFormUrl}
+      />
       <ScrollToTop showThreshold={200} />
     </>
   )

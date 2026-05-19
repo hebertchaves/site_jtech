@@ -12,9 +12,10 @@ interface PreWhatsAppModalProps {
   open: boolean
   onClose: () => void
   lang: Lang
+  rdFormUrl?: string
 }
 
-export function PreWhatsAppModal({ open, onClose, lang }: PreWhatsAppModalProps) {
+export function PreWhatsAppModal({ open, onClose, lang, rdFormUrl }: PreWhatsAppModalProps) {
   const [form, setForm] = useState({ name: "", email: "", company: "", role: "", phone: "" })
   const [loading, setLoading] = useState(false)
 
@@ -34,18 +35,24 @@ export function PreWhatsAppModal({ open, onClose, lang }: PreWhatsAppModalProps)
     }
 
     onClose()
-    openWhatsApp(
-      {
-        name: form.name,
-        email: form.email,
-        company: form.company,
-        role: form.role,
-        phone: form.phone,
-        page: "modal",
-        language: lang,
-      },
-      lang
-    )
+
+    if (rdFormUrl) {
+      window.open(rdFormUrl, '_blank', 'noopener,noreferrer')
+    } else {
+      openWhatsApp(
+        {
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          role: form.role,
+          phone: form.phone,
+          page: "modal",
+          language: lang,
+        },
+        lang
+      )
+    }
+
     setLoading(false)
   }
 

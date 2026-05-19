@@ -9,10 +9,13 @@ import {
   transformStrapiEbooks,
   transformStrapiPost,
   transformStrapiEbook,
+  transformStrapiProductCTAConfigs,
   StrapiResponse,
   StrapiPost,
   StrapiEbook,
+  StrapiProductCTAConfig,
 } from "../lib/strapi-transformers"
+import { ProductCTAConfig } from "./contentProvider"
 
 /**
  * StrapiContentProvider - Direct Strapi 5 integration
@@ -311,6 +314,26 @@ export class StrapiContentProvider implements ContentProvider {
       }
 
       return transformStrapiEbook(fallbackResponse.data[0], lang)
+    }
+  }
+
+  /**
+   * Get all published product CTA configs, keyed by productSlug
+   */
+  async getProductCTAConfigs(): Promise<Record<string, ProductCTAConfig>> {
+    const url = this.buildURL('/api/product-cta-configs', {
+      'pagination[limit]': 100,
+      'fields[0]': 'productSlug',
+      'fields[1]': 'rdFormUrl',
+      'fields[2]': 'ctaLabel',
+    })
+
+    try {
+      const response = await this.fetchStrapi<StrapiResponse<StrapiProductCTAConfig[]>>(url)
+      return transformStrapiProductCTAConfigs(response.data ?? [])
+    } catch (error) {
+      console.error('Error fetching product CTA configs:', error)
+      return {}
     }
   }
 

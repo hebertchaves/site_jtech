@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_cta_configs",
+  "info": {
+    "singularName": "product-cta-config",
+    "pluralName": "product-cta-configs",
+    "displayName": "Product CTA Config",
+    "description": "Configuração dos CTAs de produto — URL da RD Station por produto/módulo"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "productSlug": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "rdFormUrl": {
+      "type": "string",
+      "required": true
+    },
+    "ctaLabel": {
+      "type": "string"
+    }
+  }
+}

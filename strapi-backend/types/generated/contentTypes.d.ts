@@ -762,6 +762,40 @@ export interface ApiPreviewTokenPreviewToken
   };
 }
 
+export interface ApiProductCtaConfigProductCtaConfig
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'product_cta_configs';
+  info: {
+    description: 'Configura\u00E7\u00E3o dos CTAs de produto \u2014 URL da RD Station por produto/m\u00F3dulo';
+    displayName: 'Product CTA Config';
+    pluralName: 'product-cta-configs';
+    singularName: 'product-cta-config';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    ctaLabel: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-cta-config.product-cta-config'
+    > &
+      Schema.Attribute.Private;
+    productSlug: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    publishedAt: Schema.Attribute.DateTime;
+    rdFormUrl: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -1279,6 +1313,7 @@ declare module '@strapi/strapi' {
       'api::post.post': ApiPostPost;
       'api::preview-session.preview-session': ApiPreviewSessionPreviewSession;
       'api::preview-token.preview-token': ApiPreviewTokenPreviewToken;
+      'api::product-cta-config.product-cta-config': ApiProductCtaConfigProductCtaConfig;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
