@@ -386,7 +386,8 @@ export function AboutPage({ lang }: AboutPageProps) {
                             }}
                             onClick={() => {
                               const solutionsPath = getRoute("solutions", lang)
-                              window.location.hash = `#/${lang}${solutionsPath}?produto=${produto.slug}`
+                              const paramKey = productTab === "modulos" ? "modulo" : "produto"
+                              window.location.hash = `#/${lang}${solutionsPath}?${paramKey}=${produto.slug}`
                             }}
                           >
                             <div className="flex flex-col items-center justify-center">

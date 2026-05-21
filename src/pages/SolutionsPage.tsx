@@ -89,172 +89,194 @@ const LOREM_DETAIL: ProductDetail = {
   ctaSubtitle: 'Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
 }
 
-const productDetails: Record<string, ProductDetail> = {
-  'sansys-pay': LOREM_DETAIL,
+function getProductDetails(lang: Lang): Record<string, ProductDetail> {
+  return {
+    'sansys-pay': LOREM_DETAIL,
 
-  'sansys-waste': {
-    fullDescription: 'O Sansys Waste é a solução inteligente para gestão de resíduos e gestão de concessões, projetada para oferecer controle completo sobre o ciclo de vida dos resíduos, desde a entrada até a destinação final, promovendo sustentabilidade e vantagem competitiva.',
-    benefitsTitle: 'Solução inteligente para gestão de resíduos',
-    benefitsSubtitle: 'Rastreabilidade total, eficiência operacional e conformidade ambiental',
-    benefits: [
-      { title: 'Padronização operacional', subtitle: 'Layout e processos unificados em toda a concessão.' },
-      { title: 'Precisão no faturamento', subtitle: 'Maior controle sobre toneladas tratadas e redução de fraudes.' },
-      { title: 'Integração com ERP', subtitle: 'Faturamento automático e relatórios de desempenho.' },
-      { title: 'Visão completa', subtitle: 'Painéis de gestão e alertas inteligentes para tomada de decisão ágil.' },
-    ],
-    functionalitiesTitle: 'Principais funcionalidades',
-    functionalities: [
-      'Roteirização inteligente de coleta',
-      'Rastreamento GPS de veículos',
-      'Controle de pesagem e volumes',
-      'Gestão de aterros e destinação',
-      'Indicadores de sustentabilidade',
-      'App para coletores e cidadãos',
-    ],
-    resultsTitle: 'Resultados comprovados',
-    // Valores a confirmar internamente
-    results: [
-      { metric: '30%', label: 'Redução de fraudes', description: 'Controle preciso sobre pesagem e volumes tratados' },
-      { metric: '100%', label: 'Rastreabilidade', description: 'Do início ao fim do ciclo de vida dos resíduos' },
-      { metric: '25%', label: 'Eficiência operacional', description: 'Com roteirização inteligente e processos padronizados' },
-    ],
-    applicationsTitle: 'Aplicações',
-    applications: ['Coleta urbana', 'Aterros sanitários', 'Reciclagem', 'Limpeza pública'],
-    ctaTitle: 'Gestão inteligente de resíduos começa aqui',
-    ctaSubtitle: 'Fale com nossos especialistas e descubra como o Sansys Waste pode transformar sua gestão de resíduos.',
-  },
+    'sansys-waste': {
+      fullDescription: t(lang, 'solutions.waste.detail.fullDesc'),
+      benefitsTitle: t(lang, 'solutions.waste.detail.benefitsTitle'),
+      benefitsSubtitle: t(lang, 'solutions.waste.detail.benefitsSubtitle'),
+      benefits: [
+        { title: t(lang, 'solutions.waste.detail.b1title'), subtitle: t(lang, 'solutions.waste.detail.b1sub') },
+        { title: t(lang, 'solutions.waste.detail.b2title'), subtitle: t(lang, 'solutions.waste.detail.b2sub') },
+        { title: t(lang, 'solutions.waste.detail.b3title'), subtitle: t(lang, 'solutions.waste.detail.b3sub') },
+        { title: t(lang, 'solutions.waste.detail.b4title'), subtitle: t(lang, 'solutions.waste.detail.b4sub') },
+      ],
+      functionalitiesTitle: t(lang, 'solutions.waste.detail.funcsTitle'),
+      functionalities: [
+        t(lang, 'solutions.waste.detail.f1'),
+        t(lang, 'solutions.waste.detail.f2'),
+        t(lang, 'solutions.waste.detail.f3'),
+        t(lang, 'solutions.waste.detail.f4'),
+        t(lang, 'solutions.waste.detail.f5'),
+        t(lang, 'solutions.waste.detail.f6'),
+      ],
+      resultsTitle: t(lang, 'solutions.waste.detail.resultsTitle'),
+      results: [
+        { metric: '30%', label: t(lang, 'solutions.waste.detail.r1label'), description: t(lang, 'solutions.waste.detail.r1desc') },
+        { metric: '100%', label: t(lang, 'solutions.waste.detail.r2label'), description: t(lang, 'solutions.waste.detail.r2desc') },
+        { metric: '25%', label: t(lang, 'solutions.waste.detail.r3label'), description: t(lang, 'solutions.waste.detail.r3desc') },
+      ],
+      applicationsTitle: t(lang, 'solutions.waste.detail.appsTitle'),
+      applications: [
+        t(lang, 'solutions.waste.detail.a1'),
+        t(lang, 'solutions.waste.detail.a2'),
+        t(lang, 'solutions.waste.detail.a3'),
+        t(lang, 'solutions.waste.detail.a4'),
+      ],
+      ctaTitle: t(lang, 'solutions.waste.detail.ctaTitle'),
+      ctaSubtitle: t(lang, 'solutions.waste.detail.ctaSub'),
+    },
 
-  'sansys-agency': {
-    fullDescription: 'O Sansys Agency centraliza todos os canais de atendimento ao cliente em uma única plataforma. Gerencia solicitações, ordens de serviço, reclamações e histórico de interações, proporcionando atendimento de excelência e agilidade na resolução de demandas.',
-    benefitsTitle: 'Solução omnichannel para autoatendimento',
-    benefitsSubtitle: 'Conectividade, eficiência operacional e personalização',
-    benefits: [
-      { title: 'Plataforma multicanais', subtitle: 'WhatsApp, webchat, portal, app mobile e totens, todos integrados.' },
-      { title: 'Consulta de dados em tempo real', subtitle: 'Histórico de consumo, faturas, débitos e solicitações.' },
-      { title: 'Experiência consistente', subtitle: 'Não há necessidade de repetir informações entre diferentes canais.' },
-      { title: 'Personalização de experiência', subtitle: 'Configuração de cores, imagens e recursos de acordo com a concessionária.' },
-    ],
-    functionalitiesTitle: 'Principais funcionalidades',
-    functionalities: [
-      'Atendimento multicanal (WhatsApp, redes sociais, telefone, chat)',
-      'Gestão de solicitações e ordens de serviço',
-      'Sistema de protocolo e acompanhamento',
-      'Histórico completo de interações',
-      'Dashboard de performance e SLA',
-      'Redução da demanda no atendimento presencial',
-    ],
-    resultsTitle: 'Resultados comprovados',
-    // Valores a confirmar internamente
-    results: [
-      { metric: '40%', label: 'Redução de chamadas presenciais', description: 'Autoatendimento eficiente em múltiplos canais' },
-      { metric: '95%', label: 'Satisfação dos clientes', description: 'Experiência consistente e personalizada' },
-      { metric: '24/7', label: 'Disponibilidade', description: 'Atendimento contínuo sem interrupções' },
-    ],
-    applicationsTitle: 'Aplicações',
-    applications: ['Centrais de atendimento', 'Ouvidoria', 'SAC', 'Agências físicas e virtuais'],
-    ctaTitle: 'Autoatendimento seguro e personalizado',
-    ctaSubtitle: 'Fale com nossos especialistas e descubra como o Sansys Agency pode transformar sua gestão de relacionamento com o cliente.',
-  },
+    'sansys-agency': {
+      fullDescription: t(lang, 'solutions.agency.detail.fullDesc'),
+      benefitsTitle: t(lang, 'solutions.agency.detail.benefitsTitle'),
+      benefitsSubtitle: t(lang, 'solutions.agency.detail.benefitsSubtitle'),
+      benefits: [
+        { title: t(lang, 'solutions.agency.detail.b1title'), subtitle: t(lang, 'solutions.agency.detail.b1sub') },
+        { title: t(lang, 'solutions.agency.detail.b2title'), subtitle: t(lang, 'solutions.agency.detail.b2sub') },
+        { title: t(lang, 'solutions.agency.detail.b3title'), subtitle: t(lang, 'solutions.agency.detail.b3sub') },
+        { title: t(lang, 'solutions.agency.detail.b4title'), subtitle: t(lang, 'solutions.agency.detail.b4sub') },
+      ],
+      functionalitiesTitle: t(lang, 'solutions.agency.detail.funcsTitle'),
+      functionalities: [
+        t(lang, 'solutions.agency.detail.f1'),
+        t(lang, 'solutions.agency.detail.f2'),
+        t(lang, 'solutions.agency.detail.f3'),
+        t(lang, 'solutions.agency.detail.f4'),
+        t(lang, 'solutions.agency.detail.f5'),
+        t(lang, 'solutions.agency.detail.f6'),
+      ],
+      resultsTitle: t(lang, 'solutions.agency.detail.resultsTitle'),
+      results: [
+        { metric: '40%', label: t(lang, 'solutions.agency.detail.r1label'), description: t(lang, 'solutions.agency.detail.r1desc') },
+        { metric: '95%', label: t(lang, 'solutions.agency.detail.r2label'), description: t(lang, 'solutions.agency.detail.r2desc') },
+        { metric: '24/7', label: t(lang, 'solutions.agency.detail.r3label'), description: t(lang, 'solutions.agency.detail.r3desc') },
+      ],
+      applicationsTitle: t(lang, 'solutions.agency.detail.appsTitle'),
+      applications: [
+        t(lang, 'solutions.agency.detail.a1'),
+        t(lang, 'solutions.agency.detail.a2'),
+        t(lang, 'solutions.agency.detail.a3'),
+        t(lang, 'solutions.agency.detail.a4'),
+      ],
+      ctaTitle: t(lang, 'solutions.agency.detail.ctaTitle'),
+      ctaSubtitle: t(lang, 'solutions.agency.detail.ctaSub'),
+    },
 
-  'sansys-hub': LOREM_DETAIL,
+    'sansys-hub': LOREM_DETAIL,
 
-  'sansys-flow': {
-    fullDescription: 'O Sansys Flow foi projetado para organizar fluxos operacionais, padronizar rotinas e garantir controle completo sobre cada etapa da operação. Ele transforma atividades dispersas em processos estruturados, aumentando a eficiência, reduzindo retrabalho e trazendo mais previsibilidade para a gestão.',
-    benefitsTitle: 'Solução para automação de processos',
-    benefitsSubtitle: 'Padronização de rotinas, aumento de eficiência e previsibilidade na gestão',
-    benefits: [
-      { title: 'Modelagem de fluxos personalizados', subtitle: 'Adaptação completa aos processos específicos de cada concessão.' },
-      { title: 'Visibilidade em tempo real', subtitle: 'Acompanhamento de cada etapa dos processos.' },
-      { title: 'Redução de gargalos', subtitle: 'Identificação rápida de atrasos e pontos críticos.' },
-      { title: 'Integração com o ecossistema Sansys', subtitle: 'Conexão direta com operação, atendimento e faturamento.' },
-    ],
-    functionalitiesTitle: 'Principais funcionalidades',
-    functionalities: [
-      'Automação de tarefas',
-      'Criação de fluxos operacionais',
-      'Gestão de etapas e status',
-      'Integração com operação',
-      'Monitoramento de indicadores',
-      'Padronização de rotinas',
-    ],
-    resultsTitle: 'Resultados comprovados',
-    // Valores a confirmar internamente
-    results: [
-      { metric: '35%', label: 'Redução de retrabalho', description: 'Com fluxos estruturados e padronizados' },
-      { metric: '100%', label: 'Padronização', description: 'De processos em toda a concessão' },
-      { metric: '50%', label: 'Mais previsibilidade', description: 'Na gestão de operações e entregas' },
-    ],
-    applicationsTitle: 'Aplicações',
-    applications: ['Concessionárias de saneamento', 'Autarquias públicas', 'Aterros sanitários', 'Operações de resíduos'],
-    ctaTitle: 'Fluxos operacionais automatizados',
-    ctaSubtitle: 'Fale com nossos especialistas e descubra como o Sansys Flow pode transformar sua gestão de processos.',
-  },
+    'sansys-flow': {
+      fullDescription: t(lang, 'solutions.flow.detail.fullDesc'),
+      benefitsTitle: t(lang, 'solutions.flow.detail.benefitsTitle'),
+      benefitsSubtitle: t(lang, 'solutions.flow.detail.benefitsSubtitle'),
+      benefits: [
+        { title: t(lang, 'solutions.flow.detail.b1title'), subtitle: t(lang, 'solutions.flow.detail.b1sub') },
+        { title: t(lang, 'solutions.flow.detail.b2title'), subtitle: t(lang, 'solutions.flow.detail.b2sub') },
+        { title: t(lang, 'solutions.flow.detail.b3title'), subtitle: t(lang, 'solutions.flow.detail.b3sub') },
+        { title: t(lang, 'solutions.flow.detail.b4title'), subtitle: t(lang, 'solutions.flow.detail.b4sub') },
+      ],
+      functionalitiesTitle: t(lang, 'solutions.flow.detail.funcsTitle'),
+      functionalities: [
+        t(lang, 'solutions.flow.detail.f1'),
+        t(lang, 'solutions.flow.detail.f2'),
+        t(lang, 'solutions.flow.detail.f3'),
+        t(lang, 'solutions.flow.detail.f4'),
+        t(lang, 'solutions.flow.detail.f5'),
+        t(lang, 'solutions.flow.detail.f6'),
+      ],
+      resultsTitle: t(lang, 'solutions.flow.detail.resultsTitle'),
+      results: [
+        { metric: '35%', label: t(lang, 'solutions.flow.detail.r1label'), description: t(lang, 'solutions.flow.detail.r1desc') },
+        { metric: '100%', label: t(lang, 'solutions.flow.detail.r2label'), description: t(lang, 'solutions.flow.detail.r2desc') },
+        { metric: '50%', label: t(lang, 'solutions.flow.detail.r3label'), description: t(lang, 'solutions.flow.detail.r3desc') },
+      ],
+      applicationsTitle: t(lang, 'solutions.flow.detail.appsTitle'),
+      applications: [
+        t(lang, 'solutions.flow.detail.a1'),
+        t(lang, 'solutions.flow.detail.a2'),
+        t(lang, 'solutions.flow.detail.a3'),
+        t(lang, 'solutions.flow.detail.a4'),
+      ],
+      ctaTitle: t(lang, 'solutions.flow.detail.ctaTitle'),
+      ctaSubtitle: t(lang, 'solutions.flow.detail.ctaSub'),
+    },
 
-  'sansys-reader': {
-    fullDescription: 'O Sansys Reader moderniza o processo de leitura de hidrômetros com aplicativo mobile intuitivo. Oferece captura por foto/OCR, rotas otimizadas, modo offline, validação inteligente e sincronização automática, aumentando produtividade e precisão.',
-    benefitsTitle: 'Solução mobile para leitura em campo',
-    benefitsSubtitle: 'Leitura com precisão, gestão de equipes e inteligência de dados',
-    benefits: [
-      { title: 'Aplicativo mobile', subtitle: 'Compatível com Android, para uso online ou offline.' },
-      { title: 'Reconhecimento óptico de caracteres (OCR)', subtitle: 'Para captura automática dos números do hidrômetro.' },
-      { title: 'Integração com crítica de leitura com IA', subtitle: 'Para prevenção de erros e fraudes.' },
-      { title: 'Dashboards de inteligência de dados', subtitle: 'Para análise de desempenho, consumo e padrões de uso.' },
-    ],
-    functionalitiesTitle: 'Principais funcionalidades',
-    functionalities: [
-      'Captura de leitura por foto com OCR',
-      'Rotas otimizadas para leituristas',
-      'Modo offline com sincronização automática',
-      'Validação inteligente de leituras',
-      'Registro de ocorrências em campo',
-      'Dashboard de produtividade',
-    ],
-    resultsTitle: 'Resultados comprovados',
-    // Valores a confirmar internamente
-    results: [
-      { metric: '98%', label: 'Precisão de leitura', description: 'Com OCR e validação inteligente de dados' },
-      { metric: '+30%', label: 'Produtividade em campo', description: 'Rotas otimizadas e app intuitivo' },
-      { metric: '-60%', label: 'Erros de leitura', description: 'Com validação automática e IA integrada' },
-    ],
-    applicationsTitle: 'Aplicações',
-    applications: ['Leitura residencial', 'Leitura comercial', 'Gestão de rotas', 'Produtividade em campo'],
-    ctaTitle: 'Medição e faturamento com mais agilidade',
-    ctaSubtitle: 'Fale com nossos especialistas e descubra como o Sansys Reader pode modernizar o processo de leitura na sua concessionária.',
-  },
+    'sansys-reader': {
+      fullDescription: t(lang, 'solutions.reader.detail.fullDesc'),
+      benefitsTitle: t(lang, 'solutions.reader.detail.benefitsTitle'),
+      benefitsSubtitle: t(lang, 'solutions.reader.detail.benefitsSubtitle'),
+      benefits: [
+        { title: t(lang, 'solutions.reader.detail.b1title'), subtitle: t(lang, 'solutions.reader.detail.b1sub') },
+        { title: t(lang, 'solutions.reader.detail.b2title'), subtitle: t(lang, 'solutions.reader.detail.b2sub') },
+        { title: t(lang, 'solutions.reader.detail.b3title'), subtitle: t(lang, 'solutions.reader.detail.b3sub') },
+        { title: t(lang, 'solutions.reader.detail.b4title'), subtitle: t(lang, 'solutions.reader.detail.b4sub') },
+      ],
+      functionalitiesTitle: t(lang, 'solutions.reader.detail.funcsTitle'),
+      functionalities: [
+        t(lang, 'solutions.reader.detail.f1'),
+        t(lang, 'solutions.reader.detail.f2'),
+        t(lang, 'solutions.reader.detail.f3'),
+        t(lang, 'solutions.reader.detail.f4'),
+        t(lang, 'solutions.reader.detail.f5'),
+        t(lang, 'solutions.reader.detail.f6'),
+      ],
+      resultsTitle: t(lang, 'solutions.reader.detail.resultsTitle'),
+      results: [
+        { metric: '98%', label: t(lang, 'solutions.reader.detail.r1label'), description: t(lang, 'solutions.reader.detail.r1desc') },
+        { metric: '+30%', label: t(lang, 'solutions.reader.detail.r2label'), description: t(lang, 'solutions.reader.detail.r2desc') },
+        { metric: '-60%', label: t(lang, 'solutions.reader.detail.r3label'), description: t(lang, 'solutions.reader.detail.r3desc') },
+      ],
+      applicationsTitle: t(lang, 'solutions.reader.detail.appsTitle'),
+      applications: [
+        t(lang, 'solutions.reader.detail.a1'),
+        t(lang, 'solutions.reader.detail.a2'),
+        t(lang, 'solutions.reader.detail.a3'),
+        t(lang, 'solutions.reader.detail.a4'),
+      ],
+      ctaTitle: t(lang, 'solutions.reader.detail.ctaTitle'),
+      ctaSubtitle: t(lang, 'solutions.reader.detail.ctaSub'),
+    },
 
-  'sansys-gis': {
-    fullDescription: 'O Sansys GIS integra dados geográficos à operação, transformando eventos técnicos em decisões mais rápidas, precisas e orientadas por contexto. Ele permite visualizar, analisar e gerenciar toda a infraestrutura e os impactos operacionais em tempo real, facilitando manutenções preventivas, corretivas e serviços de emergência.',
-    benefitsTitle: 'Sistema de informação geográfica para gestão de ativos e infraestrutura',
-    benefitsSubtitle: 'Gestão de eventos operacionais, previsibilidade e melhor experiência para o cliente',
-    benefits: [
-      { title: 'Centralização de dados', subtitle: 'Redes, clientes, ativos e ocorrências em um único ambiente.' },
-      { title: 'Agilidade', subtitle: 'Identificação rápida de áreas afetadas por eventos operacionais.' },
-      { title: 'Integração com o campo', subtitle: 'Otimizando a gestão de frotas e o direcionamento de equipes.' },
-      { title: 'Apoio à tomada de decisão', subtitle: 'Análise espacial integrada a indicadores operacionais.' },
-    ],
-    functionalitiesTitle: 'Principais funcionalidades',
-    functionalities: [
-      'Mapeamento da rede',
-      'Gestão de ativos (redes, válvulas, setores)',
-      'Gestão de ocorrências',
-      'Análise de impacto',
-      'Integração com operação de campo',
-      'Monitoramento e indicadores',
-    ],
-    resultsTitle: 'Resultados comprovados',
-    // Valores a confirmar internamente
-    results: [
-      { metric: '40%', label: 'Redução no tempo de resposta', description: 'A eventos adversos na operação' },
-      { metric: '100%', label: 'Visibilidade da rede', description: 'Infraestrutura e ativos mapeados em tempo real' },
-      { metric: '30%', label: 'Eficiência em manutenção', description: 'Preventiva e corretiva com análise espacial' },
-    ],
-    applicationsTitle: 'Aplicações',
-    applications: ['Manutenção preventiva', 'Manutenção corretiva', 'Serviços de emergência', 'Gestão de frotas'],
-    ctaTitle: 'Resposta ágil a eventos adversos',
-    ctaSubtitle: 'Fale com nossos especialistas e descubra como o Sansys GIS pode agilizar seu processo de resposta a eventos adversos na operação.',
-  },
+    'sansys-gis': {
+      fullDescription: t(lang, 'solutions.gis.detail.fullDesc'),
+      benefitsTitle: t(lang, 'solutions.gis.detail.benefitsTitle'),
+      benefitsSubtitle: t(lang, 'solutions.gis.detail.benefitsSubtitle'),
+      benefits: [
+        { title: t(lang, 'solutions.gis.detail.b1title'), subtitle: t(lang, 'solutions.gis.detail.b1sub') },
+        { title: t(lang, 'solutions.gis.detail.b2title'), subtitle: t(lang, 'solutions.gis.detail.b2sub') },
+        { title: t(lang, 'solutions.gis.detail.b3title'), subtitle: t(lang, 'solutions.gis.detail.b3sub') },
+        { title: t(lang, 'solutions.gis.detail.b4title'), subtitle: t(lang, 'solutions.gis.detail.b4sub') },
+      ],
+      functionalitiesTitle: t(lang, 'solutions.gis.detail.funcsTitle'),
+      functionalities: [
+        t(lang, 'solutions.gis.detail.f1'),
+        t(lang, 'solutions.gis.detail.f2'),
+        t(lang, 'solutions.gis.detail.f3'),
+        t(lang, 'solutions.gis.detail.f4'),
+        t(lang, 'solutions.gis.detail.f5'),
+        t(lang, 'solutions.gis.detail.f6'),
+      ],
+      resultsTitle: t(lang, 'solutions.gis.detail.resultsTitle'),
+      results: [
+        { metric: '40%', label: t(lang, 'solutions.gis.detail.r1label'), description: t(lang, 'solutions.gis.detail.r1desc') },
+        { metric: '100%', label: t(lang, 'solutions.gis.detail.r2label'), description: t(lang, 'solutions.gis.detail.r2desc') },
+        { metric: '30%', label: t(lang, 'solutions.gis.detail.r3label'), description: t(lang, 'solutions.gis.detail.r3desc') },
+      ],
+      applicationsTitle: t(lang, 'solutions.gis.detail.appsTitle'),
+      applications: [
+        t(lang, 'solutions.gis.detail.a1'),
+        t(lang, 'solutions.gis.detail.a2'),
+        t(lang, 'solutions.gis.detail.a3'),
+        t(lang, 'solutions.gis.detail.a4'),
+      ],
+      ctaTitle: t(lang, 'solutions.gis.detail.ctaTitle'),
+      ctaSubtitle: t(lang, 'solutions.gis.detail.ctaSub'),
+    },
 
-  'sansys-bi': LOREM_DETAIL,
+    'sansys-bi': LOREM_DETAIL,
+  }
 }
 
 // ─── Conteúdo detalhado por módulo (Sansys Water) ────────────────────────────
@@ -308,153 +330,174 @@ const LOREM_MODULE_DETAIL: ModuleDetail = {
   ctaSubtitle: 'Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
 }
 
-const moduleDetails: Record<string, ModuleDetail> = {
-  'sansys-smart-meter': {
-    fullDescription: 'O Sansys Smart Meter permite a leitura automática de medidores através de tecnologias IoT, oferecendo monitoramento em tempo real de consumo, detecção de vazamentos, gestão de fraudes e análise preditiva. Suporta múltiplos protocolos de comunicação e integração, proporcionando eficiência operacional e redução de perdas comerciais.',
-    benefitsTitle: 'Medição inteligente para mais precisão, agilidade e controle.',
-    benefitsSubtitle: 'Monitoramento em tempo real, eficiência operacional e redução de perdas comerciais.',
-    benefits: [
-      { title: 'Eliminação de leitura manual', subtitle: 'Leituras automáticas a cada 10 minutos.' },
-      { title: 'Integração ao Sansys Water', subtitle: 'Maior controle operacional e apoio à tomada de decisões.' },
-      { title: 'Tecnologia que funciona offline', subtitle: 'A comunicação via smartphones (IoT) dispensa infraestrutura cara, como GPRS ou LoRa.' },
-      { title: 'Instalação simples e ampla compatibilidade', subtitle: 'A adoção causa impacto mínimo na rotina operacional.' },
-    ],
-    functionalitiesTitle: 'Principais funcionalidades',
-    functionalities: [
-      'Leitura automática remota (AMR/AMI)',
-      'Monitoramento em tempo real de consumo',
-      'Detecção automática de vazamentos e anomalias',
-      'Suporte a múltiplos protocolos IoT (LoRaWAN, NB-IoT, GPRS)',
-      'Alertas inteligentes e notificações',
-      'Análise preditiva de consumo',
-      'Dashboard de visualização de dados',
-      'Integração com sistemas de billing',
-      'Bateria com até 8 anos de duração',
-    ],
-    resultsTitle: 'Resultados comprovados',
-    // Valores a confirmar internamente
-    results: [
-      { metric: 'XX%', label: 'Redução de perdas', description: 'Com monitoramento e detecção de vazamentos em tempo real' },
-      { metric: 'XXk', label: 'Leituras automáticas', description: 'Eliminando a necessidade de visitas presenciais' },
-      { metric: 'XX%', label: 'Precisão de faturamento', description: 'Com validação inteligente e dados em tempo real' },
-    ],
-    applicationsTitle: 'Aplicações',
-    applications: ['Telemetria de água', 'Gestão de redes de distribuição', 'Controle de perdas', 'Detecção de fraudes'],
-    ctaTitle: 'Transforme sua operação com tecnologia inteligente',
-    ctaSubtitle: 'Fale com nossos especialistas e descubra como o Sansys Smart Meter pode eliminar a leitura manual e levar mais eficiência ao seu processo!',
-  },
+function getModuleDetails(lang: Lang): Record<string, ModuleDetail> {
+  return {
+    'sansys-smart-meter': {
+      fullDescription: t(lang, 'solutions.module.smartmeter.detail.fullDesc'),
+      benefitsTitle: t(lang, 'solutions.module.smartmeter.detail.benefitsTitle'),
+      benefitsSubtitle: t(lang, 'solutions.module.smartmeter.detail.benefitsSubtitle'),
+      benefits: [
+        { title: t(lang, 'solutions.module.smartmeter.detail.b1title'), subtitle: t(lang, 'solutions.module.smartmeter.detail.b1sub') },
+        { title: t(lang, 'solutions.module.smartmeter.detail.b2title'), subtitle: t(lang, 'solutions.module.smartmeter.detail.b2sub') },
+        { title: t(lang, 'solutions.module.smartmeter.detail.b3title'), subtitle: t(lang, 'solutions.module.smartmeter.detail.b3sub') },
+        { title: t(lang, 'solutions.module.smartmeter.detail.b4title'), subtitle: t(lang, 'solutions.module.smartmeter.detail.b4sub') },
+      ],
+      functionalitiesTitle: t(lang, 'solutions.module.smartmeter.detail.funcsTitle'),
+      functionalities: [
+        t(lang, 'solutions.module.smartmeter.detail.f1'),
+        t(lang, 'solutions.module.smartmeter.detail.f2'),
+        t(lang, 'solutions.module.smartmeter.detail.f3'),
+        t(lang, 'solutions.module.smartmeter.detail.f4'),
+        t(lang, 'solutions.module.smartmeter.detail.f5'),
+        t(lang, 'solutions.module.smartmeter.detail.f6'),
+        t(lang, 'solutions.module.smartmeter.detail.f7'),
+        t(lang, 'solutions.module.smartmeter.detail.f8'),
+        t(lang, 'solutions.module.smartmeter.detail.f9'),
+      ],
+      resultsTitle: t(lang, 'solutions.module.smartmeter.detail.resultsTitle'),
+      results: [
+        { metric: 'XX%', label: t(lang, 'solutions.module.smartmeter.detail.r1label'), description: t(lang, 'solutions.module.smartmeter.detail.r1desc') },
+        { metric: 'XXk', label: t(lang, 'solutions.module.smartmeter.detail.r2label'), description: t(lang, 'solutions.module.smartmeter.detail.r2desc') },
+        { metric: 'XX%', label: t(lang, 'solutions.module.smartmeter.detail.r3label'), description: t(lang, 'solutions.module.smartmeter.detail.r3desc') },
+      ],
+      applicationsTitle: t(lang, 'solutions.module.smartmeter.detail.appsTitle'),
+      applications: [
+        t(lang, 'solutions.module.smartmeter.detail.a1'),
+        t(lang, 'solutions.module.smartmeter.detail.a2'),
+        t(lang, 'solutions.module.smartmeter.detail.a3'),
+        t(lang, 'solutions.module.smartmeter.detail.a4'),
+      ],
+      ctaTitle: t(lang, 'solutions.module.smartmeter.detail.ctaTitle'),
+      ctaSubtitle: t(lang, 'solutions.module.smartmeter.detail.ctaSub'),
+    },
 
-  'sansys-omnichannel': {
-    fullDescription: 'O Sansys Omnichannel unifica WhatsApp, telefone, redes sociais, aplicativo, chatbot e outros canais em uma única plataforma. Mais agilidade, controle e eficiência para a equipe, enquanto o cliente tem uma experiência integrada e mais satisfatória.',
-    benefitsTitle: 'Atendimento fluido, centralizado e eficiente.',
-    benefitsSubtitle: 'Mais agilidade, clareza e satisfação para o cliente final.',
-    benefits: [
-      { title: 'Centralização de canais', subtitle: 'Todas as interações, WhatsApp, chat, telefone, app e redes sociais, em um único lugar.' },
-      { title: 'Histórico completo do cliente', subtitle: 'Evite repetições e ofereça um atendimento mais inteligente com acesso a todo o contexto da solicitação.' },
-      { title: 'Redução do tempo de atendimento', subtitle: 'Triagem automatizada e agilidade na resolução de problemas com encaminhamento correto.' },
-      { title: 'Integração com o Sansys Water', subtitle: 'Conecte o atendimento aos módulos de OS, faturamento, cadastro e muito mais.' },
-    ],
-    functionalitiesTitle: 'Principais funcionalidades',
-    functionalities: [
-      'Interface unificada para todos os canais',
-      'Integração com WhatsApp Business API',
-      'Integração com todos os canais de atendimento',
-      'Chatbot inteligente com IA conversacional',
-      'Gestão de filas e distribuição automática',
-      'CRM integrado com histórico completo',
-      'Gravação e monitoramento de interações',
-      'Análise de sentimento e satisfação',
-      'Relatórios de performance e SLA',
-    ],
-    resultsTitle: 'Resultados comprovados',
-    // Valores a confirmar internamente
-    results: [
-      { metric: 'XX%', label: 'Redução no tempo de atendimento', description: 'Com triagem automatizada e canais unificados' },
-      { metric: 'XX%', label: 'Satisfação dos clientes', description: 'Com experiência integrada e personalizada' },
-      { metric: '24/7', label: 'Disponibilidade', description: 'Atendimento contínuo em todos os canais' },
-    ],
-    applicationsTitle: 'Aplicações',
-    applications: ['Central de atendimento', 'Suporte técnico', 'SAC', 'Ouvidoria'],
-    ctaTitle: 'Transforme a experiência dos seus clientes',
-    ctaSubtitle: 'Fale com nossos especialistas e descubra como o Sansys Omnichannel pode garantir mais agilidade, controle e satisfação no seu atendimento ao cliente.',
-  },
+    'sansys-omnichannel': {
+      fullDescription: t(lang, 'solutions.module.omnichannel.detail.fullDesc'),
+      benefitsTitle: t(lang, 'solutions.module.omnichannel.detail.benefitsTitle'),
+      benefitsSubtitle: t(lang, 'solutions.module.omnichannel.detail.benefitsSubtitle'),
+      benefits: [
+        { title: t(lang, 'solutions.module.omnichannel.detail.b1title'), subtitle: t(lang, 'solutions.module.omnichannel.detail.b1sub') },
+        { title: t(lang, 'solutions.module.omnichannel.detail.b2title'), subtitle: t(lang, 'solutions.module.omnichannel.detail.b2sub') },
+        { title: t(lang, 'solutions.module.omnichannel.detail.b3title'), subtitle: t(lang, 'solutions.module.omnichannel.detail.b3sub') },
+        { title: t(lang, 'solutions.module.omnichannel.detail.b4title'), subtitle: t(lang, 'solutions.module.omnichannel.detail.b4sub') },
+      ],
+      functionalitiesTitle: t(lang, 'solutions.module.omnichannel.detail.funcsTitle'),
+      functionalities: [
+        t(lang, 'solutions.module.omnichannel.detail.f1'),
+        t(lang, 'solutions.module.omnichannel.detail.f2'),
+        t(lang, 'solutions.module.omnichannel.detail.f3'),
+        t(lang, 'solutions.module.omnichannel.detail.f4'),
+        t(lang, 'solutions.module.omnichannel.detail.f5'),
+        t(lang, 'solutions.module.omnichannel.detail.f6'),
+        t(lang, 'solutions.module.omnichannel.detail.f7'),
+        t(lang, 'solutions.module.omnichannel.detail.f8'),
+        t(lang, 'solutions.module.omnichannel.detail.f9'),
+      ],
+      resultsTitle: t(lang, 'solutions.module.omnichannel.detail.resultsTitle'),
+      results: [
+        { metric: 'XX%', label: t(lang, 'solutions.module.omnichannel.detail.r1label'), description: t(lang, 'solutions.module.omnichannel.detail.r1desc') },
+        { metric: 'XX%', label: t(lang, 'solutions.module.omnichannel.detail.r2label'), description: t(lang, 'solutions.module.omnichannel.detail.r2desc') },
+        { metric: '24/7', label: t(lang, 'solutions.module.omnichannel.detail.r3label'), description: t(lang, 'solutions.module.omnichannel.detail.r3desc') },
+      ],
+      applicationsTitle: t(lang, 'solutions.module.omnichannel.detail.appsTitle'),
+      applications: [
+        t(lang, 'solutions.module.omnichannel.detail.a1'),
+        t(lang, 'solutions.module.omnichannel.detail.a2'),
+        t(lang, 'solutions.module.omnichannel.detail.a3'),
+        t(lang, 'solutions.module.omnichannel.detail.a4'),
+      ],
+      ctaTitle: t(lang, 'solutions.module.omnichannel.detail.ctaTitle'),
+      ctaSubtitle: t(lang, 'solutions.module.omnichannel.detail.ctaSub'),
+    },
 
-  'sansys-bi': LOREM_MODULE_DETAIL,
+    'sansys-bi': LOREM_MODULE_DETAIL,
 
-  'sansys-critica-leitura': {
-    fullDescription: 'O Sansys IA Crítica de Leitura utiliza inteligência artificial e deep learning para validar automaticamente leituras de medidores. Identifica inconsistências, medidores parados e outros problemas antes do faturamento. Aprende continuamente com padrões de consumo, reduzindo reclamações e custos operacionais.',
-    benefitsTitle: 'Validação inteligente para medições mais seguras',
-    benefitsSubtitle: 'Redução de erros, informação precisa e faturamento confiável',
-    benefits: [
-      { title: 'Prevenção de refaturamento', subtitle: 'Validação da medição antes do faturamento.' },
-      { title: 'Análise baseada em dados', subtitle: 'Leitura baseada no histórico do cliente.' },
-      { title: 'Redução de retrabalho', subtitle: 'Leituras suspeitas são sinalizadas automaticamente, para ajuste instantâneo, evitando necessidade de novas visitas.' },
-      { title: 'Integração com o Sansys Water', subtitle: 'Garantindo que apenas informações validadas avancem no processo.' },
-    ],
-    functionalitiesTitle: 'Principais características',
-    functionalities: [
-      'Validação automática com IA',
-      'Detecção de leituras inconsistentes',
-      'Identificação de medidores parados',
-      'Análise de tendências de consumo',
-      'Aprendizado contínuo (machine learning)',
-      'Alertas de anomalias em tempo real',
-      'Priorização de releituras',
-      'Redução de reclamações pós-faturamento',
-      'Proteção da receita operacional',
-    ],
-    resultsTitle: 'Resultados comprovados',
-    // Valores a confirmar internamente
-    results: [
-      { metric: 'XX%', label: 'Redução de erros de leitura', description: 'Com validação automática por inteligência artificial' },
-      { metric: 'XX%', label: 'Redução de reclamações', description: 'Com faturamento mais preciso e confiável' },
-      { metric: 'XX%', label: 'Eficiência operacional', description: 'Com priorização inteligente de releituras' },
-    ],
-    applicationsTitle: 'Aplicações',
-    applications: ['Validação de leituras', 'Controle de qualidade', 'Redução de erros de faturamento', 'Otimização de rotas de leitura'],
-    ctaTitle: 'Evite erros antes que virem refaturamento',
-    ctaSubtitle: 'Fale com nossos especialistas e descubra como o Sansys IA Crítica de Leitura pode proporcionar medições mais seguras e faturamento confiável para sua concessionária.',
-  },
+    'sansys-critica-leitura': {
+      fullDescription: t(lang, 'solutions.module.criticaleitura.detail.fullDesc'),
+      benefitsTitle: t(lang, 'solutions.module.criticaleitura.detail.benefitsTitle'),
+      benefitsSubtitle: t(lang, 'solutions.module.criticaleitura.detail.benefitsSubtitle'),
+      benefits: [
+        { title: t(lang, 'solutions.module.criticaleitura.detail.b1title'), subtitle: t(lang, 'solutions.module.criticaleitura.detail.b1sub') },
+        { title: t(lang, 'solutions.module.criticaleitura.detail.b2title'), subtitle: t(lang, 'solutions.module.criticaleitura.detail.b2sub') },
+        { title: t(lang, 'solutions.module.criticaleitura.detail.b3title'), subtitle: t(lang, 'solutions.module.criticaleitura.detail.b3sub') },
+        { title: t(lang, 'solutions.module.criticaleitura.detail.b4title'), subtitle: t(lang, 'solutions.module.criticaleitura.detail.b4sub') },
+      ],
+      functionalitiesTitle: t(lang, 'solutions.module.criticaleitura.detail.funcsTitle'),
+      functionalities: [
+        t(lang, 'solutions.module.criticaleitura.detail.f1'),
+        t(lang, 'solutions.module.criticaleitura.detail.f2'),
+        t(lang, 'solutions.module.criticaleitura.detail.f3'),
+        t(lang, 'solutions.module.criticaleitura.detail.f4'),
+        t(lang, 'solutions.module.criticaleitura.detail.f5'),
+        t(lang, 'solutions.module.criticaleitura.detail.f6'),
+        t(lang, 'solutions.module.criticaleitura.detail.f7'),
+        t(lang, 'solutions.module.criticaleitura.detail.f8'),
+        t(lang, 'solutions.module.criticaleitura.detail.f9'),
+      ],
+      resultsTitle: t(lang, 'solutions.module.criticaleitura.detail.resultsTitle'),
+      results: [
+        { metric: 'XX%', label: t(lang, 'solutions.module.criticaleitura.detail.r1label'), description: t(lang, 'solutions.module.criticaleitura.detail.r1desc') },
+        { metric: 'XX%', label: t(lang, 'solutions.module.criticaleitura.detail.r2label'), description: t(lang, 'solutions.module.criticaleitura.detail.r2desc') },
+        { metric: 'XX%', label: t(lang, 'solutions.module.criticaleitura.detail.r3label'), description: t(lang, 'solutions.module.criticaleitura.detail.r3desc') },
+      ],
+      applicationsTitle: t(lang, 'solutions.module.criticaleitura.detail.appsTitle'),
+      applications: [
+        t(lang, 'solutions.module.criticaleitura.detail.a1'),
+        t(lang, 'solutions.module.criticaleitura.detail.a2'),
+        t(lang, 'solutions.module.criticaleitura.detail.a3'),
+        t(lang, 'solutions.module.criticaleitura.detail.a4'),
+      ],
+      ctaTitle: t(lang, 'solutions.module.criticaleitura.detail.ctaTitle'),
+      ctaSubtitle: t(lang, 'solutions.module.criticaleitura.detail.ctaSub'),
+    },
 
-  'sansys-antifraude': {
-    fullDescription: 'O Sansys Antifraude utiliza algoritmos de machine learning e análise comportamental para identificar padrões suspeitos, fraudes e irregularidades em tempo real. Gera alertas automáticos, prioriza inspeções de campo e oferece ferramentas para gestão de fiscalização, reduzindo significativamente perdas comerciais.',
-    benefitsTitle: 'Identificação e gestão de irregularidades no consumo de água',
-    benefitsSubtitle: 'Redução de perdas com rastreabilidade completa e segurança jurídica.',
-    benefits: [
-      { title: 'Identificação automática de irregularidades', subtitle: 'Com base em padrões operacionais e dados históricos.' },
-      { title: 'Priorização de inspeções', subtitle: 'Possíveis fraudes são classificadas conforme a probabilidade de irregularidades.' },
-      { title: 'Segurança jurídica', subtitle: 'Registro de todo o ciclo da fraude, desde a identificação até a regularização.' },
-      { title: 'Recuperação de receitas', subtitle: 'O sistema automatiza o cálculo de consumo retroativo, multas e demais encargos relativos à irregularidade encontrada.' },
-    ],
-    functionalitiesTitle: 'Principais características',
-    functionalities: [
-      'Detecção automática com machine learning',
-      'Análise de padrões de consumo anômalo',
-      'Identificação de ligações clandestinas',
-      'Priorização inteligente de inspeções',
-      'Gestão de ordens de fiscalização',
-      'App mobile para equipes de campo',
-      'Histórico e evidências digitais',
-      'Recuperação de receita com mais agilidade',
-      'Indicadores de recuperação de receita',
-    ],
-    resultsTitle: 'Resultados comprovados',
-    // Valores a confirmar internamente
-    results: [
-      { metric: 'XX%', label: 'Redução de perdas comerciais', description: 'Com detecção automática e priorização de inspeções' },
-      { metric: 'XX%', label: 'Agilidade na regularização', description: 'Com app mobile e gestão digital de fiscalização' },
-      { metric: 'XX%', label: 'Recuperação de receita', description: 'Com cálculo retroativo automatizado' },
-    ],
-    applicationsTitle: 'Aplicações',
-    applications: ['Combate a fraudes', 'Redução de perdas comerciais', 'Fiscalização de campo', 'Regularização cadastral'],
-    ctaTitle: 'Identifique perdas antes que virem prejuízo',
-    ctaSubtitle: 'Fale com nossos especialistas e descubra como o Sansys Antifraude pode ajudar sua concessionária a combater fraudes e recuperar receitas.',
-  },
+    'sansys-antifraude': {
+      fullDescription: t(lang, 'solutions.module.antifraude.detail.fullDesc'),
+      benefitsTitle: t(lang, 'solutions.module.antifraude.detail.benefitsTitle'),
+      benefitsSubtitle: t(lang, 'solutions.module.antifraude.detail.benefitsSubtitle'),
+      benefits: [
+        { title: t(lang, 'solutions.module.antifraude.detail.b1title'), subtitle: t(lang, 'solutions.module.antifraude.detail.b1sub') },
+        { title: t(lang, 'solutions.module.antifraude.detail.b2title'), subtitle: t(lang, 'solutions.module.antifraude.detail.b2sub') },
+        { title: t(lang, 'solutions.module.antifraude.detail.b3title'), subtitle: t(lang, 'solutions.module.antifraude.detail.b3sub') },
+        { title: t(lang, 'solutions.module.antifraude.detail.b4title'), subtitle: t(lang, 'solutions.module.antifraude.detail.b4sub') },
+      ],
+      functionalitiesTitle: t(lang, 'solutions.module.antifraude.detail.funcsTitle'),
+      functionalities: [
+        t(lang, 'solutions.module.antifraude.detail.f1'),
+        t(lang, 'solutions.module.antifraude.detail.f2'),
+        t(lang, 'solutions.module.antifraude.detail.f3'),
+        t(lang, 'solutions.module.antifraude.detail.f4'),
+        t(lang, 'solutions.module.antifraude.detail.f5'),
+        t(lang, 'solutions.module.antifraude.detail.f6'),
+        t(lang, 'solutions.module.antifraude.detail.f7'),
+        t(lang, 'solutions.module.antifraude.detail.f8'),
+        t(lang, 'solutions.module.antifraude.detail.f9'),
+      ],
+      resultsTitle: t(lang, 'solutions.module.antifraude.detail.resultsTitle'),
+      results: [
+        { metric: 'XX%', label: t(lang, 'solutions.module.antifraude.detail.r1label'), description: t(lang, 'solutions.module.antifraude.detail.r1desc') },
+        { metric: 'XX%', label: t(lang, 'solutions.module.antifraude.detail.r2label'), description: t(lang, 'solutions.module.antifraude.detail.r2desc') },
+        { metric: 'XX%', label: t(lang, 'solutions.module.antifraude.detail.r3label'), description: t(lang, 'solutions.module.antifraude.detail.r3desc') },
+      ],
+      applicationsTitle: t(lang, 'solutions.module.antifraude.detail.appsTitle'),
+      applications: [
+        t(lang, 'solutions.module.antifraude.detail.a1'),
+        t(lang, 'solutions.module.antifraude.detail.a2'),
+        t(lang, 'solutions.module.antifraude.detail.a3'),
+        t(lang, 'solutions.module.antifraude.detail.a4'),
+      ],
+      ctaTitle: t(lang, 'solutions.module.antifraude.detail.ctaTitle'),
+      ctaSubtitle: t(lang, 'solutions.module.antifraude.detail.ctaSub'),
+    },
+  }
 }
 
 // ─── Componente principal ────────────────────────────────────────────────────
 
 export function SolutionsPage({ lang }: SolutionsPageProps) {
+  const productDetails = getProductDetails(lang)
+  const moduleDetails = getModuleDetails(lang)
+
   const [whatsappModalOpen, setWhatsappModalOpen] = useState(false)
   const [activeCTAConfig, setActiveCTAConfig] = useState<ProductCTAConfig | null>(null)
   const [ctaConfigs, setCTAConfigs] = useState<Record<string, ProductCTAConfig>>({})
@@ -501,6 +544,13 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
 
   // Navegar direto para um módulo via ?modulo= na URL
   useEffect(() => {
+    const MODULO_SLUGS = [
+      'sansys-smart-meter',
+      'sansys-omnichannel',
+      'sansys-bi',
+      'sansys-antifraude',
+      'sansys-critica-leitura',
+    ]
     const readModuloParam = () => {
       const hash = window.location.hash
       const queryStart = hash.indexOf('?')
@@ -508,13 +558,13 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
       const params = new URLSearchParams(hash.slice(queryStart + 1))
       const slug = params.get('modulo')
       if (!slug) return
-      const idx = modulos.findIndex(m => m.slug === slug)
+      const idx = MODULO_SLUGS.indexOf(slug)
       if (idx === -1) return
-      setProductIndex(0) // garantir que Water está selecionado
+      setProductIndex(0)
       setModuloIndex(idx)
       setTimeout(() => {
         document.getElementById('secao-modulos')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 100)
+      }, 800)
     }
     readModuloParam()
     window.addEventListener('hashchange', readModuloParam)
@@ -536,7 +586,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
       title: t(lang, "solutions.water.title"),
       description: t(lang, "solutions.water.description"),
       badges: [t(lang, "solutions.badge.specialized"), t(lang, "solutions.badge.integration"), t(lang, "solutions.badge.saas"), t(lang, "solutions.badge.multiplatform")],
-      image: "https://conteudo.sansys.app/site/img/jtech-sansys-water-software-gestao-saneamento.webp",
+      image: "/mockups/sansys-water.png",
     },
     {
       slug: "sansys-pay",
@@ -544,7 +594,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
       title: t(lang, "solutions.pay.title"),
       description: t(lang, "solutions.pay.description"),
       badges: [t(lang, "solutions.pay.badge1"), t(lang, "solutions.pay.badge2"), t(lang, "solutions.pay.badge3"), t(lang, "solutions.pay.badge4")],
-      image: "https://conteudo.sansys.app/site/img/jtech-sansys-water-software-gestao-saneamento.webp",
+      image: "/mockups/sansys-pay.png",
     },
     {
       slug: "sansys-waste",
@@ -552,7 +602,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
       title: t(lang, "solutions.waste.title"),
       description: t(lang, "solutions.waste.description"),
       badges: [t(lang, "solutions.waste.badge1"), t(lang, "solutions.waste.badge2"), t(lang, "solutions.waste.badge3"), t(lang, "solutions.waste.badge4")],
-      image: "https://conteudo.sansys.app/site/img/jtech-sansys-water-software-gestao-saneamento.webp",
+      image: "/mockups/sansys-waste.png",
     },
     {
       slug: "sansys-agency",
@@ -560,7 +610,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
       title: t(lang, "solutions.agency.title"),
       description: t(lang, "solutions.agency.description"),
       badges: [t(lang, "solutions.agency.badge1"), t(lang, "solutions.agency.badge2"), t(lang, "solutions.agency.badge3"), t(lang, "solutions.agency.badge4")],
-      image: "https://conteudo.sansys.app/site/img/jtech-sansys-water-software-gestao-saneamento.webp",
+      image: "/mockups/sansys-agency.png",
     },
     {
       slug: "sansys-hub",
@@ -568,7 +618,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
       title: t(lang, "solutions.hub.title"),
       description: t(lang, "solutions.hub.description"),
       badges: [t(lang, "solutions.hub.badge1"), t(lang, "solutions.hub.badge2"), t(lang, "solutions.hub.badge3"), t(lang, "solutions.hub.badge4")],
-      image: "https://conteudo.sansys.app/site/img/jtech-sansys-water-software-gestao-saneamento.webp",
+      image: "/mockups/sansys-hub.png",
     },
     {
       slug: "sansys-flow",
@@ -576,7 +626,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
       title: t(lang, "solutions.flow.title"),
       description: t(lang, "solutions.flow.description"),
       badges: [t(lang, "solutions.flow.badge1"), t(lang, "solutions.flow.badge2"), t(lang, "solutions.flow.badge3"), t(lang, "solutions.flow.badge4")],
-      image: "https://conteudo.sansys.app/site/img/jtech-sansys-water-software-gestao-saneamento.webp",
+      image: "/mockups/sansys-flow.png",
     },
     {
       slug: "sansys-reader",
@@ -584,7 +634,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
       title: t(lang, "solutions.reader.title"),
       description: t(lang, "solutions.reader.description"),
       badges: [t(lang, "solutions.reader.badge1"), t(lang, "solutions.reader.badge2"), t(lang, "solutions.reader.badge3"), t(lang, "solutions.reader.badge4")],
-      image: "https://conteudo.sansys.app/site/img/jtech-sansys-water-software-gestao-saneamento.webp",
+      image: "/mockups/sansys-reader.png",
     },
     {
       slug: "sansys-gis",
@@ -592,14 +642,6 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
       title: t(lang, "solutions.gis.title"),
       description: t(lang, "solutions.gis.description"),
       badges: [t(lang, "solutions.gis.badge1"), t(lang, "solutions.gis.badge2"), t(lang, "solutions.gis.badge3"), t(lang, "solutions.gis.badge4")],
-      image: "https://conteudo.sansys.app/site/img/jtech-sansys-water-software-gestao-saneamento.webp",
-    },
-    {
-      slug: "sansys-bi",
-      name: "sansys bi",
-      title: "Business Intelligence para saneamento",
-      description: "Dashboards estratégicos e análises preditivas integradas ao ecossistema Sansys, com suporte a Qlik Sense e Google BigQuery.",
-      badges: ["Dashboards", "Análise preditiva", "Módulo SaaS", "Integração total"],
       image: "https://conteudo.sansys.app/site/img/jtech-sansys-water-software-gestao-saneamento.webp",
     },
   ]
@@ -841,7 +883,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
               </section>
 
               {/* Módulos */}
-              <section id="secao-modulos" className="bg-white relative -mt-[164px]">
+              <section id="secao-modulos" className="bg-white relative -mt-[164px] scroll-mt-20">
                 <Container>
                   <h2 className="mb-12 text-center font-extralight pt-16" dangerouslySetInnerHTML={{ __html: t(lang, "solutions.modules.title") }} />
                   <div className="relative pb-4">
@@ -860,7 +902,10 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                           {getVisibleModulos().map((modulo, idx) => {
                             const isActive = modulo.originalIndex === moduloIndex
                             return (
-                            <div key={idx} onClick={() => setModuloIndex(modulo.originalIndex)}
+                            <div key={idx} onClick={() => {
+                              setModuloIndex(modulo.originalIndex)
+                              setTimeout(() => document.getElementById('module-detail-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50)
+                            }}
                               className={`rounded-lg overflow-hidden border-2 transition-all duration-300 cursor-pointer flex-shrink-0 ${isActive ? 'border-[#E30613] shadow-xl scale-105 opacity-100 z-10' : 'border-gray-200 bg-white opacity-60 hover:opacity-80'}`}
                               style={{ width: 'calc((100% - 48px) / 3)', minWidth: '200px' }}
                             >
@@ -886,6 +931,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
               {/* Detalhe do módulo selecionado */}
               <AnimatePresence mode="wait">
                 <motion.div
+                  id="module-detail-section"
                   key={modulos[moduloIndex].slug}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
