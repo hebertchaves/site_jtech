@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { Play, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react"
 import { Lang, t } from "../lib/i18n"
 import { PreWhatsAppModal } from "../components/forms/PreWhatsAppModal"
 import { Container } from "../components/layout/Container"
@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "motion/react"
 import { LogoBySlug } from "../components/logos"
 import { getContentProvider } from "../providers"
 import { ProductCTAConfig } from "../providers/contentProvider"
+import { waterCoreModules } from "../data/water-core-modules"
 
 interface SolutionsPageProps {
   lang: Lang
@@ -91,7 +92,26 @@ const LOREM_DETAIL: ProductDetail = {
 
 function getProductDetails(lang: Lang): Record<string, ProductDetail> {
   return {
-    'sansys-pay': LOREM_DETAIL,
+    'sansys-pay': {
+      fullDescription: t(lang, 'solutions.pay.detail.fullDesc'),
+      benefitsTitle: t(lang, 'solutions.pay.detail.benefitsTitle'),
+      benefitsSubtitle: t(lang, 'solutions.pay.detail.benefitsSubtitle'),
+      benefits: [
+        { title: t(lang, 'solutions.pay.detail.b1title'), subtitle: t(lang, 'solutions.pay.detail.b1sub') },
+        { title: t(lang, 'solutions.pay.detail.b2title'), subtitle: t(lang, 'solutions.pay.detail.b2sub') },
+        { title: t(lang, 'solutions.pay.detail.b3title'), subtitle: t(lang, 'solutions.pay.detail.b3sub') },
+        { title: t(lang, 'solutions.pay.detail.b4title'), subtitle: t(lang, 'solutions.pay.detail.b4sub') },
+      ],
+      // Pay não exibe as dobras Funcionalidades / Resultados / Aplicações (arrays vazios = seções ocultas)
+      functionalitiesTitle: '',
+      functionalities: [],
+      resultsTitle: '',
+      results: [],
+      applicationsTitle: '',
+      applications: [],
+      ctaTitle: t(lang, 'solutions.pay.detail.ctaTitle'),
+      ctaSubtitle: t(lang, 'solutions.pay.detail.ctaSub'),
+    },
 
     'sansys-waste': {
       fullDescription: t(lang, 'solutions.waste.detail.fullDesc'),
@@ -165,8 +185,6 @@ function getProductDetails(lang: Lang): Record<string, ProductDetail> {
       ctaSubtitle: t(lang, 'solutions.agency.detail.ctaSub'),
     },
 
-    'sansys-hub': LOREM_DETAIL,
-
     'sansys-flow': {
       fullDescription: t(lang, 'solutions.flow.detail.fullDesc'),
       benefitsTitle: t(lang, 'solutions.flow.detail.benefitsTitle'),
@@ -237,42 +255,6 @@ function getProductDetails(lang: Lang): Record<string, ProductDetail> {
       ],
       ctaTitle: t(lang, 'solutions.reader.detail.ctaTitle'),
       ctaSubtitle: t(lang, 'solutions.reader.detail.ctaSub'),
-    },
-
-    'sansys-gis': {
-      fullDescription: t(lang, 'solutions.gis.detail.fullDesc'),
-      benefitsTitle: t(lang, 'solutions.gis.detail.benefitsTitle'),
-      benefitsSubtitle: t(lang, 'solutions.gis.detail.benefitsSubtitle'),
-      benefits: [
-        { title: t(lang, 'solutions.gis.detail.b1title'), subtitle: t(lang, 'solutions.gis.detail.b1sub') },
-        { title: t(lang, 'solutions.gis.detail.b2title'), subtitle: t(lang, 'solutions.gis.detail.b2sub') },
-        { title: t(lang, 'solutions.gis.detail.b3title'), subtitle: t(lang, 'solutions.gis.detail.b3sub') },
-        { title: t(lang, 'solutions.gis.detail.b4title'), subtitle: t(lang, 'solutions.gis.detail.b4sub') },
-      ],
-      functionalitiesTitle: t(lang, 'solutions.gis.detail.funcsTitle'),
-      functionalities: [
-        t(lang, 'solutions.gis.detail.f1'),
-        t(lang, 'solutions.gis.detail.f2'),
-        t(lang, 'solutions.gis.detail.f3'),
-        t(lang, 'solutions.gis.detail.f4'),
-        t(lang, 'solutions.gis.detail.f5'),
-        t(lang, 'solutions.gis.detail.f6'),
-      ],
-      resultsTitle: t(lang, 'solutions.gis.detail.resultsTitle'),
-      results: [
-        { metric: '40%', label: t(lang, 'solutions.gis.detail.r1label'), description: t(lang, 'solutions.gis.detail.r1desc') },
-        { metric: '100%', label: t(lang, 'solutions.gis.detail.r2label'), description: t(lang, 'solutions.gis.detail.r2desc') },
-        { metric: '30%', label: t(lang, 'solutions.gis.detail.r3label'), description: t(lang, 'solutions.gis.detail.r3desc') },
-      ],
-      applicationsTitle: t(lang, 'solutions.gis.detail.appsTitle'),
-      applications: [
-        t(lang, 'solutions.gis.detail.a1'),
-        t(lang, 'solutions.gis.detail.a2'),
-        t(lang, 'solutions.gis.detail.a3'),
-        t(lang, 'solutions.gis.detail.a4'),
-      ],
-      ctaTitle: t(lang, 'solutions.gis.detail.ctaTitle'),
-      ctaSubtitle: t(lang, 'solutions.gis.detail.ctaSub'),
     },
 
     'sansys-bi': LOREM_DETAIL,
@@ -410,7 +392,26 @@ function getModuleDetails(lang: Lang): Record<string, ModuleDetail> {
       ctaSubtitle: t(lang, 'solutions.module.omnichannel.detail.ctaSub'),
     },
 
-    'sansys-bi': LOREM_MODULE_DETAIL,
+    'sansys-bi': {
+      fullDescription: t(lang, 'solutions.module.bi.detail.fullDesc'),
+      benefitsTitle: t(lang, 'solutions.module.bi.detail.benefitsTitle'),
+      benefitsSubtitle: t(lang, 'solutions.module.bi.detail.benefitsSubtitle'),
+      benefits: [
+        { title: t(lang, 'solutions.module.bi.detail.b1title'), subtitle: t(lang, 'solutions.module.bi.detail.b1sub') },
+        { title: t(lang, 'solutions.module.bi.detail.b2title'), subtitle: t(lang, 'solutions.module.bi.detail.b2sub') },
+        { title: t(lang, 'solutions.module.bi.detail.b3title'), subtitle: t(lang, 'solutions.module.bi.detail.b3sub') },
+        { title: t(lang, 'solutions.module.bi.detail.b4title'), subtitle: t(lang, 'solutions.module.bi.detail.b4sub') },
+      ],
+      // BI não exibe Funcionalidades / Aplicações (arrays vazios = seções ocultas)
+      functionalitiesTitle: '',
+      functionalities: [],
+      resultsTitle: '',
+      results: [],
+      applicationsTitle: '',
+      applications: [],
+      ctaTitle: t(lang, 'solutions.module.bi.detail.ctaTitle'),
+      ctaSubtitle: t(lang, 'solutions.module.bi.detail.ctaSub'),
+    },
 
     'sansys-critica-leitura': {
       fullDescription: t(lang, 'solutions.module.criticaleitura.detail.fullDesc'),
@@ -502,6 +503,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
   const [activeCTAConfig, setActiveCTAConfig] = useState<ProductCTAConfig | null>(null)
   const [ctaConfigs, setCTAConfigs] = useState<Record<string, ProductCTAConfig>>({})
   const [moduloIndex, setModuloIndex] = useState(0)
+  const [openCoreModule, setOpenCoreModule] = useState<number>(0)
   const [bannerOffset, setBannerOffset] = useState(0)
   const [productIndex, setProductIndex] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
@@ -613,14 +615,6 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
       image: "/mockups/sansys-agency.png",
     },
     {
-      slug: "sansys-hub",
-      name: "sansys hub",
-      title: t(lang, "solutions.hub.title"),
-      description: t(lang, "solutions.hub.description"),
-      badges: [t(lang, "solutions.hub.badge1"), t(lang, "solutions.hub.badge2"), t(lang, "solutions.hub.badge3"), t(lang, "solutions.hub.badge4")],
-      image: "/mockups/sansys-hub.png",
-    },
-    {
       slug: "sansys-flow",
       name: "sansys flow",
       title: t(lang, "solutions.flow.title"),
@@ -635,14 +629,6 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
       description: t(lang, "solutions.reader.description"),
       badges: [t(lang, "solutions.reader.badge1"), t(lang, "solutions.reader.badge2"), t(lang, "solutions.reader.badge3"), t(lang, "solutions.reader.badge4")],
       image: "/mockups/sansys-reader.png",
-    },
-    {
-      slug: "sansys-gis",
-      name: "sansys gis",
-      title: t(lang, "solutions.gis.title"),
-      description: t(lang, "solutions.gis.description"),
-      badges: [t(lang, "solutions.gis.badge1"), t(lang, "solutions.gis.badge2"), t(lang, "solutions.gis.badge3"), t(lang, "solutions.gis.badge4")],
-      image: "https://conteudo.sansys.app/site/img/jtech-sansys-water-software-gestao-saneamento.webp",
     },
   ]
 
@@ -795,10 +781,6 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                       {currentProduct.badges.map((badge, idx) => (
                         <span key={idx} className="bg-gray-200 text-gray-700 text-sm px-4 py-2 rounded-full">{badge}</span>
                       ))}
-                      <button className="bg-gray-700 text-white text-sm px-4 py-2 rounded-full flex items-center gap-2 hover:bg-gray-800 transition-colors">
-                        <Play className="h-4 w-4" />
-                        {t(lang, "solutions.video.demo")}
-                      </button>
                     </div>
                   </div>
                   <div className="animate-slide-in-right">
@@ -882,10 +864,63 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                 </Container>
               </section>
 
-              {/* Módulos */}
-              <section id="secao-modulos" className="bg-white relative -mt-[164px] scroll-mt-20">
+              {/* Principais Módulos — acordeão (módulos core do Sansys Water) */}
+              <section
+                className="bg-white relative -mt-[164px] scroll-mt-20"
+                style={{ backgroundImage: "url('https://conteudo.sansys.app/site/img/jtech-background-solucoes-saneamento.webp')", backgroundSize: "cover", backgroundPosition: "center" }}
+                role="img" aria-label="Fundo com textura suave para a seção de módulos principais"
+              >
                 <Container>
-                  <h2 className="mb-12 text-center font-extralight pt-16" dangerouslySetInnerHTML={{ __html: t(lang, "solutions.modules.title") }} />
+                  <h2 className="mb-12 text-center text-[#E30613] text-5xl font-normal pt-16" dangerouslySetInnerHTML={{ __html: t(lang, "solutions.coremodules.title") }} />
+                  <div className="max-w-[1200px] mx-auto bg-white/70 px-4 divide-y divide-gray-200 border-y border-gray-200">
+                    {waterCoreModules.map((mod, idx) => {
+                      const isOpen = openCoreModule === idx
+                      return (
+                        <div key={mod.id}>
+                          <button
+                            type="button"
+                            onClick={() => setOpenCoreModule(isOpen ? -1 : idx)}
+                            className="w-full flex items-center justify-between gap-4 py-5 text-left group"
+                            aria-expanded={isOpen}
+                          >
+                            <span className={`text-xl font-semibold transition-colors ${isOpen ? 'text-[#E30613]' : 'text-gray-900 group-hover:text-[#E30613]'}`}>{mod.name[lang]}</span>
+                            <ChevronDown className={`h-6 w-6 flex-shrink-0 text-[#E30613] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                          </button>
+                          <AnimatePresence initial={false}>
+                            {isOpen && (
+                              <motion.div
+                                key="content"
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                className="overflow-hidden"
+                              >
+                                <div className="pb-8 pt-1">
+                                  <p className="text-gray-700 leading-relaxed mb-6 max-w-3xl">{mod.intro[lang]}</p>
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {mod.topics.map((topic, tIdx) => (
+                                      <div key={tIdx} className="bg-white rounded-lg p-5 border-l-4 border-[#E30613] shadow-sm">
+                                        <h3 className="text-base font-semibold mb-1 text-gray-900">{topic.title[lang]}</h3>
+                                        <p className="text-sm text-gray-600 leading-relaxed">{topic.description[lang]}</p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </Container>
+              </section>
+
+              {/* Módulos Adicionais */}
+              <section id="secao-modulos" className="bg-white relative scroll-mt-20 pt-16">
+                <Container>
+                  <h2 className="mb-12 text-center font-extralight" dangerouslySetInnerHTML={{ __html: t(lang, "solutions.modules.title") }} />
                   <div className="relative pb-4">
                     <div className="flex items-center justify-center gap-4">
                       <button onClick={prevModulo} className="hidden lg:flex w-12 h-12 rounded-full border-2 border-[#E30613] items-center justify-center hover:bg-[#E30613] transition-all group flex-shrink-0 z-30 bg-white shadow-md" aria-label={t(lang, "solutions.module.prev")}>
@@ -977,7 +1012,8 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                           </Container>
                         </section>
 
-                        {/* Funcionalidades */}
+                        {/* Funcionalidades — oculto p/ módulos sem itens */}
+                        {md.functionalities.length > 0 && (
                         <section className="py-16 bg-white">
                           <Container>
                             <div
@@ -999,8 +1035,10 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                             </div>
                           </Container>
                         </section>
+                        )}
 
-                        {/* Aplicações */}
+                        {/* Aplicações — oculto p/ módulos sem itens */}
+                        {md.applications.length > 0 && (
                         <section className="py-16 bg-white">
                           <Container>
                             <div className="mb-10">
@@ -1016,6 +1054,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                             </div>
                           </Container>
                         </section>
+                        )}
 
                         {/* CTA do módulo */}
                         <section
@@ -1060,7 +1099,8 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                 </Container>
               </section>
 
-              {/* Bloco 3 — Funcionalidades (6 bullets) */}
+              {/* Bloco 3 — Funcionalidades (6 bullets) — oculto p/ produtos sem itens */}
+              {detail.functionalities.length > 0 && (
               <section
                 className="py-16 text-white"
                 style={{ backgroundColor: "#0B0B0B", backgroundImage: "url('https://conteudo.sansys.app/site/img/jtech-background-missao-visao-valores.webp')", backgroundSize: "cover", backgroundPosition: "bottom" }}
@@ -1081,32 +1121,10 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                   </div>
                 </Container>
               </section>
+              )}
 
-              {/* Bloco 4 — Resultados (3 boxes) */}
-              <section className="py-16 bg-white" style={{ backgroundImage: 'url(https://conteudo.sansys.app/site/img/jtech-background-solucoes-saneamento.webp)', backgroundSize: 'cover', backgroundPosition: 'bottom', backgroundRepeat: 'no-repeat' }}>
-                <Container>
-                  <div className="text-center mb-12">
-                    <h2 className="text-3xl mb-2">{detail.resultsTitle}</h2>
-                    <div className="h-[2px] bg-[#E30613] w-[80px] mx-auto mt-3" />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                    {detail.results.map((r, idx) => (
-                      <div key={idx} className="bg-white rounded-lg p-8 text-center shadow-sm hover:shadow-md transition-shadow">
-                        <div className="text-5xl font-bold text-[#E30613] mb-2">{r.metric}</div>
-                        <div className="text-lg font-semibold text-gray-900 mb-1">{r.label}</div>
-                        <div className="text-sm text-gray-500">{r.description}</div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="text-center">
-                    <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => openCTA(currentProduct.slug)}>
-                      {ctaLabel(currentProduct.slug, 'Fale com um de nossos especialistas')}
-                    </Button>
-                  </div>
-                </Container>
-              </section>
-
-              {/* Bloco 5 — Aplicações (4 boxes) */}
+              {/* Bloco 5 — Aplicações (4 boxes) — oculto p/ produtos sem itens */}
+              {detail.applications.length > 0 && (
               <section className="py-16 bg-white">
                 <Container>
                   <div className="mb-10">
@@ -1122,6 +1140,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                   </div>
                 </Container>
               </section>
+              )}
 
               {/* Bloco 6 — CTA Final */}
               <section

@@ -116,11 +116,9 @@ export default function HomePage({ lang }: HomePageProps) {
     { name: "Sansys Pay", slug: "sansys-pay" },
     { name: "Sansys Agency", slug: "sansys-agency" },
     { name: "Sansys Flow", slug: "sansys-flow" },
-    { name: "Sansys Hub", slug: "sansys-hub" },
     { name: "Sansys Water", slug: "sansys-water" },
     { name: "Sansys Waste", slug: "sansys-waste" },
     { name: "Sansys Reader", slug: "sansys-reader" },
-    { name: "Sansys GIS", slug: "sansys-gis" },
   ]
 
   const modulos = [
@@ -232,8 +230,8 @@ export default function HomePage({ lang }: HomePageProps) {
   // Efeito para posicionar no Sansys Water quando mudar para tab Produtos
   useEffect(() => {
     if (productTab === "produtos") {
-      // Sansys Water está no índice 4 do array produtos
-      const sansysWaterIndex = 4
+      // Posiciona dinamicamente no Sansys Water dentro do array produtos
+      const sansysWaterIndex = produtos.findIndex((p) => p.slug === "sansys-water")
       setTimeout(() => {
         setIsTransitioning(false)
         setProductCarouselIndex(cloneCount + sansysWaterIndex)

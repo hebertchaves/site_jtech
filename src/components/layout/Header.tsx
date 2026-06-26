@@ -11,10 +11,8 @@ const SOLUTION_PRODUCTS = [
   { slug: "sansys-pay",    name: "Sansys Pay"    },
   { slug: "sansys-waste",  name: "Sansys Waste"  },
   { slug: "sansys-agency", name: "Sansys Agency" },
-  { slug: "sansys-hub",    name: "Sansys Hub"    },
   { slug: "sansys-flow",   name: "Sansys Flow"   },
   { slug: "sansys-reader", name: "Sansys Reader" },
-  { slug: "sansys-gis",    name: "Sansys GIS"    },
 ]
 
 interface HeaderProps {

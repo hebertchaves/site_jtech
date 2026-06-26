@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Play, ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Lang, t } from "../lib/i18n"
 import { Container } from "../components/layout/Container"
 import { Button } from "../components/ui/button"
@@ -99,9 +99,7 @@ export function AboutPage({ lang }: AboutPageProps) {
     { slug: "sansys-waste", name: "Sansys Waste" },
     { slug: "sansys-agency", name: "Sansys Agency" },
     { slug: "sansys-reader", name: "Sansys Reader" },
-    { slug: "sansys-hub", name: "Sansys Hub" },
     { slug: "sansys-flow", name: "Sansys Flow" },
-    { slug: "sansys-gis", name: "Sansys GIS" },
   ]
 
   const modulos = [
@@ -249,27 +247,11 @@ export function AboutPage({ lang }: AboutPageProps) {
               dangerouslySetInnerHTML={{ __html: t(lang, "about.who.text1") }}
             />
 
-            <div className="bg-gray-50 border-l-4 border-[#E30613] p-6 rounded mb-8">
-              <p 
+            <div className="bg-gray-50 border-l-4 border-[#E30613] p-6 rounded">
+              <p
                 className="text-gray-800 leading-relaxed text-justify [&>strong]:font-bold"
                 dangerouslySetInnerHTML={{ __html: t(lang, "about.who.text2") }}
               />
-            </div>
-
-            {/* Vídeo em formato widescreen */}
-            <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
-              <div className="relative bg-black rounded-lg overflow-hidden group cursor-pointer w-full h-full">
-                <ImageWithFallback
-                  src="https://conteudo.sansys.app/site/img/jtech-conteudo-institucional.webp"
-                  alt="Thumbnail vídeo institucional"
-                  className="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-20 h-20 bg-[#E30613] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Play className="h-10 w-10 text-white ml-1" />
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </Container>
