@@ -788,7 +788,7 @@ const translations: Translations = {
     "home.metrics.support.line2": "soporte por mes",
     
     // HomePage - Blog/Conteúdo
-    "home.content.title": "Conteúdos Recientes",
+    "home.content.title": "Contenidos Recientes",
     "home.content.section.title": "Contenidos que ayudan a su empresa\na entender tendencias y conceptos",
     "home.content.blog.badge": "Blog",
     "home.content.cta": "Acceda a nuestra área de contenido",
@@ -817,7 +817,7 @@ const translations: Translations = {
     "about.hero.title": "<strong>Tecnología e innovación</strong><br/><span style='font-weight: 200'>para transformar<br/>el saneamiento.</span>",
     "about.hero.subtitle": "Transformando desafíos en soluciones inteligentes para saneamiento",
     "about.who.title": "Quiénes Somos",
-    "about.who.text": "Somos especialistas en automatización industrial y control de procesos, ofreciendo soluções integradas e innovadoras para diversos sectores de la industria.",
+    "about.who.text": "Somos especialistas en automatización industrial y control de procesos, ofreciendo soluciones integradas e innovadoras para diversos sectores de la industria.",
     "about.who.text1": "Con más de 20 años de trayectoria, Jtech nació con el propósito de crear soluciones tecnológicas capaces de transformar la gestión del saneamiento. A lo largo de estas dos décadas, evolucionamos junto a las concesionarias de agua y residuos, desarrollando sistemas que unifican procesos, aumentan la eficiencia y apoyan la sostenibilidad.",
     "about.who.text2": "Hoy, nuestro portafolio va más allá de sistemas: abrazamos la innovación continua, integración de datos e inteligencia para apoyar la evolución del sector en Brasil y el mundo.",
     "about.who.video": "Video institucional Jtech",

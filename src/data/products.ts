@@ -26,13 +26,13 @@ export const products: Product[] = [
     category: "Gestão de Pagamentos",
     shortDescription: {
       pt: "Sistema completo de gestão de faturas e pagamentos para serviços de saneamento",
-      es: "Sistema completo de gestão de facturas y pagos para servicios de saneamento",
+      es: "Sistema completo de gestión de facturas y pagos para servicios de saneamiento",
       en: "Complete billing and payment management system for sanitation services",
       fr: "Système complet de gestion de facturation et paiements pour services d'assainissement",
     },
     description: {
       pt: "O Sansys Pay é uma solução robusta para gestão de faturas, cobranças e recebimentos de serviços de saneamento. Oferece múltiplos canais de pagamento, controle de inadimplência e integração com sistemas bancários, proporcionando eficiência operacional e redução de custos administrativos.",
-      es: "Sansys Pay es una solución robusta para gestão de facturas, cobros e recaudaciones de serviços de saneamento. Oferece múltiplos canais de pagamento, control de morosidade e integração com sistemas bancários, proporcionando eficiência operacional e redução de costos administrativos.",
+      es: "Sansys Pay es una solución robusta para la gestión de facturas, cobros y recaudación de servicios de saneamiento. Ofrece múltiples canales de pago, control de morosidad e integración con sistemas bancarios, proporcionando eficiencia operacional y reducción de costos administrativos.",
       en: "Sansys Pay is a robust solution for billing, collection and payment management for sanitation services. It offers multiple payment channels, delinquency control and integration with banking systems, providing operational efficiency and reduced administrative costs.",
       fr: "Sansys Pay est une solution robuste pour la gestion de facturation, recouvrement et paiements des services d'assainissement. Il offre plusieurs canaux de paiement, contrôle des impayés et intégration avec les systèmes bancaires, assurant efficacité opérationnelle et réduction des coûts administratifs.",
     },
@@ -72,7 +72,7 @@ export const products: Product[] = [
     },
     applications: {
       pt: ["Companhias de saneamento", "Concessionárias de água", "Serviços municipais", "Operadores privados"],
-      es: ["Compañías de saneamento", "Concesionarias de agua", "Servicios municipales", "Operadores privados"],
+      es: ["Compañías de saneamiento", "Concesionarias de agua", "Servicios municipales", "Operadores privados"],
       en: ["Sanitation companies", "Water utilities", "Municipal services", "Private operators"],
       fr: ["Compagnies d'assainissement", "Services des eaux", "Services municipaux", "Opérateurs privés"],
     },
@@ -90,13 +90,13 @@ export const products: Product[] = [
     category: "Atendimento ao Cliente",
     shortDescription: {
       pt: "Plataforma integrada para gestão de atendimento e relacionamento com clientes",
-      es: "Plataforma integrada para gestão de atenção e relação com clientes",
+      es: "Plataforma integrada para gestión de atención y relación con clientes",
       en: "Integrated platform for customer service and relationship management",
       fr: "Plateforme intégrée pour gestion du service client et relations",
     },
     description: {
       pt: "O Sansys Agency centraliza todos os canais de atendimento ao cliente em uma única plataforma. Gerencia solicitações, ordens de serviço, reclamações e histórico de interações, proporcionando atendimento de excelência e agilidade na resolução de demandas.",
-      es: "Sansys Agency centraliza todos los canais de atención al cliente en una única plataforma. Gestiona solicitudes, órdenes de servicio, reclamos e historial de interacciones, proporcionando atención de excelência y agilidad en la resolução de demandas.",
+      es: "Sansys Agency centraliza todos los canales de atención al cliente en una única plataforma. Gestiona solicitudes, órdenes de servicio, reclamos e historial de interacciones, proporcionando atención de excelencia y agilidad en la resolución de demandas.",
       en: "Sansys Agency centralizes all customer service channels in a single platform. It manages requests, service orders, complaints and interaction history, providing excellence in service and agility in demand resolution.",
       fr: "Sansys Agency centralise tous les canaux de service client sur une plateforme unique. Il gère les demandes, ordres de service, réclamations et historique d'interactions, offrant un service d'excellence et agilité dans la résolution des demandes.",
     },
@@ -154,13 +154,13 @@ export const products: Product[] = [
     category: "Telemetria e Medição",
     shortDescription: {
       pt: "Sistema de medição inteligente e telemetria para gestão eficiente do consumo",
-      es: "Sistema de medição inteligente e telemetría para gestão eficiente del consumo",
+      es: "Sistema de medición inteligente y telemetría para gestión eficiente del consumo",
       en: "Smart metering and telemetry system for efficient consumption management",
       fr: "Système de comptage intelligent et télémétrie pour gestion efficace de la consommation",
     },
     description: {
       pt: "O Sansys Flow revoluciona a medição de água com tecnologia de telemetria avançada. Permite leitura remota em tempo real, detecção de vazamentos, análise de padrões de consumo e faturamento preciso, reduzindo perdas e otimizando a gestão hídrica.",
-      es: "Sansys Flow revoluciona la medição de agua con tecnología de telemetría avanzada. Permite lectura remota en tiempo real, deteção de fugas, análise de patrones de consumo e facturación precisa, reduciendo pérdidas y optimizando la gestión hídrica.",
+      es: "Sansys Flow revoluciona la medición de agua con tecnología de telemetría avanzada. Permite lectura remota en tiempo real, detección de fugas, análisis de patrones de consumo y facturación precisa, reduciendo pérdidas y optimizando la gestión hídrica.",
       en: "Sansys Flow revolutionizes water metering with advanced telemetry technology. It enables real-time remote reading, leak detection, consumption pattern analysis and accurate billing, reducing losses and optimizing water management.",
       fr: "Sansys Flow révolutionne le comptage d'eau avec technologie de télémétrie avancée. Il permet la lecture à distance en temps réel, détection de fuites, analyse des habitudes de consommation et facturation précise, réduisant les pertes et optimisant la gestion hydrique.",
     },
@@ -200,7 +200,7 @@ export const products: Product[] = [
     },
     applications: {
       pt: ["Redes de abastecimento", "Medição residencial e comercial", "Gestão de perdas", "Smart cities"],
-      es: ["Redes de abastecimento", "Medição residencial e comercial", "Gestão de pérdidas", "Ciudades inteligentes"],
+      es: ["Redes de abastecimiento", "Medición residencial y comercial", "Gestión de pérdidas", "Ciudades inteligentes"],
       en: ["Water supply networks", "Residential and commercial metering", "Loss management", "Smart cities"],
       fr: ["Réseaux d'approvisionnement", "Comptage résidentiel et commercial", "Gestion des pertes", "Villes intelligentes"],
     },
@@ -218,13 +218,13 @@ export const products: Product[] = [
     category: "Gestão de Água e Esgoto",
     shortDescription: {
       pt: "Sistema integrado para gestão operacional de água e esgoto",
-      es: "Sistema integrado para gestão operacional de água e alcantarillado",
+      es: "Sistema integrado para gestión operacional de agua y alcantarillado",
       en: "Integrated system for water and sewage operational management",
       fr: "Système intégré pour gestion opérationnelle de l'eau et assainissement",
     },
     description: {
       pt: "O Sansys Water é uma solução completa para gestão operacional de sistemas de abastecimento de água e coleta de esgoto. Integra monitoramento de redes, controle de qualidade, manutenção preventiva e gestão de ativos, garantindo eficiência operacional e conformidade regulatória.",
-      es: "Sansys Water es una solución completa para gestión operacional de sistemas de abastecimento de agua y recolección de alcantarillado. Integra monitoreo de redes, control de calidad, mantenimiento preventivo y gestión de activos, garantizando eficiência operacional y conformidad regulatoria.",
+      es: "Sansys Water es una solución completa para gestión operacional de sistemas de abastecimiento de agua y recolección de alcantarillado. Integra monitoreo de redes, control de calidad, mantenimiento preventivo y gestión de activos, garantizando eficiencia operacional y conformidad regulatoria.",
       en: "Sansys Water is a complete solution for operational management of water supply and sewage collection systems. It integrates network monitoring, quality control, preventive maintenance and asset management, ensuring operational efficiency and regulatory compliance.",
       fr: "Sansys Water est une solution complète pour la gestion opérationnelle des systèmes d'approvisionnement en eau et collecte des eaux usées. Il intègre surveillance de réseaux, contrôle qualité, maintenance préventive et gestion d'actifs, garantissant efficacité opérationnelle et conformité réglementaire.",
     },
@@ -264,7 +264,7 @@ export const products: Product[] = [
     },
     applications: {
       pt: ["Estações de tratamento", "Redes de distribuição", "Sistemas de esgoto", "Gestão operacional"],
-      es: ["Estaciones de tratamento", "Redes de distribuição", "Sistemas de alcantarillado", "Gestão operacional"],
+      es: ["Estaciones de tratamiento", "Redes de distribución", "Sistemas de alcantarillado", "Gestión operacional"],
       en: ["Treatment plants", "Distribution networks", "Sewage systems", "Operational management"],
       fr: ["Stations de traitement", "Réseaux de distribution", "Systèmes d'égouts", "Gestion opérationnelle"],
     },
@@ -282,7 +282,7 @@ export const products: Product[] = [
     category: "Gestão de Resíduos",
     shortDescription: {
       pt: "Plataforma para gestão inteligente de coleta e destinação de resíduos sólidos",
-      es: "Plataforma para gestão inteligente de recoleção e destino de residuos sólidos",
+      es: "Plataforma para gestión inteligente de recolección y disposición de residuos sólidos",
       en: "Platform for intelligent solid waste collection and disposal management",
       fr: "Plateforme pour gestion intelligente de collecte et élimination des déchets solides",
     },
@@ -346,13 +346,13 @@ export const products: Product[] = [
     category: "Leitura de Hidrômetros",
     shortDescription: {
       pt: "Aplicativo mobile para leitura e gestão de hidrômetros em campo",
-      es: "Aplicación móvil para lectura y gestión de hidrômetros em campo",
+      es: "Aplicación móvil para lectura y gestión de hidrómetros en campo",
       en: "Mobile app for water meter reading and field management",
       fr: "Application mobile pour lecture et gestion de compteurs d'eau sur terrain",
     },
     description: {
       pt: "O Sansys Reader moderniza o processo de leitura de hidrômetros com aplicativo mobile intuitivo. Oferece captura por foto/OCR, rotas otimizadas, mode offline, validação inteligente e sincronização automática, aumentando produtividade e precisão.",
-      es: "Sansys Reader moderniza el proceso de lectura de hidrómetros con aplicación móvil intuitiva. Oferece captura por foto/OCR, rutas optimizadas, modo offline, validación inteligente e sincronización automática, aumentando productividad y precisión.",
+      es: "Sansys Reader moderniza el proceso de lectura de hidrómetros con aplicación móvil intuitiva. Ofrece captura por foto/OCR, rutas optimizadas, modo offline, validación inteligente y sincronización automática, aumentando productividad y precisión.",
       en: "Sansys Reader modernizes the water meter reading process with an intuitive mobile app. It offers photo/OCR capture, optimized routes, offline mode, intelligent validation and automatic synchronization, increasing productivity and accuracy.",
       fr: "Sansys Reader modernise le processus de lecture de compteurs avec application mobile intuitive. Il offre capture par photo/OCR, routes optimisées, mode hors ligne, validation intelligente et synchronisation automatique, augmentant productivité et précision.",
     },
@@ -368,7 +368,7 @@ export const products: Product[] = [
       es: [
         "Captura de lectura por foto con OCR",
         "Rutas optimizadas para lectores",
-        "Modo offline com sincronização automática",
+        "Modo offline con sincronización automática",
         "Validación inteligente de lecturas",
         "Registro de ocurrencias en campo",
         "Dashboard de productividad",
@@ -392,7 +392,7 @@ export const products: Product[] = [
     },
     applications: {
       pt: ["Leitura residencial", "Leitura comercial", "Gestão de rotas", "Produtividade de campo"],
-      es: ["Lectura residencial", "Lectura comercial", "Gestão de rutas", "Productividad de campo"],
+      es: ["Lectura residencial", "Lectura comercial", "Gestión de rutas", "Productividad de campo"],
       en: ["Residential reading", "Commercial reading", "Route management", "Field productivity"],
       fr: ["Lecture résidentielle", "Lecture commerciale", "Gestion de routes", "Productivité sur terrain"],
     },
