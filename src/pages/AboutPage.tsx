@@ -498,7 +498,7 @@ export function AboutPage({ lang }: AboutPageProps) {
                 <ImageWithFallback
                   src="https://conteudo.sansys.app/site/img/jtech-atendimento-cliente-tecnologia-saneamento.webp"
                   alt="Profissional utilizando headset e computador em atendimento digital, representando a gestão de atendimento ao cliente com tecnologia no setor de saneamento"
-                  className="w-full rounded-lg shadow-lg"
+                  className="w-full rounded-2xl shadow-lg"
                 />
               </div>
             </div>
@@ -530,26 +530,31 @@ export function AboutPage({ lang }: AboutPageProps) {
               <ImageWithFallback
                 src="https://conteudo.sansys.app/site/img/jtech-compromisso-ambinetal-saneamento.webp"
                 alt="Logos da Jtech e da Veolia, representando parceria em tecnologia e soluções para o setor de saneamento"
-                className="w-full"
+                className="w-full rounded-2xl"
               />
             </div>
 
             <div className="max-w-2xl mx-auto">
-              <p className="text-gray-300 mb-6 leading-relaxed text-justify">
-                {t(lang, "about.environment.text1")}
-              </p>
+              <p
+                className="text-gray-300 mb-6 leading-relaxed text-justify [&>strong]:font-bold"
+                dangerouslySetInnerHTML={{ __html: t(lang, "about.environment.text1") }}
+              />
 
-              <p className="text-gray-300 mb-8 leading-relaxed text-justify">
-                {t(lang, "about.environment.text2")}
-              </p>
+              <p
+                className="text-gray-300 mb-8 leading-relaxed text-justify [&>strong]:font-bold"
+                dangerouslySetInnerHTML={{ __html: t(lang, "about.environment.text2") }}
+              />
             </div>
           </div>
         </Container>
 
-        {/* Card suspenso - metade na section 5 e metade na section 6 */}
-        <div className="absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 z-10">
-          <div className="bg-white rounded-lg shadow-xl" style={{ padding: '2.5rem 4rem' }}>
-            <div className="max-w-md">
+        {/* Card suspenso - metade na section 5 e metade na section 6.
+            Largura acompanha a viewport (max-w-[38rem] = 448px de conteúdo +
+            padding, mantendo o tamanho original no desktop) e o padding
+            horizontal reduz no mobile para não espremer o logo e o texto. */}
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 z-10 w-full max-w-[38rem] px-4">
+          <div className="bg-white rounded-lg shadow-xl px-6 py-8 sm:px-16 sm:py-10">
+            <div className="max-w-md mx-auto">
               {/* SVG Jtech + Veolia */}
               <svg className="w-full h-auto mb-6" viewBox="0 0 398 48" xmlns="http://www.w3.org/2000/svg">
                 <g>

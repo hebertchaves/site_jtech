@@ -479,7 +479,9 @@ export function ContentPage({ lang }: ContentPageProps) {
       {/* ====================================
           EBOOKS SECTION
           E-books disponíveis para download
+          Oculta enquanto não houver nenhum e-book publicado
           ==================================== */}
+      {ebooks.length > 0 && (
       <section className="py-16 bg-gray-50">
         <Container>
           {/* Título com linha decorativa */}
@@ -529,6 +531,7 @@ export function ContentPage({ lang }: ContentPageProps) {
           </div>
         </Container>
       </section>
+      )}
 
       {/* ====================================
           NEWSLETTER SECTION

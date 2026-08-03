@@ -11,6 +11,8 @@ import { LogoBySlug } from "../components/logos"
 import { getContentProvider } from "../providers"
 import { ProductCTAConfig } from "../providers/contentProvider"
 import { waterCoreModules } from "../data/water-core-modules"
+import { wasteCoreModules } from "../data/waste-core-modules"
+import { CoreModulesAccordion } from "../components/product/CoreModulesAccordion"
 
 interface SolutionsPageProps {
   lang: Lang
@@ -102,9 +104,14 @@ function getProductDetails(lang: Lang): Record<string, ProductDetail> {
         { title: t(lang, 'solutions.pay.detail.b3title'), subtitle: t(lang, 'solutions.pay.detail.b3sub') },
         { title: t(lang, 'solutions.pay.detail.b4title'), subtitle: t(lang, 'solutions.pay.detail.b4sub') },
       ],
-      // Pay não exibe as dobras Funcionalidades / Resultados / Aplicações (arrays vazios = seções ocultas)
-      functionalitiesTitle: '',
-      functionalities: [],
+      functionalitiesTitle: t(lang, 'solutions.pay.detail.funcsTitle'),
+      functionalities: [
+        t(lang, 'solutions.pay.detail.f1'),
+        t(lang, 'solutions.pay.detail.f2'),
+        t(lang, 'solutions.pay.detail.f3'),
+        t(lang, 'solutions.pay.detail.f4'),
+      ],
+      // Pay não exibe as dobras Resultados / Aplicações (arrays vazios = seções ocultas)
       resultsTitle: '',
       results: [],
       applicationsTitle: '',
@@ -674,6 +681,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
   const currentProduct = produtos[productIndex]
   const detail = productDetails[currentProduct.slug]
   const isWater = currentProduct.slug === 'sansys-water'
+  const isWaste = currentProduct.slug === 'sansys-waste'
   const solutionsPath = lang === 'pt' ? 'solucoes' : lang === 'es' ? 'soluciones' : 'solutions'
 
   const openCTA = (slug: string) => {
@@ -871,49 +879,13 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                 role="img" aria-label="Fundo com textura suave para a seção de módulos principais"
               >
                 <Container>
-                  <h2 className="mb-12 text-center text-[#E30613] text-5xl font-normal pt-16" dangerouslySetInnerHTML={{ __html: t(lang, "solutions.coremodules.title") }} />
-                  <div className="max-w-[1200px] mx-auto bg-white/70 px-4 divide-y divide-gray-200 border-y border-gray-200">
-                    {waterCoreModules.map((mod, idx) => {
-                      const isOpen = openCoreModule === idx
-                      return (
-                        <div key={mod.id}>
-                          <button
-                            type="button"
-                            onClick={() => setOpenCoreModule(isOpen ? -1 : idx)}
-                            className="w-full flex items-center justify-between gap-4 py-5 text-left group"
-                            aria-expanded={isOpen}
-                          >
-                            <span className={`text-xl font-semibold transition-colors ${isOpen ? 'text-[#E30613]' : 'text-gray-900 group-hover:text-[#E30613]'}`}>{mod.name[lang]}</span>
-                            <ChevronDown className={`h-6 w-6 flex-shrink-0 text-[#E30613] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
-                          </button>
-                          <AnimatePresence initial={false}>
-                            {isOpen && (
-                              <motion.div
-                                key="content"
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.3, ease: 'easeInOut' }}
-                                className="overflow-hidden"
-                              >
-                                <div className="pb-8 pt-1">
-                                  <p className="text-gray-700 leading-relaxed mb-6 max-w-3xl">{mod.intro[lang]}</p>
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    {mod.topics.map((topic, tIdx) => (
-                                      <div key={tIdx} className="bg-white rounded-lg p-5 border-l-4 border-[#E30613] shadow-sm">
-                                        <h3 className="text-base font-semibold mb-1 text-gray-900">{topic.title[lang]}</h3>
-                                        <p className="text-sm text-gray-600 leading-relaxed">{topic.description[lang]}</p>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
-                      )
-                    })}
-                  </div>
+                  <CoreModulesAccordion
+                    lang={lang}
+                    title={t(lang, "solutions.coremodules.title")}
+                    modules={waterCoreModules}
+                    openIndex={openCoreModule}
+                    onToggle={setOpenCoreModule}
+                  />
                 </Container>
               </section>
 
@@ -1056,27 +1028,29 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                         </section>
                         )}
 
-                        {/* CTA do módulo */}
-                        <section
-                          className="py-20 text-white"
-                          style={{ backgroundColor: "#0B0B0B", backgroundImage: "url('https://conteudo.sansys.app/site/img/jtech-background-contato-suporte-atendimento-cliente-saneamento.webp')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
-                          role="img" aria-label="Fundo com elementos gráficos tecnológicos para call-to-action"
-                        >
-                          <Container>
-                            <div className="text-center max-w-3xl mx-auto">
-                              <h2 className="text-3xl md:text-4xl font-extralight text-white mb-4">{md.ctaTitle}</h2>
-                              <p className="text-gray-300 text-lg mb-8 leading-relaxed">{md.ctaSubtitle}</p>
-                              <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => openCTA(modulos[moduloIndex].slug)}>
-                                {ctaLabel(modulos[moduloIndex].slug, 'Entrar em contato')}
-                              </Button>
-                            </div>
-                          </Container>
-                        </section>
                       </>
                     )
                   })()}
                 </motion.div>
               </AnimatePresence>
+
+              {/* CTA final — fixo do produto (fora do detalhe do módulo, não muda
+                  conforme o módulo selecionado no carrossel) */}
+              <section
+                className="py-20 text-white"
+                style={{ backgroundColor: "#0B0B0B", backgroundImage: "url('https://conteudo.sansys.app/site/img/jtech-background-contato-suporte-atendimento-cliente-saneamento.webp')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+                role="img" aria-label="Fundo com elementos gráficos tecnológicos para call-to-action"
+              >
+                <Container>
+                  <div className="text-center max-w-3xl mx-auto">
+                    <h2 className="text-3xl md:text-4xl font-extralight text-white mb-4">{t(lang, 'solutions.water.detail.ctaTitle')}</h2>
+                    <p className="text-gray-300 text-lg mb-8 leading-relaxed">{t(lang, 'solutions.water.detail.ctaSub')}</p>
+                    <Button size="lg" className="bg-[#E30613] hover:bg-[#C10511]" onClick={() => openCTA(currentProduct.slug)}>
+                      {ctaLabel(currentProduct.slug, 'Entrar em contato')}
+                    </Button>
+                  </div>
+                </Container>
+              </section>
             </>
           ) : detail ? (
             /* ── DEMAIS PRODUTOS: novos blocos ───────────────────────────────── */
@@ -1098,6 +1072,25 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
                   </div>
                 </Container>
               </section>
+
+              {/* Bloco 2 — Principais Módulos — acordeão (módulos core do Sansys Waste) */}
+              {isWaste && (
+              <section
+                className="bg-white relative scroll-mt-20 pb-16"
+                style={{ backgroundImage: "url('https://conteudo.sansys.app/site/img/jtech-background-solucoes-saneamento.webp')", backgroundSize: "cover", backgroundPosition: "center" }}
+                role="img" aria-label="Fundo com textura suave para a seção de módulos principais"
+              >
+                <Container>
+                  <CoreModulesAccordion
+                    lang={lang}
+                    title={t(lang, "solutions.coremodules.title")}
+                    modules={wasteCoreModules}
+                    openIndex={openCoreModule}
+                    onToggle={setOpenCoreModule}
+                  />
+                </Container>
+              </section>
+              )}
 
               {/* Bloco 3 — Funcionalidades (6 bullets) — oculto p/ produtos sem itens */}
               {detail.functionalities.length > 0 && (

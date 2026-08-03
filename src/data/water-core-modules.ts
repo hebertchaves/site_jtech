@@ -1,19 +1,7 @@
-import { Lang } from "../lib/i18n"
+import { CoreModule } from "./core-modules"
 
 // Módulos principais (core) do Sansys Water — exibidos na dobra "Principais Módulos"
 // (acordeão) da página de soluções. Conteúdo nos 4 idiomas do site.
-
-export interface CoreModuleTopic {
-  title: Record<Lang, string>
-  description: Record<Lang, string>
-}
-
-export interface CoreModule {
-  id: string
-  name: Record<Lang, string>
-  intro: Record<Lang, string>
-  topics: CoreModuleTopic[]
-}
 
 export const waterCoreModules: CoreModule[] = [
   {
