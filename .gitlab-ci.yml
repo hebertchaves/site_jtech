@@ -88,8 +88,9 @@ deploy-backend:
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
     - if: '$CI_COMMIT_TAG'
+      when: manual
     - if: '$CI_COMMIT_BRANCH == "ci/validate-pipeline"'
-  when: manual
+      when: manual
   before_script:
     - command -v jq >/dev/null
     - command -v bash >/dev/null
@@ -105,9 +106,10 @@ deploy-frontend:
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
     - if: '$CI_COMMIT_TAG'
+      when: manual
     - if: '$CI_COMMIT_BRANCH == "ci/validate-pipeline"'
-  when: manual
+      when: manual
   script:
-    - aws s3 sync dist/ "s3://${FRONTEND_BUCKET}" --delete
+    - aws s3 sync dist/ "s3://${FRONTEND_BUCKET}"
     - aws s3 cp dist/index.html "s3://${FRONTEND_BUCKET}/index.html" --cache-control "no-cache,no-store,must-revalidate" --content-type "text/html"
     - aws cloudfront create-invalidation --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" --paths "/*"
