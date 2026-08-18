@@ -22,11 +22,16 @@ export default factories.createCoreController('api::ebook.ebook', ({ strapi }) =
     const { name, email, locale, consentGiven, consentText } = ctx.request.body || {};
 
     // ── Validação de entrada ──────────────────────────────────────────
-    if (typeof name !== 'string' || name.trim().length < 2 || name.length > MAX_NAME_LENGTH) {
+    // Normaliza antes de validar: autocomplete de celular costuma mandar
+    // espaço sobrando, e recusar por isso seria hostil sem ganho nenhum.
+    const cleanName = typeof name === 'string' ? name.trim() : '';
+    const cleanEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+
+    if (cleanName.length < 2 || cleanName.length > MAX_NAME_LENGTH) {
       return ctx.badRequest('Nome inválido');
     }
 
-    if (typeof email !== 'string' || email.length > MAX_EMAIL_LENGTH || !EMAIL_RE.test(email)) {
+    if (cleanEmail.length > MAX_EMAIL_LENGTH || !EMAIL_RE.test(cleanEmail)) {
       return ctx.badRequest('E-mail inválido');
     }
 
@@ -65,8 +70,8 @@ export default factories.createCoreController('api::ebook.ebook', ({ strapi }) =
       // não acontece. É isso que sustenta a promessa do gating.
       await strapi.documents('api::ebook-lead.ebook-lead').create({
         data: {
-          name: name.trim(),
-          email: email.trim().toLowerCase(),
+          name: cleanName,
+          email: cleanEmail,
           ebookSlug: slug,
           ebookTitle: ebook.title,
           locale,
