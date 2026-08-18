@@ -7,7 +7,7 @@ import { CONTENT_FILTER_CONFIGS } from "../lib/content-taxonomy"
 import { Container } from "../components/layout/Container"
 import { Button } from "../components/ui/button"
 import { Input } from "../components/ui/input"
-import { submitLead } from "../lib/leads"
+import { submitLead, leadErrorMessage } from "../lib/leads"
 import { trackFormSubmit } from "../lib/analytics"
 import { calculateBannerOffset } from "../lib/banner-alignment"
 import { ScrollToTop } from "../components/ScrollToTop"
@@ -189,7 +189,7 @@ export function ContentPage({ lang }: ContentPageProps) {
       )
 
       if (!res.success) {
-        setNewsletterMsg(res.error || t(lang, "contact.error"))
+        setNewsletterMsg(leadErrorMessage(lang, res.error))
         return
       }
 

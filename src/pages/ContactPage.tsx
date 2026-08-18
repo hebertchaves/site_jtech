@@ -3,7 +3,7 @@ import { MapPin, ThumbsUp, TrendingUp, MessageCircle } from "lucide-react"
 import { motion, AnimatePresence } from "motion/react"
 import { Lang, t } from "../lib/i18n"
 import { getLegalLink } from "../lib/legal-links"
-import { submitLead } from "../lib/leads"
+import { submitLead, leadErrorMessage } from "../lib/leads"
 import { trackFormSubmit } from "../lib/analytics"
 import { Container } from "../components/layout/Container"
 import { Button } from "../components/ui/button"
@@ -69,7 +69,7 @@ export function ContactPage({ lang }: ContactPageProps) {
       )
 
       if (!res.success) {
-        alert(res.error || t(lang, "contact.error"))
+        alert(leadErrorMessage(lang, res.error))
         return
       }
 

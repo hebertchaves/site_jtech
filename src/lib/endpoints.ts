@@ -1,10 +1,18 @@
 // Transport configuration
-export const LEADS_TRANSPORT: "n8n_webhook" | "mock" = "n8n_webhook"
+// "disabled" = nenhum lead é enviado (fluxo do n8n ainda não publicado)
+// "n8n_webhook" = envia para N8N_LEADS_WEBHOOK_URL
+// "mock" = apenas loga no console (desenvolvimento)
+export const LEADS_TRANSPORT: "n8n_webhook" | "mock" | "disabled" = "disabled"
 // "strapi" = usa StrapiContentProvider (requer Strapi rodando)
 // "mock"   = usa dados estáticos locais (para Figma ou sem backend)
 export const CONTENT_TRANSPORT: "strapi" | "mock" = "strapi"
 
-// n8n Webhook URLs - Replace with your actual n8n instance URLs
+// n8n Webhook URLs
+// ⚠️ Os IDs abaixo são de workflows de TESTE (/webhook-test/), que no n8n só
+// respondem enquanto alguém está com o editor aberto — e hoje devolvem 404.
+// Enquanto os workflows definitivos não forem publicados, LEADS_TRANSPORT fica
+// em "disabled". Ao publicar: trocar /webhook-test/ por /webhook/, conferir os
+// IDs e voltar LEADS_TRANSPORT para "n8n_webhook".
 export const N8N_LEADS_WEBHOOK_URL = "https://n8n.jtech.com.br/webhook-test/a6d72fc2-72d7-4a74-ad39-f8110d25bd4d"
 export const N8N_CONTENT_WEBHOOK_URL = "https://n8n.jtech.com.br/webhook-test/cc35da21-d044-45a1-88c5-b4952ac754cf"
 

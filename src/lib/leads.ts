@@ -1,7 +1,10 @@
-import { Lang } from "./i18n"
+import { Lang, t } from "./i18n"
 import { getAttribution, UTMParams } from "./utm"
 import { LEADS_TRANSPORT, N8N_LEADS_WEBHOOK_URL, ENVIRONMENT } from "./endpoints"
 import { getConsentPreferences } from "./consent"
+
+/** Código de erro devolvido quando o transporte de leads está congelado. */
+export const LEAD_TRANSPORT_DISABLED = "lead_transport_disabled"
 
 export interface LeadPayload {
   name: string
@@ -79,11 +82,31 @@ export async function submitLead(
     ...attribution,
   }
 
+  if (LEADS_TRANSPORT === "disabled") {
+    return submitDisabled(payload)
+  }
+
   if (LEADS_TRANSPORT === "n8n_webhook") {
     return submitToN8N(payload)
   }
 
   return submitMock(payload)
+}
+
+/**
+ * Transporte congelado: os workflows do n8n ainda não foram publicados.
+ * Não dispara requisição (o endpoint de teste devolve 404) e devolve um código
+ * de erro estável, para a UI mostrar "indisponível" em vez de "tente de novo" —
+ * repetir o envio não mudaria o resultado.
+ */
+async function submitDisabled(
+  payload: LeadPayload
+): Promise<{ success: boolean; error?: string }> {
+  console.warn(
+    "[leads] Envio desativado (LEADS_TRANSPORT=disabled). Lead não registrado:",
+    { form_type: payload.form_type, form_name: payload.form_name }
+  )
+  return { success: false, error: LEAD_TRANSPORT_DISABLED }
 }
 
 function getCleanPagePath(): string {
@@ -137,4 +160,14 @@ export async function submitPreWhatsAppLead(
     { ...data, form_type: "pre_whatsapp", form_name: data.source ?? "pre-whatsapp" },
     lang
   )
+}
+
+/**
+ * Mensagem para o usuário a partir do erro devolvido por submitLead.
+ * Nunca expõe detalhe técnico (status HTTP, stack) na interface.
+ */
+export function leadErrorMessage(lang: Lang, error?: string): string {
+  return error === LEAD_TRANSPORT_DISABLED
+    ? t(lang, "contact.error.unavailable")
+    : t(lang, "contact.error")
 }
