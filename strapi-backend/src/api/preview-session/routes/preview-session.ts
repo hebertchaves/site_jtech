@@ -7,7 +7,8 @@ export default {
       config: {
         auth: false, // Public endpoint (token validated in controller)
         policies: [],
-        middlewares: [],
+        // Endpoint público que troca token por sessão: limita tentativas
+        middlewares: ['plugin::users-permissions.rateLimit'],
       },
     },
     {

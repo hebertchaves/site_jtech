@@ -28,19 +28,28 @@ export default {
 
       const responseTime = Date.now() - startTime;
 
+      const isProduction = process.env.NODE_ENV === 'production';
+
       ctx.status = 200;
+      // Em produção o endpoint é público (load balancer / monitoramento) e por
+      // isso responde só o mínimo. Versão exata, uptime e ambiente eram um
+      // convite a cruzar a instalação com CVEs conhecidas.
       ctx.body = {
         status: 'ok',
         timestamp: new Date().toISOString(),
-        uptime: process.uptime(),
         responseTime: `${responseTime}ms`,
         database: 'connected',
-        plugins: {
-          i18n: i18nLoaded,
-          usersPermissions: usersLoaded,
-        },
-        version: strapi.config.get('info.strapi'),
-        environment: process.env.NODE_ENV || 'development',
+        ...(isProduction
+          ? {}
+          : {
+              uptime: process.uptime(),
+              plugins: {
+                i18n: i18nLoaded,
+                usersPermissions: usersLoaded,
+              },
+              version: strapi.config.get('info.strapi'),
+              environment: process.env.NODE_ENV || 'development',
+            }),
       };
     } catch (error) {
       strapi.log.error('Health check failed:', error);
