@@ -23,7 +23,6 @@ export const routes = {
   ebookDetail: { pt: "/ebooks/:slug", es: "/ebooks/:slug", en: "/ebooks/:slug", fr: "/ebooks/:slug" },
   ebookPreview: { pt: "/ebooks/preview", es: "/ebooks/preview", en: "/ebooks/preview", fr: "/ebooks/preview" },
   contact: { pt: "/contato", es: "/contacto", en: "/contact", fr: "/contact" },
-  privacy: { pt: "/privacidade", es: "/privacidad", en: "/privacy", fr: "/confidentialite" },
 } as const
 
 export function getRoute(key: keyof typeof routes, lang: Lang, params?: Record<string, string>): string {

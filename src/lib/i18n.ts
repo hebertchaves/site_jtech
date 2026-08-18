@@ -703,9 +703,6 @@ const translations: Translations = {
     "prewhatsapp.close": "Fechar",
     
     // Privacy Page
-    "privacy.title": "Política de Privacidade",
-    "privacy.updated": "Última atualização",
-    "privacy.intro": "Esta Política de Privacidade descreve como coletamos, usamos e protegemos suas informações pessoais.",
     
     // Terms Page
     
@@ -1431,9 +1428,6 @@ const translations: Translations = {
     "prewhatsapp.close": "Cerrar",
     
     // Privacy Page
-    "privacy.title": "Política de Privacidad",
-    "privacy.updated": "Última actualización",
-    "privacy.intro": "Esta Política de Privacidad describe cómo recopilamos, usamos y protegemos su información personal.",
     
     // Terms Page
     
@@ -2159,9 +2153,6 @@ const translations: Translations = {
     "prewhatsapp.close": "Close",
     
     // Privacy Page
-    "privacy.title": "Privacy Policy",
-    "privacy.updated": "Last updated",
-    "privacy.intro": "This Privacy Policy describes how we collect, use, and protect your personal information.",
     
     // Terms Page
     
@@ -2887,9 +2878,6 @@ const translations: Translations = {
     "prewhatsapp.close": "Fermer",
     
     // Privacy Page
-    "privacy.title": "Politique de Confidentialité",
-    "privacy.updated": "Dernière mise à jour",
-    "privacy.intro": "Cette Politique de Confidentialité décrit comment nous collectons, utilisons et protégeons vos informations personnelles.",
     
     // Terms Page
     
