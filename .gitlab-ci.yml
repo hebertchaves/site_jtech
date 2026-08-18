@@ -1,0 +1,115 @@
+stages:
+  - validate
+  - build
+  - deploy
+
+variables:
+  NODE_VERSION: "20"
+  BACKEND_PLATFORM: "linux/arm64"
+  ECR_REPOSITORY: "jtech-portal"
+  AWS_ACCOUNT_ID: "630777132932"
+  FRONTEND_BUCKET: "jtech-site-prod"
+  CLOUDFRONT_DISTRIBUTION_ID: "EU8RBW6EG8XCB"
+  DOCKER_TLS_CERTDIR: "/certs"
+
+prepare-version:
+  stage: validate
+  image: node:${NODE_VERSION}-alpine
+  script:
+    - |
+      ROOT_VERSION="$(node -p "require('./package.json').version")"
+      BACKEND_VERSION="$(node -p "require('./strapi-backend/package.json').version")"
+      test "$ROOT_VERSION" = "$BACKEND_VERSION" || {
+        echo "As versoes do frontend e backend precisam ser iguais: $ROOT_VERSION != $BACKEND_VERSION" >&2
+        exit 1
+      }
+      if [ -n "${CI_COMMIT_TAG:-}" ]; then
+        APP_VERSION="$CI_COMMIT_TAG"
+      elif [ "$CI_COMMIT_BRANCH" = "main" ]; then
+        APP_VERSION="${ROOT_VERSION}-${CI_COMMIT_SHORT_SHA}"
+      else
+        APP_VERSION="${ROOT_VERSION}-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
+      fi
+      printf 'APP_VERSION=%s\n' "$APP_VERSION" > version.env
+  artifacts:
+    reports:
+      dotenv: version.env
+
+build-backend:
+  stage: build
+  image: docker:27
+  services:
+    - name: docker:27-dind
+      command: ["--tls=false"]
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  needs:
+    - job: prepare-version
+      artifacts: true
+  before_script:
+    - apk add --no-cache aws-cli
+    - export ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+    - test -n "$AWS_DEFAULT_REGION" || { echo "Configure AWS_DEFAULT_REGION"; exit 1; }
+    - |
+      getent hosts "$ECR_REGISTRY" || {
+        echo "Nao foi possivel resolver o registry ECR: $ECR_REGISTRY. Verifique a rede/DNS do runner."
+        exit 1
+      }
+    - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$ECR_REGISTRY"
+    - docker run --privileged --rm tonistiigi/binfmt --install arm64
+  script:
+    - docker build --pull --platform "$BACKEND_PLATFORM" -t "$ECR_REGISTRY/$ECR_REPOSITORY:$APP_VERSION" ./strapi-backend
+    - docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$APP_VERSION"
+
+build-frontend:
+  stage: build
+  image: node:${NODE_VERSION}-alpine
+  needs:
+    - job: prepare-version
+      artifacts: true
+  script:
+    - test -n "${FRONTEND_ENV_PRODUCTION:-}" || { echo "Configure a variavel de arquivo FRONTEND_ENV_PRODUCTION no GitLab"; exit 1; }
+    - cp "$FRONTEND_ENV_PRODUCTION" .env.production
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 day
+
+deploy-backend:
+  stage: deploy
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  needs:
+    - job: prepare-version
+      artifacts: true
+    - job: build-backend
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_TAG'
+      when: manual
+    - if: '$CI_COMMIT_BRANCH == "ci/validate-pipeline"'
+      when: manual
+  before_script:
+    - command -v jq >/dev/null
+    - command -v bash >/dev/null
+    - export ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+  script:
+    - bash script/deploy-ecs-production.sh
+
+deploy-frontend:
+  stage: deploy
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  needs:
+    - job: build-frontend
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_TAG'
+      when: manual
+    - if: '$CI_COMMIT_BRANCH == "ci/validate-pipeline"'
+      when: manual
+  script:
+    - aws s3 sync dist/ "s3://${FRONTEND_BUCKET}" --delete
+    - aws s3 cp dist/index.html "s3://${FRONTEND_BUCKET}/index.html" --cache-control "no-cache,no-store,must-revalidate" --content-type "text/html"
+    - aws cloudfront create-invalidation --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" --paths "/*"

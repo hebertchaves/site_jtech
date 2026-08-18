@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Play, ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Lang, t } from "../lib/i18n"
 import { Container } from "../components/layout/Container"
 import { Button } from "../components/ui/button"
@@ -99,9 +99,7 @@ export function AboutPage({ lang }: AboutPageProps) {
     { slug: "sansys-waste", name: "Sansys Waste" },
     { slug: "sansys-agency", name: "Sansys Agency" },
     { slug: "sansys-reader", name: "Sansys Reader" },
-    { slug: "sansys-hub", name: "Sansys Hub" },
     { slug: "sansys-flow", name: "Sansys Flow" },
-    { slug: "sansys-gis", name: "Sansys GIS" },
   ]
 
   const modulos = [
@@ -249,27 +247,11 @@ export function AboutPage({ lang }: AboutPageProps) {
               dangerouslySetInnerHTML={{ __html: t(lang, "about.who.text1") }}
             />
 
-            <div className="bg-gray-50 border-l-4 border-[#E30613] p-6 rounded mb-8">
-              <p 
+            <div className="bg-gray-50 border-l-4 border-[#E30613] p-6 rounded">
+              <p
                 className="text-gray-800 leading-relaxed text-justify [&>strong]:font-bold"
                 dangerouslySetInnerHTML={{ __html: t(lang, "about.who.text2") }}
               />
-            </div>
-
-            {/* Vídeo em formato widescreen */}
-            <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
-              <div className="relative bg-black rounded-lg overflow-hidden group cursor-pointer w-full h-full">
-                <ImageWithFallback
-                  src="https://conteudo.sansys.app/site/img/jtech-conteudo-institucional.webp"
-                  alt="Thumbnail vídeo institucional"
-                  className="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-20 h-20 bg-[#E30613] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Play className="h-10 w-10 text-white ml-1" />
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </Container>
@@ -386,7 +368,8 @@ export function AboutPage({ lang }: AboutPageProps) {
                             }}
                             onClick={() => {
                               const solutionsPath = getRoute("solutions", lang)
-                              window.location.hash = `#/${lang}${solutionsPath}?produto=${produto.slug}`
+                              const paramKey = productTab === "modulos" ? "modulo" : "produto"
+                              window.location.hash = `#/${lang}${solutionsPath}?${paramKey}=${produto.slug}`
                             }}
                           >
                             <div className="flex flex-col items-center justify-center">
@@ -515,7 +498,7 @@ export function AboutPage({ lang }: AboutPageProps) {
                 <ImageWithFallback
                   src="https://conteudo.sansys.app/site/img/jtech-atendimento-cliente-tecnologia-saneamento.webp"
                   alt="Profissional utilizando headset e computador em atendimento digital, representando a gestão de atendimento ao cliente com tecnologia no setor de saneamento"
-                  className="w-full rounded-lg shadow-lg"
+                  className="w-full rounded-2xl shadow-lg"
                 />
               </div>
             </div>
@@ -547,26 +530,31 @@ export function AboutPage({ lang }: AboutPageProps) {
               <ImageWithFallback
                 src="https://conteudo.sansys.app/site/img/jtech-compromisso-ambinetal-saneamento.webp"
                 alt="Logos da Jtech e da Veolia, representando parceria em tecnologia e soluções para o setor de saneamento"
-                className="w-full"
+                className="w-full rounded-2xl"
               />
             </div>
 
             <div className="max-w-2xl mx-auto">
-              <p className="text-gray-300 mb-6 leading-relaxed text-justify">
-                {t(lang, "about.environment.text1")}
-              </p>
+              <p
+                className="text-gray-300 mb-6 leading-relaxed text-justify [&>strong]:font-bold"
+                dangerouslySetInnerHTML={{ __html: t(lang, "about.environment.text1") }}
+              />
 
-              <p className="text-gray-300 mb-8 leading-relaxed text-justify">
-                {t(lang, "about.environment.text2")}
-              </p>
+              <p
+                className="text-gray-300 mb-8 leading-relaxed text-justify [&>strong]:font-bold"
+                dangerouslySetInnerHTML={{ __html: t(lang, "about.environment.text2") }}
+              />
             </div>
           </div>
         </Container>
 
-        {/* Card suspenso - metade na section 5 e metade na section 6 */}
-        <div className="absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 z-10">
-          <div className="bg-white rounded-lg shadow-xl" style={{ padding: '2.5rem 4rem' }}>
-            <div className="max-w-md">
+        {/* Card suspenso - metade na section 5 e metade na section 6.
+            Largura acompanha a viewport (max-w-[38rem] = 448px de conteúdo +
+            padding, mantendo o tamanho original no desktop) e o padding
+            horizontal reduz no mobile para não espremer o logo e o texto. */}
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 z-10 w-full max-w-[38rem] px-4">
+          <div className="bg-white rounded-lg shadow-xl px-6 py-8 sm:px-16 sm:py-10">
+            <div className="max-w-md mx-auto">
               {/* SVG Jtech + Veolia */}
               <svg className="w-full h-auto mb-6" viewBox="0 0 398 48" xmlns="http://www.w3.org/2000/svg">
                 <g>

@@ -63,6 +63,30 @@ export interface StrapiEbook {
   heroImage?: StrapiMedia | null
 }
 
+export type ProductSlug =
+  | 'homepage'
+  | 'sansys-water'
+  | 'sansys-pay'
+  | 'sansys-waste'
+  | 'sansys-agency'
+  | 'sansys-hub'
+  | 'sansys-flow'
+  | 'sansys-reader'
+  | 'sansys-gis'
+  | 'sansys-bi'
+  | 'sansys-smart-meter'
+  | 'sansys-omnichannel'
+  | 'sansys-antifraude'
+  | 'sansys-critica-leitura'
+
+export interface StrapiProductCTAConfig {
+  id: number
+  documentId: string
+  productSlug: ProductSlug
+  rdFormUrl: string
+  ctaLabel?: string
+}
+
 export interface StrapiResponse<T> {
   data: T
   meta?: {
@@ -190,6 +214,8 @@ export function transformStrapiEbook(strapiEbook: StrapiEbook, lang: Lang): Eboo
     thumbnailImage: thumbnailUrl || imageUrl,
     heroImage: heroUrl || imageUrl,
     downloadUrl: strapiEbook.downloadUrl,
+    ctaType: strapiEbook.ctaType,
+    rdFormUrl: strapiEbook.rdFormUrl,
   }
 }
 
@@ -205,4 +231,18 @@ export function transformStrapiPosts(strapiPosts: StrapiPost[], lang: Lang): Pos
  */
 export function transformStrapiEbooks(strapiEbooks: StrapiEbook[], lang: Lang): Ebook[] {
   return strapiEbooks.map(ebook => transformStrapiEbook(ebook, lang))
+}
+
+/**
+ * Transform Strapi ProductCTAConfig list into a slug-keyed map
+ */
+export function transformStrapiProductCTAConfigs(
+  items: StrapiProductCTAConfig[]
+): Record<string, { productSlug: string; rdFormUrl: string; ctaLabel?: string }> {
+  return Object.fromEntries(
+    items.map(item => [
+      item.productSlug,
+      { productSlug: item.productSlug, rdFormUrl: item.rdFormUrl, ctaLabel: item.ctaLabel },
+    ])
+  )
 }

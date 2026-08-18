@@ -9,10 +9,13 @@ import {
   transformStrapiEbooks,
   transformStrapiPost,
   transformStrapiEbook,
+  transformStrapiProductCTAConfigs,
   StrapiResponse,
   StrapiPost,
   StrapiEbook,
+  StrapiProductCTAConfig,
 } from "../lib/strapi-transformers"
+import { ProductCTAConfig } from "./contentProvider"
 
 /**
  * StrapiContentProvider - Direct Strapi 5 integration
@@ -217,8 +220,13 @@ export class StrapiContentProvider implements ContentProvider {
       'fields[2]': 'description',
       'fields[3]': 'pages',
       'fields[4]': 'category',
+      'fields[5]': 'downloadUrl',
+      'fields[6]': 'ctaType',
+      'fields[7]': 'rdFormUrl',
       'populate[image][fields][0]': 'url',
       'populate[image][fields][1]': 'alternativeText',
+      'populate[thumbnailImage][fields][0]': 'url',
+      'populate[thumbnailImage][fields][1]': 'alternativeText',
     })
 
     const response = await this.fetchStrapi<StrapiResponse<StrapiEbook[]>>(url)
@@ -243,8 +251,21 @@ export class StrapiContentProvider implements ContentProvider {
     const url = this.buildURL('/api/ebooks', {
       'filters[slug][$eq]': slug,
       locale,
+      'fields[0]': 'title',
+      'fields[1]': 'slug',
+      'fields[2]': 'description',
+      'fields[3]': 'content',
+      'fields[4]': 'pages',
+      'fields[5]': 'category',
+      'fields[6]': 'downloadUrl',
+      'fields[7]': 'ctaType',
+      'fields[8]': 'rdFormUrl',
       'populate[image][fields][0]': 'url',
       'populate[image][fields][1]': 'alternativeText',
+      'populate[thumbnailImage][fields][0]': 'url',
+      'populate[thumbnailImage][fields][1]': 'alternativeText',
+      'populate[heroImage][fields][0]': 'url',
+      'populate[heroImage][fields][1]': 'alternativeText',
     })
 
     try {
@@ -293,6 +314,26 @@ export class StrapiContentProvider implements ContentProvider {
       }
 
       return transformStrapiEbook(fallbackResponse.data[0], lang)
+    }
+  }
+
+  /**
+   * Get all published product CTA configs, keyed by productSlug
+   */
+  async getProductCTAConfigs(): Promise<Record<string, ProductCTAConfig>> {
+    const url = this.buildURL('/api/product-cta-configs', {
+      'pagination[limit]': 100,
+      'fields[0]': 'productSlug',
+      'fields[1]': 'rdFormUrl',
+      'fields[2]': 'ctaLabel',
+    })
+
+    try {
+      const response = await this.fetchStrapi<StrapiResponse<StrapiProductCTAConfig[]>>(url)
+      return transformStrapiProductCTAConfigs(response.data ?? [])
+    } catch (error) {
+      console.error('Error fetching product CTA configs:', error)
+      return {}
     }
   }
 

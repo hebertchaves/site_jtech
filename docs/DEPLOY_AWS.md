@@ -404,6 +404,13 @@ Será gerada a pasta `dist/`.
 aws s3 sync ./dist s3://jtech-site --delete
 ```
 
+No GitLab, o pipeline executa esse build automaticamente e publica em `s3://jtech-site-prod`.
+Configure nas variáveis protegidas do projeto `AWS_ACCESS_KEY_ID`,
+`AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION` e `ECR_REGISTRY`. A role usada deve
+permitir ECR (login/push), ECS (register task definition/update service), S3
+(sync no bucket do site) e `cloudfront:CreateInvalidation` na distribuição
+`EU8RBW6EG8XCB`.
+
 **Via console AWS (manual):**
 1. S3 → bucket `jtech-site` → **Upload**
 2. Arraste todos os arquivos e pastas de dentro de `dist/`

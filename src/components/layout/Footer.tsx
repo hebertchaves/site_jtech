@@ -44,12 +44,15 @@ export function Footer({ lang }: FooterProps) {
     { name: t(lang, "nav.contact"), href: `#/${lang}${getRoute("contact", lang)}` },
   ]
 
+  // Mesma rota e comportamento dos links de produto do menu superior (Header):
+  // rota de soluções traduzida por idioma + seleção de produto via ?produto=<slug>
+  const solutionsBase = `#/${lang}${getRoute("solutions", lang)}`
   const solutionsLinks = [
-    { name: "Sansys Water", href: `#/${lang}/solucoes/sansys-water` },
-    { name: "Sansys Waste", href: `#/${lang}/solucoes/sansys-waste` },
-    { name: "Sansys Pay", href: `#/${lang}/solucoes/sansys-pay` },
-    { name: "Sansys Agency", href: `#/${lang}/solucoes/sansys-agency` },
-    { name: "Sansys Reader", href: `#/${lang}/solucoes/sansys-reader` },
+    { name: "Sansys Water", href: `${solutionsBase}?produto=sansys-water` },
+    { name: "Sansys Waste", href: `${solutionsBase}?produto=sansys-waste` },
+    { name: "Sansys Pay", href: `${solutionsBase}?produto=sansys-pay` },
+    { name: "Sansys Agency", href: `${solutionsBase}?produto=sansys-agency` },
+    { name: "Sansys Reader", href: `${solutionsBase}?produto=sansys-reader` },
   ]
 
   const legalLinks = [

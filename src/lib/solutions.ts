@@ -13,10 +13,8 @@ export const SOLUTIONS: Solution[] = [
   { slug: "sansys-pay", name: "Sansys Pay", category: "product" },
   { slug: "sansys-waste", name: "Sansys Waste", category: "product" },
   { slug: "sansys-agency", name: "Sansys Agency", category: "product" },
-  { slug: "sansys-hub", name: "Sansys Hub", category: "product" },
   { slug: "sansys-flow", name: "Sansys Flow", category: "product" },
   { slug: "sansys-reader", name: "Sansys Reader", category: "product" },
-  { slug: "sansys-gis", name: "Sansys GIS", category: "product" },
   { slug: "sansys-smart-meter", name: "Sansys Smart Meter", category: "module" },
   { slug: "sansys-omnichannel", name: "Sansys Omnichannel", category: "module" },
   { slug: "sansys-bi", name: "Sansys BI", category: "module" },
@@ -37,11 +35,9 @@ export function getProductsForLang(lang: Lang) {
     { name: "Sansys Pay", slug: "sansys-pay" },
     { name: "Sansys Agency", slug: "sansys-agency" },
     { name: "Sansys Flow", slug: "sansys-flow" },
-    { name: "Sansys Hub", slug: "sansys-hub" },
     { name: "Sansys Water", slug: "sansys-water" },
     { name: "Sansys Waste", slug: "sansys-waste" },
     { name: "Sansys Reader", slug: "sansys-reader" },
-    { name: "Sansys GIS", slug: "sansys-gis" },
   ]
 }
 

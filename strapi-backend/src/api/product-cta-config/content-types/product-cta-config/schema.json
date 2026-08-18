@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_cta_configs",
+  "info": {
+    "singularName": "product-cta-config",
+    "pluralName": "product-cta-configs",
+    "displayName": "Product CTA Config",
+    "description": "Configuração dos CTAs de produto — URL da RD Station por produto/módulo"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "productSlug": {
+      "type": "enumeration",
+      "enum": [
+        "homepage",
+        "sansys-water",
+        "sansys-pay",
+        "sansys-waste",
+        "sansys-agency",
+        "sansys-hub",
+        "sansys-flow",
+        "sansys-reader",
+        "sansys-gis",
+        "sansys-bi",
+        "sansys-smart-meter",
+        "sansys-omnichannel",
+        "sansys-antifraude",
+        "sansys-critica-leitura"
+      ],
+      "required": true,
+      "unique": true
+    },
+    "rdFormUrl": {
+      "type": "string",
+      "required": true
+    },
+    "ctaLabel": {
+      "type": "string"
+    }
+  }
+}

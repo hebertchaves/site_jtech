@@ -1,7 +1,7 @@
 import { Lang } from "../lib/i18n"
 import { Post, posts, getPostBySlug } from "../data/posts"
 import { Ebook, ebooks, getEbookBySlug } from "../data/ebooks"
-import { ContentProvider } from "./contentProvider"
+import { ContentProvider, ProductCTAConfig } from "./contentProvider"
 
 export class MockContentProvider implements ContentProvider {
   async getPosts(lang: Lang): Promise<Post[]> {
@@ -23,5 +23,9 @@ export class MockContentProvider implements ContentProvider {
   async getEbookBySlug(lang: Lang, slug: string): Promise<Ebook | null> {
     await new Promise((resolve) => setTimeout(resolve, 300))
     return getEbookBySlug(slug) || null
+  }
+
+  async getProductCTAConfigs(): Promise<Record<string, ProductCTAConfig>> {
+    return {}
   }
 }

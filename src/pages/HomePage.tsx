@@ -10,6 +10,7 @@ import { ScrollToTop } from "../components/ScrollToTop"
 import { LogoBySlug } from "../components/logos"
 import { hasVariantSupport } from "../lib/logo-variants"
 import { getRoute } from "../lib/routes"
+import { getContentProvider } from "../providers"
 
 interface HomePageProps {
   lang: Lang
@@ -48,6 +49,7 @@ function ImageWithFallback(props: any) {
 
 export default function HomePage({ lang }: HomePageProps) {
   const [whatsappModalOpen, setWhatsappModalOpen] = useState(false)
+  const [homeRdFormUrl, setHomeRdFormUrl] = useState<string | undefined>(undefined)
   const [bannerOffset, setBannerOffset] = useState(0)
 
   // Calcular o offset do logo no header para alinhar o título
@@ -59,6 +61,13 @@ export default function HomePage({ lang }: HomePageProps) {
     updateOffset()
     window.addEventListener('resize', updateOffset)
     return () => window.removeEventListener('resize', updateOffset)
+  }, [])
+
+  useEffect(() => {
+    getContentProvider()
+      .getProductCTAConfigs()
+      .then(configs => setHomeRdFormUrl(configs['homepage']?.rdFormUrl))
+      .catch(() => {})
   }, [])
 
   const [productTab, setProductTab] = useState<"produtos" | "modulos">("produtos")
@@ -107,11 +116,9 @@ export default function HomePage({ lang }: HomePageProps) {
     { name: "Sansys Pay", slug: "sansys-pay" },
     { name: "Sansys Agency", slug: "sansys-agency" },
     { name: "Sansys Flow", slug: "sansys-flow" },
-    { name: "Sansys Hub", slug: "sansys-hub" },
     { name: "Sansys Water", slug: "sansys-water" },
     { name: "Sansys Waste", slug: "sansys-waste" },
     { name: "Sansys Reader", slug: "sansys-reader" },
-    { name: "Sansys GIS", slug: "sansys-gis" },
   ]
 
   const modulos = [
@@ -223,8 +230,8 @@ export default function HomePage({ lang }: HomePageProps) {
   // Efeito para posicionar no Sansys Water quando mudar para tab Produtos
   useEffect(() => {
     if (productTab === "produtos") {
-      // Sansys Water está no índice 4 do array produtos
-      const sansysWaterIndex = 4
+      // Posiciona dinamicamente no Sansys Water dentro do array produtos
+      const sansysWaterIndex = produtos.findIndex((p) => p.slug === "sansys-water")
       setTimeout(() => {
         setIsTransitioning(false)
         setProductCarouselIndex(cloneCount + sansysWaterIndex)
@@ -274,8 +281,8 @@ export default function HomePage({ lang }: HomePageProps) {
                 {t(lang, "home.hero.title2")} <strong>{t(lang, "home.hero.title3")}</strong><br />
                 <strong>{t(lang, "home.hero.title4")}</strong>
               </h1>
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-[#E30613] hover:bg-[#C10511]"
                 onClick={() => setWhatsappModalOpen(true)}
               >
@@ -446,7 +453,8 @@ export default function HomePage({ lang }: HomePageProps) {
                               } else {
                                 // Usar getRoute para garantir tradução correta da URL
                                 const solutionsPath = getRoute("solutions", lang)
-                                window.location.hash = `#/${lang}${solutionsPath}?produto=${produto.slug}`
+                                const paramKey = productTab === "modulos" ? "modulo" : "produto"
+                                window.location.hash = `#/${lang}${solutionsPath}?${paramKey}=${produto.slug}`
                               }
                             }}
                           >
@@ -481,7 +489,8 @@ export default function HomePage({ lang }: HomePageProps) {
                                 onClick={(e) => {
                                   e.stopPropagation()
                                   const solutionsPath = getRoute("solutions", lang)
-                                  window.location.hash = `#/${lang}${solutionsPath}?produto=${produto.slug}`
+                                  const paramKey = productTab === "modulos" ? "modulo" : "produto"
+                                  window.location.hash = `#/${lang}${solutionsPath}?${paramKey}=${produto.slug}`
                                 }}
                               >
                                 {t(lang, "home.products.cta")}
@@ -916,6 +925,7 @@ export default function HomePage({ lang }: HomePageProps) {
         lang={lang}
         open={whatsappModalOpen}
         onClose={() => setWhatsappModalOpen(false)}
+        rdFormUrl={homeRdFormUrl}
       />
 
       {/* Componente de Scroll to Top com mouse animado */}

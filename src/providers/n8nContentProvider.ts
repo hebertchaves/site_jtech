@@ -1,7 +1,7 @@
 import { Lang } from "../lib/i18n"
 import { Post } from "../data/posts"
 import { Ebook } from "../data/ebooks"
-import { ContentProvider } from "./contentProvider"
+import { ContentProvider, ProductCTAConfig } from "./contentProvider"
 import { N8N_CONTENT_WEBHOOK_URL } from "../lib/endpoints"
 
 export class N8NContentProvider implements ContentProvider {
@@ -56,18 +56,22 @@ export class N8NContentProvider implements ContentProvider {
   async getEbookBySlug(lang: Lang, slug: string): Promise<Ebook | null> {
     try {
       const response = await fetch(`${N8N_CONTENT_WEBHOOK_URL}/ebooks/${slug}?lang=${lang}`)
-      
+
       if (!response.ok) {
         if (response.status === 404) {
           return null
         }
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      
+
       return await response.json()
     } catch (error) {
       console.error(`Error fetching ebook ${slug} from n8n:`, error)
       return null
     }
+  }
+
+  async getProductCTAConfigs(): Promise<Record<string, ProductCTAConfig>> {
+    return {}
   }
 }

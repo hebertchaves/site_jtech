@@ -553,6 +553,12 @@ export interface ApiEbookEbook extends Struct.CollectionTypeSchema {
           localized: false;
         };
       }>;
+    heroImage: Schema.Attribute.Media<'images'> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
     image: Schema.Attribute.Media<'images'> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -581,6 +587,12 @@ export interface ApiEbookEbook extends Struct.CollectionTypeSchema {
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
+        };
+      }>;
+    thumbnailImage: Schema.Attribute.Media<'images'> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
         };
       }>;
     title: Schema.Attribute.String &
@@ -747,6 +759,57 @@ export interface ApiPreviewTokenPreviewToken
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     usedAt: Schema.Attribute.DateTime;
+  };
+}
+
+export interface ApiProductCtaConfigProductCtaConfig
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'product_cta_configs';
+  info: {
+    description: 'Configura\u00E7\u00E3o dos CTAs de produto \u2014 URL da RD Station por produto/m\u00F3dulo';
+    displayName: 'Product CTA Config';
+    pluralName: 'product-cta-configs';
+    singularName: 'product-cta-config';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    ctaLabel: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-cta-config.product-cta-config'
+    > &
+      Schema.Attribute.Private;
+    productSlug: Schema.Attribute.Enumeration<
+      [
+        'homepage',
+        'sansys-water',
+        'sansys-pay',
+        'sansys-waste',
+        'sansys-agency',
+        'sansys-hub',
+        'sansys-flow',
+        'sansys-reader',
+        'sansys-gis',
+        'sansys-bi',
+        'sansys-smart-meter',
+        'sansys-omnichannel',
+        'sansys-antifraude',
+        'sansys-critica-leitura',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    publishedAt: Schema.Attribute.DateTime;
+    rdFormUrl: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1267,6 +1330,7 @@ declare module '@strapi/strapi' {
       'api::post.post': ApiPostPost;
       'api::preview-session.preview-session': ApiPreviewSessionPreviewSession;
       'api::preview-token.preview-token': ApiPreviewTokenPreviewToken;
+      'api::product-cta-config.product-cta-config': ApiProductCtaConfigProductCtaConfig;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
