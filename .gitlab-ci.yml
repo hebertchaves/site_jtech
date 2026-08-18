@@ -80,7 +80,7 @@ build-frontend:
 
 deploy-backend:
   stage: deploy
-  image: amazon/aws-cli:2
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
     - job: prepare-version
       artifacts: true
@@ -91,14 +91,15 @@ deploy-backend:
     - if: '$CI_COMMIT_BRANCH == "ci/validate-pipeline"'
   when: manual
   before_script:
-    - yum install -y jq bash
+    - command -v jq >/dev/null
+    - command -v bash >/dev/null
     - export ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
   script:
     - bash script/deploy-ecs-production.sh
 
 deploy-frontend:
   stage: deploy
-  image: amazon/aws-cli:2
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
     - job: build-frontend
   rules:
