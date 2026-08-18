@@ -7,6 +7,7 @@ variables:
   NODE_VERSION: "20"
   BACKEND_PLATFORM: "linux/arm64"
   ECR_REPOSITORY: "jtech-portal"
+  AWS_ACCOUNT_ID: "630777132932"
   FRONTEND_BUCKET: "jtech-site-prod"
   CLOUDFRONT_DISTRIBUTION_ID: "EU8RBW6EG8XCB"
   DOCKER_TLS_CERTDIR: "/certs"
@@ -48,7 +49,9 @@ build-backend:
       artifacts: true
   before_script:
     - apk add --no-cache aws-cli
-    - test -n "$ECR_REGISTRY" || { echo "Configure a variavel ECR_REGISTRY"; exit 1; }
+    - export ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+    - test -n "$AWS_DEFAULT_REGION" || { echo "Configure AWS_DEFAULT_REGION"; exit 1; }
+    - getent hosts "$ECR_REGISTRY" || { echo "Nao foi possivel resolver o registry ECR: $ECR_REGISTRY. Verifique a rede/DNS do runner."; exit 1; }
     - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$ECR_REGISTRY"
     - docker run --privileged --rm tonistiigi/binfmt --install arm64
   script:
@@ -84,6 +87,7 @@ deploy-backend:
     - if: '$CI_COMMIT_BRANCH == "ci/validate-pipeline"'
   before_script:
     - yum install -y jq bash
+    - export ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
   script:
     - bash script/deploy-ecs-production.sh
 

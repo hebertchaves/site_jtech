@@ -21,7 +21,7 @@ resolve_version() {
     elif [[ -n "${CI_COMMIT_TAG:-}" ]]; then
         version="$CI_COMMIT_TAG"
     elif [[ "$APP_VERSION_FILE" == *.json ]]; then
-        version=$(node -p "require('./$APP_VERSION_FILE').version")
+        version=$(jq -r '.version // empty' "$APP_VERSION_FILE")
     else
         version=$(grep '^APP_VERSION=' "$APP_VERSION_FILE" -m 1 | cut -d '=' -f2- | xargs)
     fi
