@@ -51,7 +51,11 @@ build-backend:
     - apk add --no-cache aws-cli
     - export ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
     - test -n "$AWS_DEFAULT_REGION" || { echo "Configure AWS_DEFAULT_REGION"; exit 1; }
-    - getent hosts "$ECR_REGISTRY" || { echo "Nao foi possivel resolver o registry ECR: $ECR_REGISTRY. Verifique a rede/DNS do runner."; exit 1; }
+    - |
+      getent hosts "$ECR_REGISTRY" || {
+        echo "Nao foi possivel resolver o registry ECR: $ECR_REGISTRY. Verifique a rede/DNS do runner."
+        exit 1
+      }
     - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$ECR_REGISTRY"
     - docker run --privileged --rm tonistiigi/binfmt --install arm64
   script:
