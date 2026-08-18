@@ -28,7 +28,6 @@ import { EbookDetailPage } from "./pages/EbookDetailPage"
 import { PreviewPage } from "./pages/PreviewPage"
 import { ContactPage } from "./pages/ContactPage"
 import { PrivacyPage } from "./pages/PrivacyPage"
-import { TermsPage } from "./pages/TermsPage"
 
 export default function App() {
   const [currentLang, setCurrentLang] = useState<Lang>(defaultLang)
@@ -142,8 +141,6 @@ export default function App() {
         return <ContactPage lang={currentLang} />
       case "privacy":
         return <PrivacyPage lang={currentLang} />
-      case "terms":
-        return <TermsPage lang={currentLang} />
       default:
         return <HomePage lang={currentLang} />
     }

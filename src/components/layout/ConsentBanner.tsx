@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react"
 import { X } from "lucide-react"
-import { Lang, t } from "../../lib/i18n"
+import { Lang } from "../../lib/i18n"
 import {
   shouldShowConsentBanner,
   saveConsentPreferences,
+  getConsentPreferences,
   ConsentPreferences,
+  OPEN_CONSENT_EVENT,
 } from "../../lib/consent"
+import { getLegalLink } from "../../lib/legal-links"
+import { consentContent } from "../../data/consent-content"
 import { Button } from "../ui/button"
 import { Checkbox } from "../ui/checkbox"
 import { Label } from "../ui/label"
@@ -14,181 +18,195 @@ interface ConsentBannerProps {
   lang: Lang
 }
 
+const MINIMAL_CONSENT: ConsentPreferences = {
+  necessary: true,
+  analytics: false,
+  marketing: false,
+}
+
+const FULL_CONSENT: ConsentPreferences = {
+  necessary: true,
+  analytics: true,
+  marketing: true,
+}
+
 export function ConsentBanner({ lang }: ConsentBannerProps) {
   const [show, setShow] = useState(false)
   const [showDetails, setShowDetails] = useState(false)
-  const [preferences, setPreferences] = useState<ConsentPreferences>({
-    necessary: true,
-    analytics: false,
-    marketing: false,
-  })
+  // Opt-in: apenas os cookies necessários vêm marcados. Consentimento válido
+  // sob LGPD/GDPR exige ação afirmativa — caixas pré-marcadas não valem como
+  // consentimento (TJUE, caso Planet49).
+  const [preferences, setPreferences] = useState<ConsentPreferences>(MINIMAL_CONSENT)
+  // true quando o painel foi reaberto pelo rodapé — já existe decisão salva
+  const [isRevisit, setIsRevisit] = useState(false)
 
   useEffect(() => {
     setShow(shouldShowConsentBanner())
   }, [])
 
+  // Reabertura pelo link "Preferências de cookies" no rodapé: recarrega a
+  // escolha salva e já abre direto no detalhamento das categorias.
+  useEffect(() => {
+    const handleOpen = () => {
+      setPreferences(getConsentPreferences() ?? MINIMAL_CONSENT)
+      setIsRevisit(!shouldShowConsentBanner())
+      setShowDetails(true)
+      setShow(true)
+    }
+    window.addEventListener(OPEN_CONSENT_EVENT, handleOpen)
+    return () => window.removeEventListener(OPEN_CONSENT_EVENT, handleOpen)
+  }, [])
+
   if (!show) return null
 
-  const handleAcceptAll = () => {
-    const allConsent: ConsentPreferences = {
-      necessary: true,
-      analytics: true,
-      marketing: true,
+  const text = consentContent[lang]
+
+  const decide = (prefs: ConsentPreferences) => {
+    saveConsentPreferences(prefs)
+    setShowDetails(false)
+    setShow(false)
+  }
+
+  // No primeiro acesso, fechar equivale a recusar tudo. Numa reabertura pelo
+  // rodapé, fechar apenas cancela — a escolha já salva é preservada.
+  const handleClose = () => {
+    if (isRevisit) {
+      setShowDetails(false)
+      setShow(false)
+      return
     }
-    saveConsentPreferences(allConsent)
-    setShow(false)
+    decide(MINIMAL_CONSENT)
   }
 
-  const handleRejectAll = () => {
-    const minimalConsent: ConsentPreferences = {
-      necessary: true,
-      analytics: false,
-      marketing: false,
-    }
-    saveConsentPreferences(minimalConsent)
-    setShow(false)
-  }
+  const legalLinks = [
+    { label: text.linkPrivacy, href: getLegalLink("privacy", lang) },
+    { label: text.linkLegalNotice, href: getLegalLink("legalNotice", lang) },
+    { label: text.linkCookies, href: getLegalLink("cookies", lang) },
+  ]
 
-  const handleSavePreferences = () => {
-    saveConsentPreferences(preferences)
-    setShow(false)
-  }
-
-  const consentText = {
-    pt: {
-      title: "Privacidade e Cookies",
-      description:
-        "Usamos cookies para melhorar sua experiência, analisar o tráfego e personalizar conteúdo. Você pode gerenciar suas preferências abaixo.",
-      necessary: "Necessários",
-      necessaryDesc: "Essenciais para o funcionamento do site",
-      analytics: "Analíticos",
-      analyticsDesc: "Nos ajudam a entender como você usa o site",
-      marketing: "Marketing",
-      marketingDesc: "Utilizados para mostrar anúncios relevantes",
-      acceptAll: "Aceitar Todos",
-      rejectAll: "Rejeitar Todos",
-      customize: "Personalizar",
-      save: "Salvar Preferências",
+  const toggleCategories = [
+    {
+      key: "analytics" as const,
+      name: text.analytics.name,
+      description: text.analytics.description,
     },
-    es: {
-      title: "Privacidad y Cookies",
-      description:
-        "Usamos cookies para mejorar su experiencia, analizar el tráfico y personalizar contenido. Puede gestionar sus preferencias abajo.",
-      necessary: "Necesarias",
-      necessaryDesc: "Esenciales para el funcionamiento del sitio",
-      analytics: "Analíticas",
-      analyticsDesc: "Nos ayudan a entender cómo usa el sitio",
-      marketing: "Marketing",
-      marketingDesc: "Utilizadas para mostrar anuncios relevantes",
-      acceptAll: "Aceptar Todas",
-      rejectAll: "Rechazar Todas",
-      customize: "Personalizar",
-      save: "Guardar Preferencias",
+    {
+      key: "marketing" as const,
+      name: text.marketing.name,
+      description: text.marketing.description,
     },
-    en: {
-      title: "Privacy and Cookies",
-      description:
-        "We use cookies to improve your experience, analyze traffic and personalize content. You can manage your preferences below.",
-      necessary: "Necessary",
-      necessaryDesc: "Essential for the site to function",
-      analytics: "Analytics",
-      analyticsDesc: "Help us understand how you use the site",
-      marketing: "Marketing",
-      marketingDesc: "Used to show relevant ads",
-      acceptAll: "Accept All",
-      rejectAll: "Reject All",
-      customize: "Customize",
-      save: "Save Preferences",
-    },
-    fr: {
-      title: "Confidentialité et Cookies",
-      description:
-        "Nous utilisons des cookies pour améliorer votre expérience, analyser le trafic et personnaliser le contenu. Vous pouvez gérer vos préférences ci-dessous.",
-      necessary: "Nécessaires",
-      necessaryDesc: "Essentiels au fonctionnement du site",
-      analytics: "Analytiques",
-      analyticsDesc: "Nous aident à comprendre comment vous utilisez le site",
-      marketing: "Marketing",
-      marketingDesc: "Utilisés pour afficher des publicités pertinentes",
-      acceptAll: "Accepter Tout",
-      rejectAll: "Rejeter Tout",
-      customize: "Personnaliser",
-      save: "Enregistrer les Préférences",
-    },
-  }
-
-  const text = consentText[lang]
+  ]
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[9998] bg-white border-t border-gray-200 shadow-lg">
-      <div className="max-w-7xl mx-auto p-6">
+    <div
+      className="fixed bottom-0 left-0 right-0 z-[9998] bg-white border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
+      role="dialog"
+      aria-modal="false"
+      aria-label={text.title}
+    >
+      <div className="max-w-7xl mx-auto p-6 max-h-[85vh] overflow-y-auto">
         <button
-          onClick={handleRejectAll}
+          onClick={handleClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-          aria-label="Close"
+          aria-label={text.close}
         >
           <X className="h-5 w-5" />
         </button>
 
         <div className="pr-12">
-          <h3 className="text-lg mb-2">{text.title}</h3>
-          <p className="text-sm text-gray-600 mb-4">{text.description}</p>
+          <h3 className="text-lg font-semibold mb-2">{text.title}</h3>
+          <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+            {showDetails ? text.description : text.shortDescription}
+          </p>
 
+          {/* Segunda camada — finalidades e categorias com opt-out individual */}
           {showDetails && (
             <div className="space-y-4 mb-4 p-4 bg-gray-50 rounded-lg">
+              <div className="text-sm text-gray-600">
+                <p className="font-medium text-gray-800 mb-1">{text.purposesTitle}</p>
+                <ul className="list-disc pl-5 space-y-1">
+                  {text.purposes.map((purpose) => (
+                    <li key={purpose}>{purpose}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <p className="text-sm font-medium text-gray-800 pt-2 border-t border-gray-200">
+                {text.categoriesTitle}
+              </p>
+
               <div className="flex items-start gap-3">
                 <Checkbox checked disabled />
                 <div className="flex-1">
-                  <Label>{text.necessary}</Label>
-                  <p className="text-xs text-gray-600">{text.necessaryDesc}</p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Label>{text.necessary.name}</Label>
+                    <span className="text-xs text-gray-500 bg-gray-200 rounded px-2 py-0.5">
+                      {text.alwaysOn}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                    {text.necessary.description}
+                  </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <Checkbox
-                  checked={preferences.analytics}
-                  onCheckedChange={(checked) =>
-                    setPreferences({ ...preferences, analytics: checked as boolean })
-                  }
-                />
-                <div className="flex-1">
-                  <Label>{text.analytics}</Label>
-                  <p className="text-xs text-gray-600">{text.analyticsDesc}</p>
+              {toggleCategories.map((category) => (
+                <div key={category.key} className="flex items-start gap-3">
+                  <Checkbox
+                    id={`consent-${category.key}`}
+                    checked={preferences[category.key]}
+                    onCheckedChange={(checked) =>
+                      setPreferences({ ...preferences, [category.key]: checked as boolean })
+                    }
+                  />
+                  <div className="flex-1">
+                    <Label htmlFor={`consent-${category.key}`}>{category.name}</Label>
+                    <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                      {category.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              ))}
 
-              <div className="flex items-start gap-3">
-                <Checkbox
-                  checked={preferences.marketing}
-                  onCheckedChange={(checked) =>
-                    setPreferences({ ...preferences, marketing: checked as boolean })
-                  }
-                />
-                <div className="flex-1">
-                  <Label>{text.marketing}</Label>
-                  <p className="text-xs text-gray-600">{text.marketingDesc}</p>
-                </div>
-              </div>
+              <p className="text-xs text-gray-500 leading-relaxed">{text.partnersNote}</p>
             </div>
           )}
 
           <div className="flex flex-wrap gap-3">
-            <Button onClick={handleAcceptAll} variant="default">
+            <Button onClick={() => decide(FULL_CONSENT)} variant="default">
               {text.acceptAll}
             </Button>
-            <Button onClick={handleRejectAll} variant="outline">
+            <Button onClick={() => decide(MINIMAL_CONSENT)} variant="outline">
               {text.rejectAll}
             </Button>
             {!showDetails ? (
               <Button onClick={() => setShowDetails(true)} variant="ghost">
-                {text.customize}
+                {text.customize} →
               </Button>
             ) : (
-              <Button onClick={handleSavePreferences} variant="dark">
+              <Button onClick={() => decide(preferences)} variant="dark">
                 {text.save}
               </Button>
             )}
           </div>
+
+          {/* Links legais — mesmos destinos do rodapé */}
+          <p className="mt-4 text-xs text-gray-500">
+            {text.linksTitle}{" "}
+            {legalLinks.map((link, i) => (
+              <span key={link.href}>
+                {i > 0 && <span className="mx-1 text-gray-300">|</span>}
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#E30613] hover:underline"
+                >
+                  {link.label}
+                </a>
+              </span>
+            ))}
+          </p>
         </div>
       </div>
     </div>

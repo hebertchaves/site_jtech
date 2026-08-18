@@ -1,6 +1,8 @@
 import { Mail, Phone, MapPin } from "lucide-react"
 import { Lang, t } from "../../lib/i18n"
 import { getRoute } from "../../lib/routes"
+import { getLegalLink } from "../../lib/legal-links"
+import { openConsentPreferences } from "../../lib/consent"
 import { Container } from "./Container"
 import { Button } from "../ui/button"
 
@@ -55,9 +57,11 @@ export function Footer({ lang }: FooterProps) {
     { name: "Sansys Reader", href: `${solutionsBase}?produto=sansys-reader` },
   ]
 
+  // Documentos legais hospedados no portal da Veolia (links externos)
   const legalLinks = [
-    { name: t(lang, "footer.privacy"), href: `#/${lang}${getRoute("privacy", lang)}` },
-    { name: t(lang, "footer.terms"), href: `#/${lang}${getRoute("terms", lang)}` },
+    { name: t(lang, "footer.privacy"), href: getLegalLink("privacy", lang) },
+    { name: t(lang, "footer.legalnotice"), href: getLegalLink("legalNotice", lang) },
+    { name: t(lang, "footer.cookies"), href: getLegalLink("cookies", lang) },
   ]
 
   const socialLinks = [
@@ -168,12 +172,24 @@ export function Footer({ lang }: FooterProps) {
                   <li key={link.name}>
                     <a
                       href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-gray-400 hover:text-white transition-colors duration-300 text-sm inline-block hover:translate-x-1 transition-transform"
                     >
                       {link.name}
                     </a>
                   </li>
                 ))}
+                {/* Reabre o banner de consentimento — consentimento revogável (LGPD) */}
+                <li>
+                  <button
+                    type="button"
+                    onClick={openConsentPreferences}
+                    className="text-gray-400 hover:text-white transition-colors duration-300 text-sm inline-block hover:translate-x-1 transition-transform text-left"
+                  >
+                    {t(lang, "footer.cookiesprefs")}
+                  </button>
+                </li>
               </ul>
 
               <div>

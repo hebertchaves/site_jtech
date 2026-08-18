@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { MapPin, ThumbsUp, TrendingUp, MessageCircle } from "lucide-react"
 import { motion, AnimatePresence } from "motion/react"
 import { Lang, t } from "../lib/i18n"
+import { getLegalLink } from "../lib/legal-links"
 import { submitLead } from "../lib/leads"
 import { trackFormSubmit } from "../lib/analytics"
 import { Container } from "../components/layout/Container"
@@ -274,8 +275,10 @@ export function ContactPage({ lang }: ContactPageProps) {
                       <label htmlFor="privacy" className="text-sm text-gray-700 cursor-pointer">
                         {t(lang, "contact.form.privacy.text")}{" "}
                         <a
-                          href={`#/${lang}/politica-de-privacidade`}
+                          href={getLegalLink("privacy", lang)}
                           className="text-[#E30613] underline"
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
                           {t(lang, "contact.form.privacy.link")}
                         </a>

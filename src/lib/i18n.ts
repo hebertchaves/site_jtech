@@ -708,9 +708,6 @@ const translations: Translations = {
     "privacy.intro": "Esta Política de Privacidade descreve como coletamos, usamos e protegemos suas informações pessoais.",
     
     // Terms Page
-    "terms.title": "Termos de Serviço",
-    "terms.updated": "Última atualização",
-    "terms.intro": "Ao usar nossos serviços, você concorda com estes termos e condições.",
     
     // Footer
     "footer.tagline": "Soluções inteligentes\npara saneamento.",
@@ -721,7 +718,9 @@ const translations: Translations = {
     "footer.clientarea": "Área do cliente",
     "footer.legal": "Legal",
     "footer.privacy": "Política de Privacidade",
-    "footer.terms": "Termos de Serviço",
+    "footer.legalnotice": "Aviso Legal",
+    "footer.cookies": "Política de Cookies",
+    "footer.cookiesprefs": "Preferências de cookies",
     "footer.rights": "Todos os direitos reservados.",
     
     // Common
@@ -1437,9 +1436,6 @@ const translations: Translations = {
     "privacy.intro": "Esta Política de Privacidad describe cómo recopilamos, usamos y protegemos su información personal.",
     
     // Terms Page
-    "terms.title": "Términos de Servicio",
-    "terms.updated": "Última actualización",
-    "terms.intro": "Al usar nuestros servicios, usted acepta estos términos y condiciones.",
     
     // Footer
     "footer.tagline": "Soluciones inteligentes\npara saneamiento.",
@@ -1450,7 +1446,9 @@ const translations: Translations = {
     "footer.clientarea": "Área del cliente",
     "footer.legal": "Legal",
     "footer.privacy": "Política de Privacidad",
-    "footer.terms": "Términos de Servicio",
+    "footer.legalnotice": "Aviso Legal",
+    "footer.cookies": "Política de Cookies",
+    "footer.cookiesprefs": "Preferencias de cookies",
     "footer.rights": "Todos los derechos reservados.",
     
     // Common
@@ -2166,9 +2164,6 @@ const translations: Translations = {
     "privacy.intro": "This Privacy Policy describes how we collect, use, and protect your personal information.",
     
     // Terms Page
-    "terms.title": "Terms of Service",
-    "terms.updated": "Last updated",
-    "terms.intro": "By using our services, you agree to these terms and conditions.",
     
     // Footer
     "footer.tagline": "Smart solutions\nfor sanitation.",
@@ -2179,7 +2174,9 @@ const translations: Translations = {
     "footer.clientarea": "Client area",
     "footer.legal": "Legal",
     "footer.privacy": "Privacy Policy",
-    "footer.terms": "Terms of Service",
+    "footer.legalnotice": "Legal Notice",
+    "footer.cookies": "Cookie Policy",
+    "footer.cookiesprefs": "Cookie preferences",
     "footer.rights": "All rights reserved.",
     
     // Common
@@ -2895,9 +2892,6 @@ const translations: Translations = {
     "privacy.intro": "Cette Politique de Confidentialité décrit comment nous collectons, utilisons et protégeons vos informations personnelles.",
     
     // Terms Page
-    "terms.title": "Conditions de Service",
-    "terms.updated": "Dernière mise à jour",
-    "terms.intro": "En utilisant nos services, vous acceptez ces termes et conditions.",
     
     // Footer
     "footer.tagline": "Solutions intelligentes\npour l'assainissement.",
@@ -2908,7 +2902,9 @@ const translations: Translations = {
     "footer.clientarea": "Zone client",
     "footer.legal": "Légal",
     "footer.privacy": "Politique de Confidentialité",
-    "footer.terms": "Conditions de Service",
+    "footer.legalnotice": "Mentions Légales",
+    "footer.cookies": "Politique de Cookies",
+    "footer.cookiesprefs": "Préférences cookies",
     "footer.rights": "Tous droits réservés.",
     
     // Common
