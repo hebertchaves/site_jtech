@@ -690,6 +690,7 @@ const translations: Translations = {
     "contact.success": "Mensagem enviada com sucesso!",
     "contact.error": "Erro ao enviar mensagem. Tente novamente.",
     "contact.error.unavailable": "O envio pelo formulário está temporariamente indisponível. Tente novamente mais tarde.",
+    "ebook.download.error": "Não foi possível liberar o download agora. Tente novamente mais tarde.",
     
     // Pre-WhatsApp Modal
     "prewhatsapp.title": "Fale com um Especialista",
@@ -1416,6 +1417,7 @@ const translations: Translations = {
     "contact.success": "¡Mensaje enviado con éxito!",
     "contact.error": "Error al enviar mensaje. Inténtelo de nuevo.",
     "contact.error.unavailable": "El envío por formulario está temporalmente no disponible. Inténtelo más tarde.",
+    "ebook.download.error": "No fue posible habilitar la descarga ahora. Inténtelo más tarde.",
     
     // Pre-WhatsApp Modal
     "prewhatsapp.title": "Hable con un Especialista",
@@ -2142,6 +2144,7 @@ const translations: Translations = {
     "contact.success": "Message sent successfully!",
     "contact.error": "Error sending message. Please try again.",
     "contact.error.unavailable": "Form submission is temporarily unavailable. Please try again later.",
+    "ebook.download.error": "We could not unlock the download right now. Please try again later.",
     
     // Pre-WhatsApp Modal
     "prewhatsapp.title": "Talk to a Specialist",
@@ -2868,6 +2871,7 @@ const translations: Translations = {
     "contact.success": "Message envoyé avec succès!",
     "contact.error": "Erreur lors de l'envoi du message. Veuillez réessayer.",
     "contact.error.unavailable": "L’envoi du formulaire est temporairement indisponible. Veuillez réessayer plus tard.",
+    "ebook.download.error": "Impossible de débloquer le téléchargement pour le moment. Veuillez réessayer plus tard.",
     
     // Pre-WhatsApp Modal
     "prewhatsapp.title": "Parlez à un Spécialiste",
