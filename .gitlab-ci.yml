@@ -62,6 +62,8 @@ build-frontend:
     - job: prepare-version
       artifacts: true
   script:
+    - test -n "${FRONTEND_ENV_PRODUCTION:-}" || { echo "Configure a variavel de arquivo FRONTEND_ENV_PRODUCTION no GitLab"; exit 1; }
+    - cp "$FRONTEND_ENV_PRODUCTION" .env.production
     - npm ci
     - npm run build
   artifacts:
