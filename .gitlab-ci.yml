@@ -37,9 +37,9 @@ prepare-version:
 
 build-backend:
   stage: build
-  image: docker:27
+  image: "$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/docker:27"
   services:
-    - name: docker:27-dind
+    - name: "$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/docker:27-dind"
       command: ["--tls=false"]
   variables:
     DOCKER_HOST: tcp://docker:2375
@@ -64,7 +64,7 @@ build-backend:
 
 build-frontend:
   stage: build
-  image: node:${NODE_VERSION}-alpine
+  image: "$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/node:${NODE_VERSION}-alpine"
   needs:
     - job: prepare-version
       artifacts: true
