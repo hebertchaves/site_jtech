@@ -85,6 +85,7 @@ deploy-backend:
     - if: '$CI_COMMIT_BRANCH == "main"'
     - if: '$CI_COMMIT_TAG'
     - if: '$CI_COMMIT_BRANCH == "ci/validate-pipeline"'
+  when: manual
   before_script:
     - yum install -y jq bash
     - export ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
@@ -100,6 +101,7 @@ deploy-frontend:
     - if: '$CI_COMMIT_BRANCH == "main"'
     - if: '$CI_COMMIT_TAG'
     - if: '$CI_COMMIT_BRANCH == "ci/validate-pipeline"'
+  when: manual
   script:
     - aws s3 sync dist/ "s3://${FRONTEND_BUCKET}" --delete
     - aws s3 cp dist/index.html "s3://${FRONTEND_BUCKET}/index.html" --cache-control "no-cache,no-store,must-revalidate" --content-type "text/html"
