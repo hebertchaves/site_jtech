@@ -508,6 +508,68 @@ Execute cada item e confirme:
 
 ---
 
+## Atualização de Versão (deploy incremental)
+
+Depois do primeiro deploy, publicar uma nova versão é isto — e **a ordem importa**.
+
+### Ordem: backend primeiro, frontend depois
+
+O frontend construído consome rotas do CMS. Se o site novo subir antes do Strapi
+atualizado, funcionalidades que dependem de rotas novas quebram na janela entre
+os dois deploys. Backend sempre primeiro.
+
+### 1. Backend (na EC2, via SSH)
+
+```bash
+cd /home/ubuntu/jtech-cms
+git pull                 # ou novo scp — conforme a Etapa 4.4
+npm install              # só se houve mudança de dependências
+npm run build
+pm2 restart jtech-cms
+pm2 logs jtech-cms       # acompanhar o boot até "Strapi started"
+```
+
+> ⚠️ Alterações de content-type criam/alteram tabelas no boot. Confirme nos logs
+> que o start terminou sem erro de banco antes de seguir.
+
+> ⚠️ Em instâncias pequenas (t2/t3.micro) o `npm run build` pode estourar a RAM e
+> morrer sem mensagem clara. Se acontecer, criar swap:
+> ```bash
+> sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile
+> sudo mkswap /swapfile && sudo swapon /swapfile
+> ```
+
+**Rollback:** `git checkout <commit-anterior> && npm run build && pm2 restart jtech-cms`
+
+### 2. Frontend (na máquina local)
+
+```bash
+npm run build
+aws s3 sync dist/ s3://jtech-site --delete
+aws cloudfront create-invalidation --distribution-id <ID_DA_DISTRIBUICAO> --paths "/*"
+```
+
+Sem a invalidação, o CloudFront continua servindo a versão anterior em cache.
+
+### 3. Verificação pós-deploy
+
+```bash
+curl -s https://cms.jtech.com.br/api/health          # status ok
+curl -s -o /dev/null -w "%{http_code}\n" https://jtech.com.br/
+```
+
+---
+
+> **Nota sobre a topologia atual:** `cms.jtech.com.br` está atrás de uma
+> distribuição CloudFront (não previsto nas etapas originais deste guia, que
+> descrevem o Nginx da EC2 respondendo direto). Consequências práticas:
+> o hostname **não** resolve para o IP da instância — o acesso SSH exige o IP
+> público da EC2, obtido no console; e a cache policy dessa distribuição precisa
+> estar configurada para **não** cachear respostas com `Set-Cookie` ou
+> `Authorization`, sob risco de servir sessão de um visitante a outro.
+
+---
+
 ## Comandos Úteis — Manutenção
 
 ```bash
