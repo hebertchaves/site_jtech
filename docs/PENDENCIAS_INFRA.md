@@ -49,23 +49,54 @@ formulário no site e conferir o registro em **Content Manager → Ebook Lead**.
 
 ---
 
-## 2. Atualizar o Strapi (5.42.0 → 5.52.0)
+## 2. Atualizar o Strapi (5.42.0 → 5.52.0) — já preparado e testado
 
-**É o item mais crítico da lista.** O backend acumula 65 vulnerabilidades de
-dependências, 2 críticas (`tar`, `shell-quote`). A mais grave é um **bypass de
-rate limit no login** do `@strapi/plugin-users-permissions`, que afeta versões
+**É o item mais crítico da lista.** Na 5.42 o backend acumulava 65
+vulnerabilidades de dependências, 2 críticas. A mais grave é um **bypass de rate
+limit no login** do `@strapi/plugin-users-permissions`, que afeta versões
 `<= 5.44.0` — habilita força bruta de senha no painel.
 
+A atualização **já está pronta e validada** no branch `chore/strapi-5.52`
+(commit `c04f29f`), com o `package-lock.json` de uma instalação limpa. Resultado:
+**65 → 19 vulnerabilidades** (críticas 2 → 1, altas 38 → 5) e o advisory de rate
+limit fora do audit.
+
+### ⚠️ Use o lock do branch — não atualize por cima da árvore existente
+
+Atualizar com `npm install @strapi/...@5.52.0` sobre o `node_modules` antigo
+**quebra o build do admin** com `Cannot find module '@radix-ui/react-tooltip'`:
+o npm deixa esse pacote aninhado sob `@strapi/design-system`, e o 5.52 exige que
+ele seja resolvível a partir de `@strapi/admin`. Foi verificado na prática.
+
+Por isso, na EC2:
+
 ```bash
-cd strapi-backend
-npm install @strapi/strapi@5.52.0 @strapi/plugin-users-permissions@5.52.0 \
-            @strapi/provider-upload-aws-s3@5.52.0
+cd /home/ubuntu/jtech-cms
+git fetch && git checkout chore/strapi-5.52   # ou o merge já feito na main
+rm -rf node_modules
+npm ci            # ci, não install: reproduz exatamente o lock validado
 npm run build
+pm2 restart jtech-cms
 ```
 
-Testar antes de subir: login no admin, listagem de posts e e-books pela API,
-upload de mídia (confirmar que continua indo para `conteudo.sansys.app`) e o
-fluxo de preview ponta a ponta.
+> **Antes de tudo, snapshot do RDS.** O salto de versão aplica migrações de
+> schema no boot, e não há caminho de volta automático.
+
+> O `npm ci` demora — foi ~1h em disco lento. Reserve a janela.
+
+### O que já foi validado localmente (Node 20, SQLite)
+
+Boot sem erro, painel admin respondendo, APIs públicas (posts, ebooks,
+categories, authors) OK, rotas de preview com os códigos esperados, gating de
+e-book íntegro e CORS continuando restritivo.
+
+### O que só dá para validar em produção
+
+- **Upload de mídia para o S3/CloudFront** — o provider só é ativado com
+  `NODE_ENV=production`. Após o deploy, subir uma imagem pelo painel e conferir
+  que a URL sai como `https://conteudo.sansys.app/uploads-strapi/...`
+- **Login no admin com os usuários reais** (o banco local é de desenvolvimento)
+- **Fluxo de preview ponta a ponta**, que exige um editor autenticado
 
 > Fazer **em deploy separado** do item 1. São mudanças de natureza diferente; se
 > algo quebrar, é preciso saber qual das duas causou.
