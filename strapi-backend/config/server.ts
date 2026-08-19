@@ -4,7 +4,12 @@ export default ({ env }) => ({
   // URL pública do Strapi (domínio do Nginx à frente da aplicação).
   // Usada para montar links absolutos: e-mail de reset de senha do admin,
   // redirects do painel e uploads locais (em prod a mídia vai por CDN_URL).
-  url: env('PUBLIC_URL', 'http://localhost:1337'),
+  url: env(
+      'PUBLIC_URL',
+      env('NODE_ENV') === 'production'
+          ? 'https://cms.jtech.com.br'
+          : 'http://localhost:1337',
+  ),
   app: {
     keys: env.array('APP_KEYS'),
   },

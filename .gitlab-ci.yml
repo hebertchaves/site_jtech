@@ -65,6 +65,8 @@ build-backend:
 build-frontend:
   stage: build
   image: node:${NODE_VERSION}-alpine
+  environment:
+    name: production
   needs:
     - job: prepare-version
       artifacts: true
