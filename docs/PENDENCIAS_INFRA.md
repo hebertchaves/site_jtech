@@ -57,9 +57,17 @@ limit no login** do `@strapi/plugin-users-permissions`, que afeta versões
 `<= 5.44.0` — habilita força bruta de senha no painel.
 
 A atualização **já está pronta e validada** no branch `chore/strapi-5.52`
-(commit `c04f29f`), com o `package-lock.json` de uma instalação limpa. Resultado:
-**65 → 19 vulnerabilidades** (críticas 2 → 1, altas 38 → 5) e o advisory de rate
-limit fora do audit.
+(ponta em `c9ba1f6`), com o `package-lock.json` de uma instalação limpa.
+
+Estado das dependências depois da atualização: **0 críticas, 1 alta, 14
+moderadas, 4 baixas** — e o advisory de rate limit fora do audit. A única alta
+restante é do `vite`, ferramenta de build do painel admin, que não executa no
+servidor em produção. As demais são transitivas do Strapi, sem caminho de
+correção do nosso lado até que eles publiquem novas versões.
+
+O branch inclui também a atualização do `node-cron` 3 → 4, que remove da árvore
+a última vulnerabilidade sob nosso controle (o `uuid` vulnerável entrava só por
+ali).
 
 ### ⚠️ Use o lock do branch — não atualize por cima da árvore existente
 
