@@ -1,5 +1,22 @@
 # Guia de Deploy — Jtech Site + CMS na AWS
 
+> ## ⚠️ Documento legado
+>
+> Este guia descreve a topologia original — Strapi rodando em **EC2** com Nginx e
+> PM2, e upload manual do frontend para o S3. **A produção não funciona mais
+> assim.** Desde a entrada do `.gitlab-ci.yml`, a publicação é automática:
+>
+> - **Backend**: imagem Docker `linux/arm64` → ECR `jtech-portal` → serviço
+>   **ECS** (`script/deploy-ecs-production.sh`), com variáveis vindas de
+>   `s3://jtech-environment/jtech-portal/.env`
+> - **Frontend**: build no runner → `s3://jtech-site-prod` → invalidação do
+>   CloudFront `EU8RBW6EG8XCB`
+> - **Gatilho**: push/merge em `main`
+>
+> O conteúdo abaixo continua útil como referência dos recursos AWS (RDS, buckets,
+> IAM, DNS, certificados) e do histórico de como o ambiente foi montado. Para
+> publicar uma versão, veja `PENDENCIAS_INFRA.md` e o próprio `.gitlab-ci.yml`.
+
 **Stack:** React + Vite (frontend) · Strapi 5 (CMS/backend) · PostgreSQL (banco) · AWS  
 **Tempo estimado:** 2–3 horas
 
@@ -508,65 +525,33 @@ Execute cada item e confirme:
 
 ---
 
-## Atualização de Versão (deploy incremental)
+## Atualização de Versão
 
-Depois do primeiro deploy, publicar uma nova versão é isto — e **a ordem importa**.
+**Publicar = mergear em `main`.** O pipeline (`.gitlab-ci.yml`) executa:
 
-### Ordem: backend primeiro, frontend depois
+1. `prepare-version` — exige que `package.json` do root e do `strapi-backend`
+   tenham a mesma versão; deriva `APP_VERSION`
+2. `build-backend` — `docker build --platform linux/arm64 ./strapi-backend` e
+   push para o ECR
+3. `build-frontend` — copia a variável de arquivo `FRONTEND_ENV_PRODUCTION` para
+   `.env.production`, roda `npm ci && npm run build`, guarda `dist/` como artefato
+4. `deploy-backend` — registra nova task definition apontando para a imagem e
+   roda `aws ecs update-service`, aguardando `services-stable`
+5. `deploy-frontend` — `aws s3 sync dist/` no bucket, `index.html` com
+   `no-cache`, e invalidação do CloudFront
 
-O frontend construído consome rotas do CMS. Se o site novo subir antes do Strapi
-atualizado, funcionalidades que dependem de rotas novas quebram na janela entre
-os dois deploys. Backend sempre primeiro.
+Em `main` os dois deploys são **automáticos**; em tag, manuais.
 
-### 1. Backend (na EC2, via SSH)
+**Rollback do backend:** apontar o serviço ECS para a task definition anterior
+(console do ECS → serviço → Update → revisão anterior), ou reverter o commit em
+`main` e deixar o pipeline reconstruir.
 
-```bash
-cd /home/ubuntu/jtech-cms
-git pull                 # ou novo scp — conforme a Etapa 4.4
-npm install              # só se houve mudança de dependências
-npm run build
-pm2 restart jtech-cms
-pm2 logs jtech-cms       # acompanhar o boot até "Strapi started"
-```
+**Rollback do frontend:** reverter o commit em `main`; o job republica o bundle
+anterior e invalida o cache.
 
-> ⚠️ Alterações de content-type criam/alteram tabelas no boot. Confirme nos logs
-> que o start terminou sem erro de banco antes de seguir.
-
-> ⚠️ Em instâncias pequenas (t2/t3.micro) o `npm run build` pode estourar a RAM e
-> morrer sem mensagem clara. Se acontecer, criar swap:
-> ```bash
-> sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile
-> sudo mkswap /swapfile && sudo swapon /swapfile
-> ```
-
-**Rollback:** `git checkout <commit-anterior> && npm run build && pm2 restart jtech-cms`
-
-### 2. Frontend (na máquina local)
-
-```bash
-npm run build
-aws s3 sync dist/ s3://jtech-site --delete
-aws cloudfront create-invalidation --distribution-id <ID_DA_DISTRIBUICAO> --paths "/*"
-```
-
-Sem a invalidação, o CloudFront continua servindo a versão anterior em cache.
-
-### 3. Verificação pós-deploy
-
-```bash
-curl -s https://cms.jtech.com.br/api/health          # status ok
-curl -s -o /dev/null -w "%{http_code}\n" https://jtech.com.br/
-```
-
----
-
-> **Nota sobre a topologia atual:** `cms.jtech.com.br` está atrás de uma
-> distribuição CloudFront (não previsto nas etapas originais deste guia, que
-> descrevem o Nginx da EC2 respondendo direto). Consequências práticas:
-> o hostname **não** resolve para o IP da instância — o acesso SSH exige o IP
-> público da EC2, obtido no console; e a cache policy dessa distribuição precisa
-> estar configurada para **não** cachear respostas com `Set-Cookie` ou
-> `Authorization`, sob risco de servir sessão de um visitante a outro.
+> As variáveis de ambiente do backend **não** ficam mais em `.env` na instância:
+> estão em `s3://jtech-environment/jtech-portal/.env`, lidas pela task definition
+> na inicialização. Alterá-las exige `aws ecs update-service --force-new-deployment`.
 
 ---
 
