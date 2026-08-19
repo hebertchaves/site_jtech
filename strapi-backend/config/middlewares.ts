@@ -43,7 +43,9 @@ export default ({ env }) => {
   {
     name: 'strapi::cors',
     config: {
-      enabled: true,
+      // `enabled` foi removido no Strapi 5.52: era ignorado e o boot avisava que
+      // usá-lo para ligar/desligar CORS pode gerar um default inseguro. Para
+      // desativar CORS, remove-se o middleware desta lista.
       origin: function () {
         // ✅ PRODUCTION HARDENING: Validate CORS_ORIGIN is configured
         const allowedOrigins = process.env.CORS_ORIGIN?.split(',').map(o => o.trim());
