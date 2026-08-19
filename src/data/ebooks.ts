@@ -11,6 +11,8 @@ export interface Ebook {
   image: string // Legacy field - fallback para thumbnailImage
   thumbnailImage?: string // Imagem para cards/listagens
   heroImage?: string // Imagem para página de detalhes (hero/apresentação)
+  /** Só existe no mock local. Vindo do Strapi, o link é liberado pelo
+   *  endpoint de download após o cadastro (ver lib/ebook-download.ts). */
   downloadUrl?: string
   ctaType?: 'RD_FORM' | 'DIRECT_DOWNLOAD' | 'EXTERNAL_LINK'
   rdFormUrl?: string

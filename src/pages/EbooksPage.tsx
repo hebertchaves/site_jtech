@@ -5,11 +5,6 @@ import { getRoute } from "../lib/routes"
 import { Ebook } from "../data/ebooks"
 import { Hero } from "../components/sections/Hero"
 import { Container } from "../components/layout/Container"
-import { submitLead } from "../lib/leads"
-import { trackFormSubmit } from "../lib/analytics"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../components/ui/dialog"
-import { Input } from "../components/ui/input"
-import { Label } from "../components/ui/label"
 import { Button } from "../components/ui/button"
 import { ScrollToTop } from "../components/ScrollToTop"
 import { getContentProvider } from "../providers"
@@ -51,10 +46,6 @@ interface EbooksPageProps {
 export function EbooksPage({ lang }: EbooksPageProps) {
   const [ebooks, setEbooks] = useState<Ebook[]>([])
   const [ebooksLoading, setEbooksLoading] = useState(true)
-  const [modalOpen, setModalOpen] = useState(false)
-  const [selectedEbook, setSelectedEbook] = useState<Ebook | null>(null)
-  const [formData, setFormData] = useState({ name: "", email: "" })
-  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const provider = getContentProvider()
@@ -70,40 +61,6 @@ export function EbooksPage({ lang }: EbooksPageProps) {
   const navigateToEbook = (slug: string) => {
     const detailRoute = getRoute("ebookDetail", lang, { slug })
     window.location.hash = `#/${lang}${detailRoute}`
-  }
-
-  const handleDownload = (ebook: Ebook) => {
-    setSelectedEbook(ebook)
-    setModalOpen(true)
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-
-    try {
-      await submitLead(
-        {
-          name: formData.name,
-          email: formData.email,
-          form_type: "ebook",
-          form_name: "ebooks-page",
-          product_interest: selectedEbook?.title[lang],
-        },
-        lang
-      )
-
-      trackFormSubmit("ebook", "Ebook Download Form")
-      
-      alert(`Download iniciado: ${selectedEbook?.title[lang]}`)
-      
-      setModalOpen(false)
-      setFormData({ name: "", email: "" })
-    } catch (error) {
-      console.error("Error submitting ebook form:", error)
-    } finally {
-      setLoading(false)
-    }
   }
 
   return (
@@ -161,43 +118,6 @@ export function EbooksPage({ lang }: EbooksPageProps) {
         </Container>
       </section>
 
-      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Download E-book</DialogTitle>
-            <DialogDescription>
-              Preencha seus dados para fazer o download de "{selectedEbook?.title[lang]}"
-            </DialogDescription>
-          </DialogHeader>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="name">{t(lang, "contact.form.name")} *</Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="email">{t(lang, "contact.form.email")} *</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-              />
-            </div>
-
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? t(lang, "common.loading") : t(lang, "common.download")}
-            </Button>
-          </form>
-        </DialogContent>
-      </Dialog>
 
       {/* Componente de Scroll to Top com mouse animado */}
       <ScrollToTop showThreshold={200} />

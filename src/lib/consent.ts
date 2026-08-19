@@ -58,3 +58,12 @@ export function rejectAllConsent(): void {
 export function setConsentPreferences(prefs: { analytics: boolean; marketing: boolean }): void {
   saveConsentPreferences({ necessary: true, ...prefs })
 }
+
+// Evento usado para reabrir o painel de preferências depois que o usuário já
+// decidiu (exigência de LGPD/GDPR: consentimento revogável a qualquer momento).
+// Disparado pelo link "Preferências de cookies" no rodapé.
+export const OPEN_CONSENT_EVENT = "openConsentPreferences"
+
+export function openConsentPreferences(): void {
+  window.dispatchEvent(new CustomEvent(OPEN_CONSENT_EVENT))
+}

@@ -77,7 +77,8 @@ export default ({ env }) => {
       credentials: true, // ✅ ENABLE CREDENTIALS for cookie-based auth (preview sessions)
     },
   },
-  'strapi::poweredBy',
+  // 'strapi::poweredBy' removido: o header X-Powered-By entregava a stack
+  // do backend, facilitando o cruzamento com CVEs da versão em uso.
   'strapi::query',
   'strapi::body',
   'strapi::session',

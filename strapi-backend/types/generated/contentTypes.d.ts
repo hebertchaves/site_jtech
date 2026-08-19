@@ -500,6 +500,53 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiEbookLeadEbookLead extends Struct.CollectionTypeSchema {
+  collectionName: 'ebook_leads';
+  info: {
+    description: 'Cadastros feitos para liberar o download de um e-book. Sem rotas REST: alimentado apenas pelo endpoint POST /api/ebooks/:slug/download e consultado pelo painel.';
+    displayName: 'Ebook Lead';
+    pluralName: 'ebook-leads';
+    singularName: 'ebook-lead';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: false;
+    };
+  };
+  attributes: {
+    consentGiven: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    consentText: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    ebookSlug: Schema.Attribute.String & Schema.Attribute.Required;
+    ebookTitle: Schema.Attribute.String;
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    ipAddress: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::ebook-lead.ebook-lead'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 120;
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    userAgent: Schema.Attribute.Text;
+  };
+}
+
 export interface ApiEbookEbook extends Struct.CollectionTypeSchema {
   collectionName: 'ebooks';
   info: {
@@ -548,6 +595,7 @@ export interface ApiEbookEbook extends Struct.CollectionTypeSchema {
         };
       }>;
     downloadUrl: Schema.Attribute.String &
+      Schema.Attribute.Private &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
@@ -1326,6 +1374,7 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::author.author': ApiAuthorAuthor;
       'api::category.category': ApiCategoryCategory;
+      'api::ebook-lead.ebook-lead': ApiEbookLeadEbookLead;
       'api::ebook.ebook': ApiEbookEbook;
       'api::post.post': ApiPostPost;
       'api::preview-session.preview-session': ApiPreviewSessionPreviewSession;

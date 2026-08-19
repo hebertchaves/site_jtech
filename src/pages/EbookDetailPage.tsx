@@ -4,6 +4,7 @@ import { Lang, t } from "../lib/i18n"
 import { getRoute } from "../lib/routes"
 import { Ebook } from "../data/ebooks"
 import { submitLead } from "../lib/leads"
+import { requestEbookDownload } from "../lib/ebook-download"
 import { trackFormSubmit } from "../lib/analytics"
 import { createConsentData, validateConsent } from "../lib/lgpd"
 import { Container } from "../components/layout/Container"
@@ -76,22 +77,31 @@ export function EbookDetailPage({ lang, slug }: EbookDetailPageProps) {
     )
   }
 
-  const triggerDownload = (eb: Ebook) => {
-    const ctaType = eb.ctaType || (eb.downloadUrl ? 'DIRECT_DOWNLOAD' : undefined)
-    if (ctaType === 'RD_FORM' && eb.rdFormUrl) {
-      window.open(eb.rdFormUrl, '_blank', 'noopener,noreferrer')
-    } else if (ctaType === 'EXTERNAL_LINK' && eb.downloadUrl) {
-      window.open(eb.downloadUrl, '_blank', 'noopener,noreferrer')
-    } else if (eb.downloadUrl) {
-      const link = document.createElement('a')
-      link.href = eb.downloadUrl
-      link.download = eb.slug + '.pdf'
-      link.target = '_blank'
-      link.rel = 'noopener noreferrer'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+  // E-books com formulário da RD Station são captados lá — abrir o nosso modal
+  // além do deles significaria pedir os mesmos dados duas vezes.
+  const handleDownloadClick = () => {
+    if (ebook.ctaType === 'RD_FORM' && ebook.rdFormUrl) {
+      window.open(ebook.rdFormUrl, '_blank', 'noopener,noreferrer')
+      return
     }
+    setModalOpen(true)
+  }
+
+  // A URL chega do backend só após o cadastro; não vem mais no payload público.
+  const triggerDownload = (eb: Ebook, downloadUrl: string) => {
+    if (eb.ctaType === 'EXTERNAL_LINK') {
+      window.open(downloadUrl, '_blank', 'noopener,noreferrer')
+      return
+    }
+
+    const link = document.createElement('a')
+    link.href = downloadUrl
+    link.download = eb.slug + '.pdf'
+    link.target = '_blank'
+    link.rel = 'noopener noreferrer'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -110,8 +120,26 @@ export function EbookDetailPage({ lang, slug }: EbookDetailPageProps) {
       // ✅ LGPD: Create consent data
       const consentData = createConsentData(lang)
 
-      // Submit lead with consent information
-      await submitLead(
+      // O cadastro no Strapi é o que libera o link — precisa vir primeiro.
+      const result = await requestEbookDownload(
+        lang,
+        ebook.slug,
+        {
+          name: formData.name,
+          email: formData.email,
+          consentGiven: true,
+          consentText: consentData.consentText,
+        },
+        ebook.downloadUrl
+      )
+
+      if (!result.success) {
+        alert(t(lang, "ebook.download.error"))
+        return
+      }
+
+      // CRM: envio paralelo, não bloqueia o download já autorizado.
+      submitLead(
         {
           name: formData.name,
           email: formData.email,
@@ -122,7 +150,7 @@ export function EbookDetailPage({ lang, slug }: EbookDetailPageProps) {
           ...consentData,
         },
         lang
-      )
+      ).catch((err) => console.error("Error submitting ebook lead:", err))
 
       trackFormSubmit("ebook", "Ebook Download Form")
 
@@ -130,9 +158,10 @@ export function EbookDetailPage({ lang, slug }: EbookDetailPageProps) {
       setFormData({ name: "", email: "" })
       setConsentGiven(false)
 
-      triggerDownload(ebook)
+      triggerDownload(ebook, result.downloadUrl)
     } catch (error) {
       console.error("Error submitting ebook form:", error)
+      alert(t(lang, "ebook.download.error"))
     } finally {
       setFormLoading(false)
     }
@@ -195,7 +224,7 @@ export function EbookDetailPage({ lang, slug }: EbookDetailPageProps) {
 
               <Button
                 size="lg"
-                onClick={() => setModalOpen(true)}
+                onClick={handleDownloadClick}
                 className="w-full"
               >
                 <Download className="mr-2 h-5 w-5" />

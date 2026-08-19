@@ -1,7 +1,48 @@
+import { ConsentPreferences } from "./consent"
+
 declare global {
   interface Window {
     dataLayer: Record<string, unknown>[]
   }
+}
+
+// Google Consent Mode v2 — o dataLayer carrega o estado do consentimento para
+// que as tags dentro do GTM respeitem cada categoria. Sem isso, a caixinha
+// "Marketing e personalização" do banner não governaria nada: o código do site
+// só verificava a categoria "analytics".
+function gtag(...args: unknown[]): void {
+  window.dataLayer = window.dataLayer || []
+  // Consent Mode exige o objeto `arguments`, não um array
+  // eslint-disable-next-line prefer-rest-params
+  window.dataLayer.push(arguments as unknown as Record<string, unknown>)
+  void args
+}
+
+/**
+ * Nega tudo por padrão. Deve rodar antes de qualquer tag do Google carregar.
+ */
+export function setDefaultConsent(): void {
+  gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
+    functionality_storage: "granted",
+    security_storage: "granted",
+  })
+}
+
+/**
+ * Reflete a escolha do usuário nas tags do Google.
+ */
+export function updateConsentMode(preferences: ConsentPreferences): void {
+  const marketing = preferences.marketing ? "granted" : "denied"
+  gtag("consent", "update", {
+    ad_storage: marketing,
+    ad_user_data: marketing,
+    ad_personalization: marketing,
+    analytics_storage: preferences.analytics ? "granted" : "denied",
+  })
 }
 
 export function initializeGTM(): void {

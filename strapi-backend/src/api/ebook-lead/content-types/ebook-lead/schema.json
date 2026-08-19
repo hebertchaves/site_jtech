@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ebook_leads",
+  "info": {
+    "singularName": "ebook-lead",
+    "pluralName": "ebook-leads",
+    "displayName": "Ebook Lead",
+    "description": "Cadastros feitos para liberar o download de um e-book. Sem rotas REST: alimentado apenas pelo endpoint POST /api/ebooks/:slug/download e consultado pelo painel."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": false
+    }
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "maxLength": 120
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "ebookSlug": {
+      "type": "string",
+      "required": true
+    },
+    "ebookTitle": {
+      "type": "string"
+    },
+    "locale": {
+      "type": "string",
+      "required": true
+    },
+    "consentGiven": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "consentText": {
+      "type": "text"
+    },
+    "ipAddress": {
+      "type": "string"
+    },
+    "userAgent": {
+      "type": "text"
+    }
+  }
+}

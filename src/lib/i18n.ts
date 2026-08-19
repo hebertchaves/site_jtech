@@ -689,6 +689,8 @@ const translations: Translations = {
     "contact.email": "E-mail",
     "contact.success": "Mensagem enviada com sucesso!",
     "contact.error": "Erro ao enviar mensagem. Tente novamente.",
+    "contact.error.unavailable": "O envio pelo formulário está temporariamente indisponível. Tente novamente mais tarde.",
+    "ebook.download.error": "Não foi possível liberar o download agora. Tente novamente mais tarde.",
     
     // Pre-WhatsApp Modal
     "prewhatsapp.title": "Fale com um Especialista",
@@ -703,14 +705,8 @@ const translations: Translations = {
     "prewhatsapp.close": "Fechar",
     
     // Privacy Page
-    "privacy.title": "Política de Privacidade",
-    "privacy.updated": "Última atualização",
-    "privacy.intro": "Esta Política de Privacidade descreve como coletamos, usamos e protegemos suas informações pessoais.",
     
     // Terms Page
-    "terms.title": "Termos de Serviço",
-    "terms.updated": "Última atualização",
-    "terms.intro": "Ao usar nossos serviços, você concorda com estes termos e condições.",
     
     // Footer
     "footer.tagline": "Soluções inteligentes\npara saneamento.",
@@ -721,7 +717,9 @@ const translations: Translations = {
     "footer.clientarea": "Área do cliente",
     "footer.legal": "Legal",
     "footer.privacy": "Política de Privacidade",
-    "footer.terms": "Termos de Serviço",
+    "footer.legalnotice": "Aviso Legal",
+    "footer.cookies": "Política de Cookies",
+    "footer.cookiesprefs": "Preferências de cookies",
     "footer.rights": "Todos os direitos reservados.",
     
     // Common
@@ -1418,6 +1416,8 @@ const translations: Translations = {
     "contact.email": "Correo",
     "contact.success": "¡Mensaje enviado con éxito!",
     "contact.error": "Error al enviar mensaje. Inténtelo de nuevo.",
+    "contact.error.unavailable": "El envío por formulario está temporalmente no disponible. Inténtelo más tarde.",
+    "ebook.download.error": "No fue posible habilitar la descarga ahora. Inténtelo más tarde.",
     
     // Pre-WhatsApp Modal
     "prewhatsapp.title": "Hable con un Especialista",
@@ -1432,14 +1432,8 @@ const translations: Translations = {
     "prewhatsapp.close": "Cerrar",
     
     // Privacy Page
-    "privacy.title": "Política de Privacidad",
-    "privacy.updated": "Última actualización",
-    "privacy.intro": "Esta Política de Privacidad describe cómo recopilamos, usamos y protegemos su información personal.",
     
     // Terms Page
-    "terms.title": "Términos de Servicio",
-    "terms.updated": "Última actualización",
-    "terms.intro": "Al usar nuestros servicios, usted acepta estos términos y condiciones.",
     
     // Footer
     "footer.tagline": "Soluciones inteligentes\npara saneamiento.",
@@ -1450,7 +1444,9 @@ const translations: Translations = {
     "footer.clientarea": "Área del cliente",
     "footer.legal": "Legal",
     "footer.privacy": "Política de Privacidad",
-    "footer.terms": "Términos de Servicio",
+    "footer.legalnotice": "Aviso Legal",
+    "footer.cookies": "Política de Cookies",
+    "footer.cookiesprefs": "Preferencias de cookies",
     "footer.rights": "Todos los derechos reservados.",
     
     // Common
@@ -2147,6 +2143,8 @@ const translations: Translations = {
     "contact.email": "Email",
     "contact.success": "Message sent successfully!",
     "contact.error": "Error sending message. Please try again.",
+    "contact.error.unavailable": "Form submission is temporarily unavailable. Please try again later.",
+    "ebook.download.error": "We could not unlock the download right now. Please try again later.",
     
     // Pre-WhatsApp Modal
     "prewhatsapp.title": "Talk to a Specialist",
@@ -2161,14 +2159,8 @@ const translations: Translations = {
     "prewhatsapp.close": "Close",
     
     // Privacy Page
-    "privacy.title": "Privacy Policy",
-    "privacy.updated": "Last updated",
-    "privacy.intro": "This Privacy Policy describes how we collect, use, and protect your personal information.",
     
     // Terms Page
-    "terms.title": "Terms of Service",
-    "terms.updated": "Last updated",
-    "terms.intro": "By using our services, you agree to these terms and conditions.",
     
     // Footer
     "footer.tagline": "Smart solutions\nfor sanitation.",
@@ -2179,7 +2171,9 @@ const translations: Translations = {
     "footer.clientarea": "Client area",
     "footer.legal": "Legal",
     "footer.privacy": "Privacy Policy",
-    "footer.terms": "Terms of Service",
+    "footer.legalnotice": "Legal Notice",
+    "footer.cookies": "Cookie Policy",
+    "footer.cookiesprefs": "Cookie preferences",
     "footer.rights": "All rights reserved.",
     
     // Common
@@ -2876,6 +2870,8 @@ const translations: Translations = {
     "contact.email": "Email",
     "contact.success": "Message envoyé avec succès!",
     "contact.error": "Erreur lors de l'envoi du message. Veuillez réessayer.",
+    "contact.error.unavailable": "L’envoi du formulaire est temporairement indisponible. Veuillez réessayer plus tard.",
+    "ebook.download.error": "Impossible de débloquer le téléchargement pour le moment. Veuillez réessayer plus tard.",
     
     // Pre-WhatsApp Modal
     "prewhatsapp.title": "Parlez à un Spécialiste",
@@ -2890,14 +2886,8 @@ const translations: Translations = {
     "prewhatsapp.close": "Fermer",
     
     // Privacy Page
-    "privacy.title": "Politique de Confidentialité",
-    "privacy.updated": "Dernière mise à jour",
-    "privacy.intro": "Cette Politique de Confidentialité décrit comment nous collectons, utilisons et protégeons vos informations personnelles.",
     
     // Terms Page
-    "terms.title": "Conditions de Service",
-    "terms.updated": "Dernière mise à jour",
-    "terms.intro": "En utilisant nos services, vous acceptez ces termes et conditions.",
     
     // Footer
     "footer.tagline": "Solutions intelligentes\npour l'assainissement.",
@@ -2908,7 +2898,9 @@ const translations: Translations = {
     "footer.clientarea": "Zone client",
     "footer.legal": "Légal",
     "footer.privacy": "Politique de Confidentialité",
-    "footer.terms": "Conditions de Service",
+    "footer.legalnotice": "Mentions Légales",
+    "footer.cookies": "Politique de Cookies",
+    "footer.cookiesprefs": "Préférences cookies",
     "footer.rights": "Tous droits réservés.",
     
     // Common

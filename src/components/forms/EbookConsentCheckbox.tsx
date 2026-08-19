@@ -1,6 +1,5 @@
 import { Lang, t } from "../../lib/i18n"
-import { getRoute } from "../../lib/routes"
-import { buildPath } from "../../lib/i18n"
+import { getLegalLink } from "../../lib/legal-links"
 
 interface EbookConsentCheckboxProps {
   lang: Lang
@@ -28,7 +27,7 @@ export function EbookConsentCheckbox({
       <label htmlFor={id} className="text-sm text-gray-600 cursor-pointer leading-snug">
         {t(lang, "contact.form.privacy.text")}{" "}
         <a
-          href={buildPath(lang, getRoute("privacy", lang))}
+          href={getLegalLink("privacy", lang)}
           className="text-[#E30613] hover:underline"
           target="_blank"
           rel="noopener noreferrer"

@@ -1,6 +1,7 @@
 import { Calendar, Clock, User } from "lucide-react"
 import { useState, useEffect } from "react"
 import { marked } from "marked"
+import { sanitizeHtml } from "../lib/sanitize"
 import { Lang, t } from "../lib/i18n"
 import { Post } from "../data/posts"
 import { Container } from "../components/layout/Container"
@@ -21,12 +22,15 @@ marked.use({ breaks: true })
  * Render content that may be plain text, HTML, or Markdown.
  * - If it contains HTML tags → render as HTML directly
  * - Otherwise → parse as Markdown (with breaks: true) then render as HTML
+ *
+ * O resultado passa por sanitizeHtml em ambos os caminhos: o Markdown do Strapi
+ * também aceita HTML embutido, então nenhum dos dois ramos é confiável.
  */
 function renderContent(raw: string): string {
   if (!raw) return ""
   const hasHtmlTags = /<[a-z][\s\S]*>/i.test(raw)
-  if (hasHtmlTags) return raw
-  return marked.parse(raw) as string
+  const html = hasHtmlTags ? raw : (marked.parse(raw) as string)
+  return sanitizeHtml(html)
 }
 
 export function PostPage({ lang, slug }: PostPageProps) {

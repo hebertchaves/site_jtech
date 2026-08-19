@@ -1,5 +1,22 @@
 # Guia de Deploy — Jtech Site + CMS na AWS
 
+> ## ⚠️ Documento legado
+>
+> Este guia descreve a topologia original — Strapi rodando em **EC2** com Nginx e
+> PM2, e upload manual do frontend para o S3. **A produção não funciona mais
+> assim.** Desde a entrada do `.gitlab-ci.yml`, a publicação é automática:
+>
+> - **Backend**: imagem Docker `linux/arm64` → ECR `jtech-portal` → serviço
+>   **ECS** (`script/deploy-ecs-production.sh`), com variáveis vindas de
+>   `s3://jtech-environment/jtech-portal/.env`
+> - **Frontend**: build no runner → `s3://jtech-site-prod` → invalidação do
+>   CloudFront `EU8RBW6EG8XCB`
+> - **Gatilho**: push/merge em `main`
+>
+> O conteúdo abaixo continua útil como referência dos recursos AWS (RDS, buckets,
+> IAM, DNS, certificados) e do histórico de como o ambiente foi montado. Para
+> publicar uma versão, veja `PENDENCIAS_INFRA.md` e o próprio `.gitlab-ci.yml`.
+
 **Stack:** React + Vite (frontend) · Strapi 5 (CMS/backend) · PostgreSQL (banco) · AWS  
 **Tempo estimado:** 2–3 horas
 
@@ -20,6 +37,8 @@ CloudFront (CDN + SSL)
         ├── RDS PostgreSQL          ← banco de dados
         │
         └── S3 Bucket "jtech-uploads" ← uploads de mídia do CMS
+              │
+              └── CloudFront de mídia ← domínio público das imagens (CDN_URL)
 ```
 
 ---
@@ -87,6 +106,17 @@ Formato: `jtech-strapi.xxxxxxxxx.us-east-1.rds.amazonaws.com`
   ]
 }
 ```
+
+4. **CloudFront na frente do bucket (recomendado).** A produção atual não serve
+   a mídia pela URL do S3, e sim por um domínio de CDN — hoje
+   `https://conteudo.sansys.app`. Crie uma distribuição CloudFront apontando
+   para este bucket, associe o domínio desejado e anote a URL: ela vai no
+   `CDN_URL` do `.env` da EC2 (Etapa 4.5).
+
+> ⚠️ Sem `CDN_URL`, o Strapi devolve as imagens com a URL padrão do S3
+> (`https://jtech-uploads.s3.us-east-1.amazonaws.com/...`). Funciona, mas
+> difere do que está no ar e amarra o conteúdo ao bucket — trocar de bucket
+> depois exige reescrever as URLs já gravadas no banco.
 
 ### 2.2 Bucket do frontend (site estático)
 
@@ -240,6 +270,9 @@ NODE_ENV=production
 HOST=0.0.0.0
 PORT=1337
 
+# URL pública do Strapi (mesmo domínio do server_name no Nginx, Etapa 5)
+PUBLIC_URL=https://cms.jtech.com.br
+
 # Gerar cada valor com:
 # node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 APP_KEYS=GERAR_1,GERAR_2,GERAR_3,GERAR_4
@@ -264,6 +297,15 @@ AWS_ACCESS_KEY_ID=CHAVE_IAM
 AWS_ACCESS_SECRET=SECRET_IAM
 AWS_REGION=us-east-1
 AWS_BUCKET=jtech-uploads
+
+# CDN de mídia — domínio do CloudFront na frente do bucket de uploads (Etapa 2.1).
+# Vira o prefixo das URLs de imagem devolvidas pela API do Strapi.
+# Sem esta variável, a API devolve a URL padrão do S3.
+# Produção atual: https://conteudo.sansys.app
+CDN_URL=https://conteudo.sansys.app
+
+# Pasta raiz dos uploads dentro do bucket (default do código: uploads-strapi)
+AWS_BUCKET_PREFIX=uploads-strapi
 ```
 
 > Para gerar os secrets, execute na EC2:
@@ -490,6 +532,36 @@ Execute cada item e confirme:
 
 ---
 
+## Atualização de Versão
+
+**Publicar = mergear em `main`.** O pipeline (`.gitlab-ci.yml`) executa:
+
+1. `prepare-version` — exige que `package.json` do root e do `strapi-backend`
+   tenham a mesma versão; deriva `APP_VERSION`
+2. `build-backend` — `docker build --platform linux/arm64 ./strapi-backend` e
+   push para o ECR
+3. `build-frontend` — copia a variável de arquivo `FRONTEND_ENV_PRODUCTION` para
+   `.env.production`, roda `npm ci && npm run build`, guarda `dist/` como artefato
+4. `deploy-backend` — registra nova task definition apontando para a imagem e
+   roda `aws ecs update-service`, aguardando `services-stable`
+5. `deploy-frontend` — `aws s3 sync dist/` no bucket, `index.html` com
+   `no-cache`, e invalidação do CloudFront
+
+Em `main` os dois deploys são **automáticos**; em tag, manuais.
+
+**Rollback do backend:** apontar o serviço ECS para a task definition anterior
+(console do ECS → serviço → Update → revisão anterior), ou reverter o commit em
+`main` e deixar o pipeline reconstruir.
+
+**Rollback do frontend:** reverter o commit em `main`; o job republica o bundle
+anterior e invalida o cache.
+
+> As variáveis de ambiente do backend **não** ficam mais em `.env` na instância:
+> estão em `s3://jtech-environment/jtech-portal/.env`, lidas pela task definition
+> na inicialização. Alterá-las exige `aws ecs update-service --force-new-deployment`.
+
+---
+
 ## Comandos Úteis — Manutenção
 
 ```bash
@@ -528,6 +600,7 @@ Após concluir o deploy, enviar ao time de dev:
 | Endpoint do RDS | _(endpoint copiado na Etapa 1.2)_ |
 | Região AWS | _(região escolhida)_ |
 | Nome do bucket uploads | jtech-uploads |
+| Domínio do CDN de mídia (`CDN_URL`) | https://conteudo.sansys.app |
 | Subdomínio do Strapi confirmado | cms.jtech.com.br |
 
 ---

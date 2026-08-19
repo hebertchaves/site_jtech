@@ -56,7 +56,9 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
+      "allowedTypes": [
+        "images"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": false
@@ -82,11 +84,16 @@
         "i18n": {
           "localized": false
         }
-      }
+      },
+      "private": true
     },
     "ctaType": {
       "type": "enumeration",
-      "enum": ["RD_FORM", "DIRECT_DOWNLOAD", "EXTERNAL_LINK"],
+      "enum": [
+        "RD_FORM",
+        "DIRECT_DOWNLOAD",
+        "EXTERNAL_LINK"
+      ],
       "default": "RD_FORM",
       "pluginOptions": {
         "i18n": {
@@ -106,7 +113,9 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
+      "allowedTypes": [
+        "images"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": false
@@ -117,7 +126,9 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
+      "allowedTypes": [
+        "images"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": false

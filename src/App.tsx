@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import { Lang, getCurrentLangFromHash, defaultLang } from "./lib/i18n"
 import { matchRoute } from "./lib/routes"
 import { captureUTMParams } from "./lib/utm"
-import { initializeGTM } from "./lib/gtm"
+import { initializeGTM, setDefaultConsent, updateConsentMode } from "./lib/gtm"
 import {
   initializeAnalytics,
   trackPageView,
@@ -27,8 +27,6 @@ import { EbooksPage } from "./pages/EbooksPage"
 import { EbookDetailPage } from "./pages/EbookDetailPage"
 import { PreviewPage } from "./pages/PreviewPage"
 import { ContactPage } from "./pages/ContactPage"
-import { PrivacyPage } from "./pages/PrivacyPage"
-import { TermsPage } from "./pages/TermsPage"
 
 export default function App() {
   const [currentLang, setCurrentLang] = useState<Lang>(defaultLang)
@@ -40,6 +38,9 @@ export default function App() {
   const cleanupScrollRef = useRef<null | (() => void)>(null)
 
   useEffect(() => {
+    // Consent Mode: nega tudo antes de qualquer tag do Google subir
+    setDefaultConsent()
+
     // Capture UTMs on load (hash router case)
     captureUTMParams()
 
@@ -63,13 +64,17 @@ export default function App() {
     }
 
     const handleConsentUpdate = () => {
+      const preferences = getConsentPreferences()
+      if (preferences) updateConsentMode(preferences)
       enableAnalyticsIfAllowed()
       disableAnalyticsIfRevoked()
     }
 
     window.addEventListener("consentUpdated", handleConsentUpdate)
 
-    // Initial check
+    // Initial check — aplica a escolha já salva de visitas anteriores
+    const savedPreferences = getConsentPreferences()
+    if (savedPreferences) updateConsentMode(savedPreferences)
     enableAnalyticsIfAllowed()
 
     return () => {
@@ -140,10 +145,6 @@ export default function App() {
         return <EbookDetailPage lang={currentLang} slug={params.slug || ""} />
       case "contact":
         return <ContactPage lang={currentLang} />
-      case "privacy":
-        return <PrivacyPage lang={currentLang} />
-      case "terms":
-        return <TermsPage lang={currentLang} />
       default:
         return <HomePage lang={currentLang} />
     }
