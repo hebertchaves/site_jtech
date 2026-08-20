@@ -332,7 +332,16 @@ export class StrapiContentProvider implements ContentProvider {
       const response = await this.fetchStrapi<StrapiResponse<StrapiProductCTAConfig[]>>(url)
       return transformStrapiProductCTAConfigs(response.data ?? [])
     } catch (error) {
-      console.error('Error fetching product CTA configs:', error)
+      // Falha aqui é silenciosa por design (os CTAs caem no texto e no fluxo
+      // padrão), o que já escondeu um 403 em produção: a role pública não tinha
+      // permissão de leitura em product-cta-config, e rdFormUrl/ctaLabel eram
+      // ignorados sem nenhum sinal na interface.
+      console.error(
+        'Falha ao buscar CTAs de produto — usando os valores padrão. ' +
+          'Se o status for 403, falta permissão de find para a role Public em ' +
+          'product-cta-config (Strapi → Settings → Users & Permissions → Roles).',
+        error
+      )
       return {}
     }
   }

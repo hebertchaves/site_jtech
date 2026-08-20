@@ -155,6 +155,11 @@ export default {
           'api::category.category.findOne',
           'api::author.author.find',
           'api::author.author.findOne',
+          // CTAs de produto: sem esta permissão o site recebe 403, cai no
+          // fallback silencioso e ignora rdFormUrl e ctaLabel configurados
+          // no painel — o sintoma é o botão continuar com o texto padrão.
+          'api::product-cta-config.product-cta-config.find',
+          'api::product-cta-config.product-cta-config.findOne',
         ];
 
         const missingActions = requiredActions.filter(a => !existingActions.has(a));
