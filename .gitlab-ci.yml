@@ -1,3 +1,14 @@
+# Pipeline de merge request valida o resultado da mesclagem, não o branch
+# isolado. A segunda regra evita o pipeline duplicado que apareceria enquanto
+# houvesse MR aberto (um de branch e um de merge request para o mesmo commit).
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH
+
 stages:
   - validate
   - build
@@ -15,6 +26,12 @@ variables:
 prepare-version:
   stage: validate
   image: node:${NODE_VERSION}-alpine
+  # Jobs sem `rules` ficam de fora de pipelines de merge request; sem nenhum job
+  # elegível o GitLab recusa criar o pipeline ("Pipeline creation failed").
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH
   script:
     - |
       ROOT_VERSION="$(node -p "require('./package.json').version")"
@@ -34,6 +51,18 @@ prepare-version:
   artifacts:
     reports:
       dotenv: version.env
+
+typecheck-frontend:
+  stage: validate
+  image: node:${NODE_VERSION}-alpine
+  # Só em merge request: nos pipelines de branch o build de produção já compila
+  # o mesmo código. Aqui o valor é checar o resultado da mesclagem antes do
+  # merge, sem depender de variável protegida nem de credencial da AWS.
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - npm ci
+    - npx tsc --noEmit
 
 build-backend:
   stage: build
