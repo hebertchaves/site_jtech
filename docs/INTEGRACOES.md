@@ -115,17 +115,24 @@ Para isso funcionar, o **URL final** de cada anúncio precisa ser montado com:
 
 ## Analytics e Tag Manager
 
-> **Estado:** aguardando ID do contêiner
+> **Estado:** ID recebido (`GTM-WLMW7J68`), aguardando aplicação na variável
 
 O Google Tag Manager é a peça central: é dentro dele que Google Analytics, Google
 Ads e qualquer outra tag de medição são ligados. O site não precisa ser alterado
 a cada nova tag — basta o GTM estar ativo. **Por isso este é o primeiro valor a
 providenciar**: sem ele, os IDs do Ads e do Analytics não têm onde ser usados.
 
+> **Não é preciso colar o snippet no HTML.** O trecho que o Google (e as agências)
+> mandam inserir no `<head>` e logo após o `<body>` **já está implementado** em
+> `src/lib/gtm.ts`: o site injeta o mesmo `<script>` e o mesmo `<noscript>`,
+> lendo o ID de uma variável. Colar o código à mão no `index.html` criaria uma
+> segunda instalação do mesmo contêiner, com eventos duplicados — e sem passar
+> pelo controle de consentimento.
+
 | | |
 |---|---|
 | **O que enviar** | O ID do contêiner do Google Tag Manager |
-| **Formato** | `GTM-XXXXXXX` |
+| **Formato** | `GTM-XXXXXXX` — atual: `GTM-WLMW7J68` |
 | **Onde é aplicado** | Variável `FRONTEND_ENV_PRODUCTION` no GitLab, na linha `VITE_GTM_ID` |
 | **Quem aplica** | Desenvolvimento ou infraestrutura |
 | **Precisa republicar?** | Sim — o valor entra no site durante a publicação |
@@ -133,6 +140,33 @@ providenciar**: sem ele, os IDs do Ads e do Analytics não têm onde ser usados.
 Enquanto essa variável estiver com o valor de exemplo, o site **não carrega o
 GTM**. Isso é proposital: evita que uma configuração pela metade dispare medição
 errada. Trocar o valor sem rodar a publicação também não surte efeito.
+
+> ⚠️ **Avisar a infraestrutura antes de aplicarem a Content-Security-Policy.** A
+> política prevista bloqueia scripts de terceiros e derrubaria o GTM. Ela precisa
+> liberar `https://www.googletagmanager.com` em `script-src` e
+> `https://www.google-analytics.com` em `connect-src` (ver `PENDENCIAS_INFRA.md`,
+> item 4). Se a CSP entrar antes desse ajuste, o tracking para de funcionar sem
+> que ninguém relacione uma coisa à outra.
+
+### Quando o GTM carrega — decisão em aberto
+
+As instruções padrão do Google pedem o GTM "no `<head>`, o mais alto possível",
+ou seja, carregando em toda visita. **O site não faz isso hoje**: o GTM só sobe
+depois que o visitante aceita cookies de analytics.
+
+A consequência prática importa para quem analisa os números: **quem recusar ou
+ignorar o banner não gera dado nenhum**, nem mesmo os pings sem cookie que o
+Google usa para modelagem de conversão. O volume virá menor do que o esperado.
+
+| Modelo | Como funciona | Efeito |
+|---|---|---|
+| **Atual** | GTM só carrega após o aceite | Mais conservador; zero dado de quem não aceita |
+| **Padrão do Google** | GTM carrega sempre; o Consent Mode v2 nega armazenamento até o aceite | Permite pings sem cookie e modelagem de conversão |
+
+O site **já implementa o Consent Mode v2**, então migrar para o segundo modelo é
+uma alteração pequena — deixar de condicionar o carregamento ao aceite, mantendo
+os sinais de consentimento. É decisão de jurídico, não só técnica: recomendamos
+começar pelo modelo atual e reavaliar se o volume de dados for insuficiente.
 
 ### Google Analytics
 
@@ -258,7 +292,7 @@ dele.
 
 | Ordem | Valor | Formato | Onde nasce | Republicar? |
 |---|---|---|---|---|
-| 1 | ID do contêiner GTM | `GTM-XXXXXXX` | Google Tag Manager | Sim |
+| 1 | ID do contêiner GTM | `GTM-WLMW7J68` ✅ recebido | Google Tag Manager | Sim |
 | 2 | ID de medição do GA4 | `G-XXXXXXXXXX` | Google Analytics | Não |
 | 3 | ID e rótulo de conversão | `AW-123456789` | Google Ads | Não |
 | 4 | Endereços das Landing Pages | `https://…` | RD Station Marketing | Não |

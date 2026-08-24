@@ -147,17 +147,31 @@ XSS: a primeira (sanitização do conteúdo do CMS) já foi implementada em cód
 CloudFront → distribuição `EU8RBW6EG8XCB` → **Response headers policy**:
 
 ```
-Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';
-  img-src 'self' data: https://conteudo.sansys.app; font-src 'self';
-  connect-src 'self' https://cms.jtech.com.br https://n8n.jtech.com.br;
+Content-Security-Policy: default-src 'self';
+  script-src 'self' 'unsafe-inline' https://www.googletagmanager.com;
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data: https://conteudo.sansys.app https://www.googletagmanager.com https://www.google-analytics.com;
+  font-src 'self';
+  connect-src 'self' https://cms.jtech.com.br https://n8n.jtech.com.br https://www.google-analytics.com https://www.googletagmanager.com;
   frame-src https://www.youtube.com https://player.vimeo.com;
   frame-ancestors 'none'; base-uri 'self'; object-src 'none'
 Referrer-Policy: strict-origin-when-cross-origin
 Permissions-Policy: geolocation=(), microphone=(), camera=()
 ```
 
-`style-src 'unsafe-inline'` é necessário por causa do Tailwind. Quando o GTM for
-ativado, o domínio dele precisa entrar em `script-src`.
+> ⚠️ **O contêiner do GTM já foi contratado (`GTM-WLMW7J68`).** Uma CSP com
+> `script-src 'self'` puro **derruba o tracking** — e a falha é silenciosa, do
+> tipo que ninguém relaciona à política de segurança semanas depois. Por isso os
+> domínios do Google constam acima. Se o GTM carregar outras tags (Ads, Hotjar,
+> pixels), cada domínio novo também precisa entrar.
+
+Duas notas sobre as permissões acima:
+
+- `style-src 'unsafe-inline'` é necessário por causa do Tailwind.
+- `script-src 'unsafe-inline'` é exigido pelo próprio snippet do GTM, que é um
+  script inline. Se quiserem evitar essa abertura, o caminho é usar `nonce` — o
+  CloudFront Functions consegue injetar um por requisição, mas dá trabalho e
+  obriga a alterar o código que injeta o script.
 
 ---
 
