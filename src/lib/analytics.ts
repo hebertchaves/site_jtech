@@ -72,6 +72,11 @@ export function trackCTAClick(cta_name: string, cta_location: string): void {
   pushToDataLayer("click_cta_whatsapp", { cta_name, cta_location })
 }
 
+export function trackRDFormClick(cta_name: string, cta_location: string): void {
+  if (!hasConsent("analytics")) return
+  pushToDataLayer("click_cta_rd_form", { cta_name, cta_location })
+}
+
 export function trackFormSubmit(form_type: string, form_name: string): void {
   if (!hasConsent("analytics")) return
   pushToDataLayer(`form_submit_${form_type}`, { form_name })

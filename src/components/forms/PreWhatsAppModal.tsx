@@ -12,10 +12,9 @@ interface PreWhatsAppModalProps {
   open: boolean
   onClose: () => void
   lang: Lang
-  rdFormUrl?: string
 }
 
-export function PreWhatsAppModal({ open, onClose, lang, rdFormUrl }: PreWhatsAppModalProps) {
+export function PreWhatsAppModal({ open, onClose, lang }: PreWhatsAppModalProps) {
   const [form, setForm] = useState({ name: "", email: "", company: "", role: "", phone: "" })
   const [loading, setLoading] = useState(false)
 
@@ -36,22 +35,18 @@ export function PreWhatsAppModal({ open, onClose, lang, rdFormUrl }: PreWhatsApp
 
     onClose()
 
-    if (rdFormUrl) {
-      window.open(rdFormUrl, '_blank', 'noopener,noreferrer')
-    } else {
-      openWhatsApp(
-        {
-          name: form.name,
-          email: form.email,
-          company: form.company,
-          role: form.role,
-          phone: form.phone,
-          page: "modal",
-          language: lang,
-        },
-        lang
-      )
-    }
+    openWhatsApp(
+      {
+        name: form.name,
+        email: form.email,
+        company: form.company,
+        role: form.role,
+        phone: form.phone,
+        page: "modal",
+        language: lang,
+      },
+      lang
+    )
 
     setLoading(false)
   }
@@ -125,7 +120,7 @@ export function PreWhatsAppModal({ open, onClose, lang, rdFormUrl }: PreWhatsApp
               {t(lang, "prewhatsapp.close")}
             </Button>
             <Button type="submit" className="flex-1" disabled={loading}>
-              {loading ? t(lang, "common.loading") : rdFormUrl ? t(lang, "prewhatsapp.cta_rd") : t(lang, "prewhatsapp.cta")}
+              {loading ? t(lang, "common.loading") : t(lang, "prewhatsapp.cta")}
             </Button>
           </div>
         </form>

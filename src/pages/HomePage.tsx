@@ -11,6 +11,8 @@ import { LogoBySlug } from "../components/logos"
 import { hasVariantSupport } from "../lib/logo-variants"
 import { getRoute } from "../lib/routes"
 import { getContentProvider } from "../providers"
+import { ProductCTAConfig } from "../providers/contentProvider"
+import { trackRDFormClick } from "../lib/analytics"
 
 interface HomePageProps {
   lang: Lang
@@ -49,7 +51,7 @@ function ImageWithFallback(props: any) {
 
 export default function HomePage({ lang }: HomePageProps) {
   const [whatsappModalOpen, setWhatsappModalOpen] = useState(false)
-  const [homeRdFormUrl, setHomeRdFormUrl] = useState<string | undefined>(undefined)
+  const [homeCTAConfig, setHomeCTAConfig] = useState<ProductCTAConfig | null>(null)
   const [bannerOffset, setBannerOffset] = useState(0)
 
   // Calcular o offset do logo no header para alinhar o título
@@ -66,9 +68,18 @@ export default function HomePage({ lang }: HomePageProps) {
   useEffect(() => {
     getContentProvider()
       .getProductCTAConfigs()
-      .then(configs => setHomeRdFormUrl(configs['homepage']?.rdFormUrl))
+      .then(configs => setHomeCTAConfig(configs['homepage'] ?? null))
       .catch(() => {})
   }, [])
+
+  const openCTA = () => {
+    if (homeCTAConfig?.rdFormUrl) {
+      trackRDFormClick(homeCTAConfig.ctaLabel ?? 'homepage', 'homepage')
+      window.open(homeCTAConfig.rdFormUrl, '_blank', 'noopener,noreferrer')
+      return
+    }
+    setWhatsappModalOpen(true)
+  }
 
   const [productTab, setProductTab] = useState<"produtos" | "modulos">("produtos")
   const [productCarouselIndex, setProductCarouselIndex] = useState(2) // Será ajustado dinamicamente baseado em cloneCount
@@ -284,9 +295,9 @@ export default function HomePage({ lang }: HomePageProps) {
               <Button
                 size="lg"
                 className="bg-[#E30613] hover:bg-[#C10511]"
-                onClick={() => setWhatsappModalOpen(true)}
+                onClick={openCTA}
               >
-                {t(lang, "home.hero.cta")} <ArrowRight className="ml-2 h-5 w-5" />
+                {homeCTAConfig?.ctaLabel ?? t(lang, "home.hero.cta")} <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>
           </div>
@@ -925,7 +936,6 @@ export default function HomePage({ lang }: HomePageProps) {
         lang={lang}
         open={whatsappModalOpen}
         onClose={() => setWhatsappModalOpen(false)}
-        rdFormUrl={homeRdFormUrl}
       />
 
       {/* Componente de Scroll to Top com mouse animado */}
