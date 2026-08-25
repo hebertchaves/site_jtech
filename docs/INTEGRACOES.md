@@ -25,60 +25,68 @@ mudança aparecer no site.
 
 ## RD Station
 
-> **Estado:** aguardando URL
+> **Estado:** aguardando o fluxo do n8n e o token da API
 
 O site usa a RD Station em três pontos: os botões de contato de cada produto, o
-formulário que aparece antes de abrir o WhatsApp na página inicial, e os e-books
-configurados para captar por formulário.
+formulário que aparece antes de abrir o WhatsApp, e os e-books configurados para
+captar por formulário.
 
-Em todos eles o comportamento é o mesmo: o visitante clica e o site **abre a
-página do formulário da RD em uma nova aba**. Por isso o que precisamos é um
-endereço — não um trecho de código.
+**A conversão acontece no próprio site.** Quem já está navegando no jtech.com.br
+já está no lugar certo para converter — não é levado para uma página externa. O
+formulário é o nosso: mantém o desenho do site, os quatro idiomas, os parâmetros
+de campanha e o registro de consentimento.
 
-> ⚠️ **O código de incorporação não serve.** Se a RD entregar algo como
-> `<div id="..."></div><script src="...">`, isso é um *formulário incorporado*:
-> foi feito para ser colado dentro de uma página, e o texto entre aspas é um
-> identificador interno, não um endereço que se possa abrir no navegador.
->
-> O que precisamos é de uma **Landing Page publicada** — outro tipo de material
-> dentro da RD Station Marketing, que gera um endereço próprio começando com
-> `https://`.
+### Como o lead chega à RD
+
+O site não fala com a RD diretamente — isso exigiria expor um token de API no
+navegador, onde qualquer visitante consegue lê-lo. O caminho é:
+
+```
+formulário no site  →  fluxo no n8n  →  API de conversões da RD Station
+```
+
+O n8n recebe o pacote de dados do formulário e cria a conversão na RD usando o
+**`form_name` do payload como `conversion_identifier`** — é isso que faz cada
+conversão apontar de qual formulário veio. Os identificadores estão na tabela
+mais abaixo.
 
 | | |
 |---|---|
-| **O que enviar** | O endereço de uma Landing Page publicada, um para cada produto que tiver formulário próprio |
+| **O que enviar** | O token da API da RD Station, cadastrado **dentro do n8n** (nunca no código do site) |
+| **Onde é aplicado** | No fluxo do n8n, junto com o endereço do webhook (ver seção *n8n*) |
+| **Quem aplica** | Quem administra o n8n |
+| **Precisa republicar?** | Não — o token vive fora do site |
+
+> **O script de rastreamento da RD** (o que identifica a jornada do visitante
+> antes da conversão) pode ser instalado como tag de HTML personalizado **dentro
+> do GTM**, sem alteração de código. Depende do GTM estar ativo e de a
+> Content-Security-Policy liberar o domínio da RD (ver `PENDENCIAS_INFRA.md`,
+> item 4). Sob o banner de cookies, ele se enquadra em *marketing*.
+
+### Landing pages externas — quando fazem sentido
+
+O campo `rdFormUrl`, no Strapi, continua existindo para campanhas pontuais e
+mídia paga, em que a landing page mora na RD e o tráfego chega direto nela.
+
+**Preenchendo esse campo em um produto, o CTA daquele produto passa a levar o
+visitante para fora do site.** Para a navegação normal do site, o campo deve
+ficar **vazio** — é assim que o CTA abre o formulário na própria página.
+
+| | |
+|---|---|
+| **O que enviar** | O endereço de uma Landing Page publicada, apenas para os casos de campanha |
 | **Formato** | `https://materiais.exemplo.com.br/nome-da-pagina` |
-| **Onde é aplicado** | Painel do Strapi → **Product CTA Config** (um registro por produto) e **Ebook** (campo do formulário) |
+| **Onde é aplicado** | Painel do Strapi → **Product CTA Config** e **Ebook** |
 | **Quem aplica** | O próprio responsável, pelo painel |
 | **Precisa republicar?** | Não |
 
-### Se a preferência for manter o visitante no site
-
-É possível exibir o formulário dentro da própria página, sem abrir aba nova.
-Isso exige desenvolvimento e muda o que se envia: em vez do endereço, passaria a
-ser o identificador do formulário. Também tem duas consequências que precisam de
-decisão antes:
-
-- o script da RD passa a ser carregado no site, o que exige liberá-lo na
-  Content-Security-Policy (ver `PENDENCIAS_INFRA.md`, item 4);
-- ele só pode subir depois que o visitante aceitar cookies de marketing.
-
-Se essa for a escolha, avisar **antes** de a CSP ser aplicada.
-
 ### Identificação de cada formulário
 
-A RD separa a origem das conversões pelo identificador do formulário. Existem
-dois caminhos no site, e só um deles é nosso:
-
-**Formulários que rodam na RD (Landing Pages).** É o caminho dos CTAs de produto
-configurados com `rdFormUrl`. O formulário não está no nosso site — o visitante é
-levado para a página da RD. Quem nomeia é quem administra a RD, no painel. Para
-separar produto a produto, basta uma Landing Page por produto, cadastrada no
-Strapi em **Product CTA Config**.
-
-**Formulários nativos do site.** São quatro. Cada um carrega um identificador que
-vai no `id` e no `name` do HTML, no `form_name` enviado com o lead e no evento do
-dataLayer — os três sempre com o mesmo valor:
+A RD separa a origem das conversões pelo identificador do formulário. São quatro
+formulários no site, e cada um carrega um identificador que aparece em três
+lugares, sempre com o mesmo valor: no `id` e no `name` do HTML, no `form_name`
+enviado com o lead (que o n8n usa como `conversion_identifier` na RD) e no evento
+do dataLayer lido pelo GTM.
 
 | Formulário | Onde aparece | Identificador |
 |---|---|---|
@@ -90,6 +98,10 @@ dataLayer — os três sempre com o mesmo valor:
 Os dois últimos usam o slug para que a origem seja distinguível: sem ele, todos
 os e-books e todos os produtos chegariam à RD com o mesmo nome de formulário.
 No pré-WhatsApp o slug também viaja em `product_interest`.
+
+Nas campanhas que usarem landing page externa (`rdFormUrl` preenchido), quem
+nomeia o formulário é quem administra a RD — ali a conversão nasce dentro dela e
+o site só registra o clique, em `click_cta_rd_form`.
 
 > O identificador é o mesmo em todos os idiomas. O idioma da visita vai em campo
 > separado (`language`), então não é preciso um formulário por idioma na RD.
@@ -177,25 +189,19 @@ errada. Trocar o valor sem rodar a publicação também não surte efeito.
 > item 4). Se a CSP entrar antes desse ajuste, o tracking para de funcionar sem
 > que ninguém relacione uma coisa à outra.
 
-### Quando o GTM carrega — decisão em aberto
+### Quando o GTM carrega
 
-As instruções padrão do Google pedem o GTM "no `<head>`, o mais alto possível",
-ou seja, carregando em toda visita. **O site não faz isso hoje**: o GTM só sobe
-depois que o visitante aceita cookies de analytics.
+O site segue o modelo padrão do Google: **o contêiner sobe em toda visita**, logo
+no carregamento da página, e o **Consent Mode v2** nega o armazenamento até o
+visitante aceitar. O GTM em si não grava cookie — quem grava são as tags dentro
+dele, e são elas que leem os sinais de consentimento.
 
-A consequência prática importa para quem analisa os números: **quem recusar ou
-ignorar o banner não gera dado nenhum**, nem mesmo os pings sem cookie que o
-Google usa para modelagem de conversão. O volume virá menor do que o esperado.
+Uma versão anterior condicionava a carga ao aceite de cookies. Isso zerava o dado
+de quem ignora o banner e deixava o contêiner invisível para o Tag Assistant, o
+que impedia até a verificação da instalação.
 
-| Modelo | Como funciona | Efeito |
-|---|---|---|
-| **Atual** | GTM só carrega após o aceite | Mais conservador; zero dado de quem não aceita |
-| **Padrão do Google** | GTM carrega sempre; o Consent Mode v2 nega armazenamento até o aceite | Permite pings sem cookie e modelagem de conversão |
-
-O site **já implementa o Consent Mode v2**, então migrar para o segundo modelo é
-uma alteração pequena — deixar de condicionar o carregamento ao aceite, mantendo
-os sinais de consentimento. É decisão de jurídico, não só técnica: recomendamos
-começar pelo modelo atual e reavaliar se o volume de dados for insuficiente.
+> **Hotjar e Clarity continuam presos ao aceite.** Eles não entendem Consent Mode
+> e só sobem depois que o visitante aceita a categoria de analytics.
 
 ### Google Analytics
 
@@ -278,9 +284,9 @@ ele está **desligado no site, de propósito**.
 | **Quem aplica** | Desenvolvimento |
 | **Precisa republicar?** | Sim |
 
-É necessário **um único endereço**, o do fluxo de leads. Existe uma segunda
-constante no código (`N8N_CONTENT_WEBHOOK_URL`) que alimentaria um provedor de
-conteúdo alternativo, mas ele não é usado — o site lê conteúdo do Strapi.
+É necessário **um único endereço**, o do fluxo de leads. Existia uma segunda
+constante no código, para um provedor de conteúdo alternativo que nunca foi
+ligado — foi removida, já que o site lê conteúdo do Strapi.
 
 ### O que o fluxo vai receber
 
@@ -334,16 +340,18 @@ dele.
 | 1 | ID do contêiner GTM | `GTM-WLMW7J68` ✅ recebido | Google Tag Manager | Sim |
 | 2 | ID de medição do GA4 | `G-XXXXXXXXXX` | Google Analytics | Não |
 | 3 | ID e rótulo de conversão | `AW-123456789` | Google Ads | Não |
-| 4 | Endereços das Landing Pages | `https://…` | RD Station Marketing | Não |
+| 4 | Token da API da RD | cadastrado no n8n | RD Station Marketing | Não |
 | 5 | Endereço do fluxo de leads | `https://…/webhook/…` | n8n | Sim |
 | 6 | Site ID do Hotjar | `3456789` | Hotjar | Sim |
 
-### Duas decisões que também dependem do responsável
+### Uma decisão que ainda depende do responsável
 
 1. **Captura do `gclid`** — necessária para importar conversões no Google Ads e
    otimizar campanhas por valor de lead. Hoje não é capturado.
-2. **Formulário da RD dentro do site** — em vez de abrir em nova aba. Muda o que
-   se envia e exige ajuste na CSP antes.
+
+> **Decidido em 25/08/2026:** a conversão acontece no site, com formulário
+> nativo entregue à RD pelo n8n; landing pages externas ficam reservadas a
+> campanhas de mídia paga. O GTM carrega em toda visita, com Consent Mode v2.
 
 Os valores marcados como "republicar: sim" entram no ar junto com a próxima
 publicação do site. Vale agrupá-los para não fazer três publicações seguidas.
