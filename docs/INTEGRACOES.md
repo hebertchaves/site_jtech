@@ -65,6 +65,35 @@ decisão antes:
 
 Se essa for a escolha, avisar **antes** de a CSP ser aplicada.
 
+### Identificação de cada formulário
+
+A RD separa a origem das conversões pelo identificador do formulário. Existem
+dois caminhos no site, e só um deles é nosso:
+
+**Formulários que rodam na RD (Landing Pages).** É o caminho dos CTAs de produto
+configurados com `rdFormUrl`. O formulário não está no nosso site — o visitante é
+levado para a página da RD. Quem nomeia é quem administra a RD, no painel. Para
+separar produto a produto, basta uma Landing Page por produto, cadastrada no
+Strapi em **Product CTA Config**.
+
+**Formulários nativos do site.** São quatro. Cada um carrega um identificador que
+vai no `id` e no `name` do HTML, no `form_name` enviado com o lead e no evento do
+dataLayer — os três sempre com o mesmo valor:
+
+| Formulário | Onde aparece | Identificador |
+|---|---|---|
+| Contato | Página de contato | `contact_<motivo>` — `customer`, `sales` ou `other` |
+| Newsletter | Página de conteúdo | `newsletter_content_page` |
+| E-book | Página de cada e-book | `ebook_<slug-do-ebook>` |
+| Pré-WhatsApp | Modal na home e em soluções | `pre_whatsapp_<slug-do-produto>` — `homepage` na página inicial |
+
+Os dois últimos usam o slug para que a origem seja distinguível: sem ele, todos
+os e-books e todos os produtos chegariam à RD com o mesmo nome de formulário.
+No pré-WhatsApp o slug também viaja em `product_interest`.
+
+> O identificador é o mesmo em todos os idiomas. O idioma da visita vai em campo
+> separado (`language`), então não é preciso um formulário por idioma na RD.
+
 ---
 
 ## Google Ads
@@ -186,9 +215,19 @@ virarem conversões ou métricas. Não é preciso pedir nada para tê-los:
 | `form_submit_newsletter` | Inscrição na newsletter |
 | `form_submit_pre_whatsapp` | Formulário antes do WhatsApp |
 | `click_cta_whatsapp` | Clique em botão de WhatsApp |
+| `click_cta_rd_form` | Clique em CTA que abre uma Landing Page da RD |
 | `click_product` | Clique em um produto |
 | `click_post` | Clique em um artigo |
 | `scroll_50` · `scroll_90` | Rolagem de metade e de quase toda a página |
+
+Os eventos de formulário levam o identificador em `form_name` (ver *Identificação
+de cada formulário*, na seção da RD Station), e os de CTA levam o slug do produto
+em `cta_location`.
+
+> Num produto configurado com `rdFormUrl`, o CTA abre a Landing Page da RD direto:
+> ali dispara `click_cta_rd_form`, e **não** `click_cta_whatsapp` nem
+> `form_submit_pre_whatsapp` — a conversão acontece dentro da RD. Vale considerar
+> isso ao comparar volumes entre produtos com e sem formulário próprio.
 
 ---
 

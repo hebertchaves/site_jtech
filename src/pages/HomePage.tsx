@@ -936,6 +936,7 @@ export default function HomePage({ lang }: HomePageProps) {
         lang={lang}
         open={whatsappModalOpen}
         onClose={() => setWhatsappModalOpen(false)}
+        productSlug="homepage"
       />
 
       {/* Componente de Scroll to Top com mouse animado */}

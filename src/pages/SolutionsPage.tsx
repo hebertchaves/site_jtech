@@ -508,6 +508,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
   const moduleDetails = getModuleDetails(lang)
 
   const [whatsappModalOpen, setWhatsappModalOpen] = useState(false)
+  const [activeCTASlug, setActiveCTASlug] = useState<string | undefined>(undefined)
   const [ctaConfigs, setCTAConfigs] = useState<Record<string, ProductCTAConfig>>({})
   const [moduloIndex, setModuloIndex] = useState(0)
   const [openCoreModule, setOpenCoreModule] = useState<number>(0)
@@ -691,6 +692,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
       window.open(config.rdFormUrl, '_blank', 'noopener,noreferrer')
       return
     }
+    setActiveCTASlug(slug)
     setWhatsappModalOpen(true)
   }
 
@@ -1164,7 +1166,8 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
       <PreWhatsAppModal
         lang={lang}
         open={whatsappModalOpen}
-        onClose={() => setWhatsappModalOpen(false)}
+        onClose={() => { setWhatsappModalOpen(false); setActiveCTASlug(undefined) }}
+        productSlug={activeCTASlug}
       />
       <ScrollToTop showThreshold={200} />
     </>

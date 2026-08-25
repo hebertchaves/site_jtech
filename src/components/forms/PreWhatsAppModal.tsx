@@ -12,11 +12,16 @@ interface PreWhatsAppModalProps {
   open: boolean
   onClose: () => void
   lang: Lang
+  /** Slug do produto/módulo cujo CTA abriu o modal — entra no identificador do
+   *  formulário, para a RD separar a origem da conversão. */
+  productSlug?: string
 }
 
-export function PreWhatsAppModal({ open, onClose, lang }: PreWhatsAppModalProps) {
+export function PreWhatsAppModal({ open, onClose, lang, productSlug }: PreWhatsAppModalProps) {
   const [form, setForm] = useState({ name: "", email: "", company: "", role: "", phone: "" })
   const [loading, setLoading] = useState(false)
+
+  const formId = `pre_whatsapp_${productSlug ?? "geral"}`
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
@@ -27,8 +32,11 @@ export function PreWhatsAppModal({ open, onClose, lang }: PreWhatsAppModalProps)
     setLoading(true)
 
     try {
-      await submitPreWhatsAppLead({ ...form, source: "pre-whatsapp" })
-      trackFormSubmit("pre_whatsapp", "pre-whatsapp-modal")
+      await submitPreWhatsAppLead(
+        { ...form, source: formId, product_interest: productSlug },
+        lang
+      )
+      trackFormSubmit("pre_whatsapp", formId)
     } catch {
       // silently continue
     }
@@ -59,7 +67,7 @@ export function PreWhatsAppModal({ open, onClose, lang }: PreWhatsAppModalProps)
           <DialogDescription>{t(lang, "prewhatsapp.subtitle")}</DialogDescription>
         </DialogHeader>
         <DialogBody>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form id={formId} name={formId} onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="name">{t(lang, "prewhatsapp.name")} *</Label>
             <Input

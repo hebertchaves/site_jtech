@@ -225,7 +225,7 @@ export function ContactPage({ lang }: ContactPageProps) {
                     </div>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-6 mb-8">
+                  <form id={`contact_${selectedReason}`} name={`contact_${selectedReason}`} onSubmit={handleSubmit} className="space-y-6 mb-8">
                     <div>
                       <Input
                         placeholder={t(lang, "contact.form.name")}
