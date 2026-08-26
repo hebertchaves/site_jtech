@@ -588,7 +588,7 @@ export function ContentPage({ lang }: ContentPageProps) {
                   )}
                 </p>
 
-                <form onSubmit={handleNewsletterSubmit} className="space-y-4">
+                <form id="newsletter_content_page" name="newsletter_content_page" onSubmit={handleNewsletterSubmit} className="space-y-4">
                   <Input
                     placeholder={t(lang, "prewhatsapp.name")}
                     value={newsletterData.name}

@@ -9,6 +9,7 @@ import { ScrollToTop } from "../components/ScrollToTop"
 import { motion, AnimatePresence } from "motion/react"
 import { LogoBySlug } from "../components/logos"
 import { getContentProvider } from "../providers"
+import { trackRDFormClick } from "../lib/analytics"
 import { ProductCTAConfig } from "../providers/contentProvider"
 import { waterCoreModules } from "../data/water-core-modules"
 import { wasteCoreModules } from "../data/waste-core-modules"
@@ -507,7 +508,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
   const moduleDetails = getModuleDetails(lang)
 
   const [whatsappModalOpen, setWhatsappModalOpen] = useState(false)
-  const [activeCTAConfig, setActiveCTAConfig] = useState<ProductCTAConfig | null>(null)
+  const [activeCTASlug, setActiveCTASlug] = useState<string | undefined>(undefined)
   const [ctaConfigs, setCTAConfigs] = useState<Record<string, ProductCTAConfig>>({})
   const [moduloIndex, setModuloIndex] = useState(0)
   const [openCoreModule, setOpenCoreModule] = useState<number>(0)
@@ -685,7 +686,13 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
   const solutionsPath = lang === 'pt' ? 'solucoes' : lang === 'es' ? 'soluciones' : 'solutions'
 
   const openCTA = (slug: string) => {
-    setActiveCTAConfig(ctaConfigs[slug] ?? null)
+    const config = ctaConfigs[slug]
+    if (config?.rdFormUrl) {
+      trackRDFormClick(config.ctaLabel ?? slug, slug)
+      window.open(config.rdFormUrl, '_blank', 'noopener,noreferrer')
+      return
+    }
+    setActiveCTASlug(slug)
     setWhatsappModalOpen(true)
   }
 
@@ -1159,8 +1166,8 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
       <PreWhatsAppModal
         lang={lang}
         open={whatsappModalOpen}
-        onClose={() => { setWhatsappModalOpen(false); setActiveCTAConfig(null) }}
-        rdFormUrl={activeCTAConfig?.rdFormUrl}
+        onClose={() => { setWhatsappModalOpen(false); setActiveCTASlug(undefined) }}
+        productSlug={activeCTASlug}
       />
       <ScrollToTop showThreshold={200} />
     </>

@@ -2,19 +2,34 @@
 // "disabled" = nenhum lead é enviado (fluxo do n8n ainda não publicado)
 // "n8n_webhook" = envia para N8N_LEADS_WEBHOOK_URL
 // "mock" = apenas loga no console (desenvolvimento)
-export const LEADS_TRANSPORT: "n8n_webhook" | "mock" | "disabled" = "disabled"
+//
+// Vem da variável de ambiente para que ligar o envio seja uma troca de
+// configuração no deploy, não uma alteração de código. Sem a variável, ou com
+// "n8n_webhook" sem URL configurada, fica desligado — publicar pela metade
+// faria cada visitante ver uma mensagem de falha.
+type LeadsTransport = "n8n_webhook" | "mock" | "disabled"
+
+function resolveLeadsTransport(): LeadsTransport {
+  const configured = import.meta.env.VITE_LEADS_TRANSPORT as LeadsTransport | undefined
+  if (configured !== "n8n_webhook" && configured !== "mock") return "disabled"
+  if (configured === "n8n_webhook" && !import.meta.env.VITE_N8N_LEAD_WEBHOOK) {
+    console.warn("[endpoints] VITE_LEADS_TRANSPORT=n8n_webhook sem VITE_N8N_LEAD_WEBHOOK — envio desligado.")
+    return "disabled"
+  }
+  return configured
+}
+
+export const LEADS_TRANSPORT: LeadsTransport = resolveLeadsTransport()
 // "strapi" = usa StrapiContentProvider (requer Strapi rodando)
 // "mock"   = usa dados estáticos locais (para Figma ou sem backend)
 export const CONTENT_TRANSPORT: "strapi" | "mock" = "strapi"
 
-// n8n Webhook URLs
-// ⚠️ Os IDs abaixo são de workflows de TESTE (/webhook-test/), que no n8n só
-// respondem enquanto alguém está com o editor aberto — e hoje devolvem 404.
-// Enquanto os workflows definitivos não forem publicados, LEADS_TRANSPORT fica
-// em "disabled". Ao publicar: trocar /webhook-test/ por /webhook/, conferir os
-// IDs e voltar LEADS_TRANSPORT para "n8n_webhook".
-export const N8N_LEADS_WEBHOOK_URL = "https://n8n.jtech.com.br/webhook-test/a6d72fc2-72d7-4a74-ad39-f8110d25bd4d"
-export const N8N_CONTENT_WEBHOOK_URL = "https://n8n.jtech.com.br/webhook-test/cc35da21-d044-45a1-88c5-b4952ac754cf"
+// n8n Webhook URL — endereço de produção do fluxo de leads, publicado no n8n.
+// Deve conter /webhook/, nunca /webhook-test/: o endereço de teste só responde
+// enquanto alguém está com o editor do n8n aberto.
+// É esse fluxo que registra a conversão na RD Station, usando o form_name do
+// payload como conversion_identifier.
+export const N8N_LEADS_WEBHOOK_URL = import.meta.env.VITE_N8N_LEAD_WEBHOOK ?? ""
 
 // Strapi CMS URL - Configured via VITE_CMS_URL environment variable
 // Default: http://localhost:1337 (dev) or https://conteudo.jtech.com.br (prod)
@@ -22,8 +37,18 @@ export const N8N_CONTENT_WEBHOOK_URL = "https://n8n.jtech.com.br/webhook-test/cc
 // Analytics configuration
 export const ANALYTICS_TOOL: "hotjar" | "clarity" = "hotjar"
 
-// GTM Container ID - Replace with your actual GTM ID
-export const GTM_CONTAINER_ID = "GTM-XXXXXXX"
+// GTM Container ID — o contêiner do Google Tag Manager.
+// Fica em código, e não em variável de ambiente, pelo mesmo motivo dos IDs
+// abaixo: não é segredo (aparece no HTML de toda página) e alterar variável de
+// CI/CD exige papel de Maintainer no GitLab, o que travava a instalação.
+// VITE_GTM_ID, quando definida com um valor real, tem prioridade sobre esta.
+export const GTM_CONTAINER_ID = "GTM-WLMW7J68"
+
+// Script de rastreamento da RD Station — o "loader" gerado no painel da conta.
+// Não é segredo: o mesmo endereço fica visível no HTML de qualquer site que o
+// use. Sobe só após o aceite de cookies de marketing (ver src/lib/rdstation.ts).
+export const RD_STATION_LOADER_URL =
+  "https://d335luupugsy2.cloudfront.net/js/loader-scripts/aa60ae92-787d-4b4d-adcc-4bca16eacffc-loader.js"
 
 // Google Analytics 4 Measurement ID - Replace with your actual GA4 ID
 export const GA4_MEASUREMENT_ID = "G-XXXXXXXXXX"

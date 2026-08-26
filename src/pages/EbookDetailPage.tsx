@@ -144,7 +144,7 @@ export function EbookDetailPage({ lang, slug }: EbookDetailPageProps) {
           name: formData.name,
           email: formData.email,
           form_type: "ebook",
-          form_name: "ebook-detail",
+          form_name: `ebook_${ebook.slug}`,
           product_interest: ebook.title[lang],
           // ✅ LGPD: Include consent data
           ...consentData,
@@ -152,7 +152,7 @@ export function EbookDetailPage({ lang, slug }: EbookDetailPageProps) {
         lang
       ).catch((err) => console.error("Error submitting ebook lead:", err))
 
-      trackFormSubmit("ebook", "Ebook Download Form")
+      trackFormSubmit("ebook", `ebook_${ebook.slug}`)
 
       setModalOpen(false)
       setFormData({ name: "", email: "" })
@@ -248,7 +248,7 @@ export function EbookDetailPage({ lang, slug }: EbookDetailPageProps) {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form id={`ebook_${ebook.slug}`} name={`ebook_${ebook.slug}`} onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label htmlFor="name">{t(lang, "contact.form.name")} *</Label>
               <Input

@@ -12,12 +12,16 @@ interface PreWhatsAppModalProps {
   open: boolean
   onClose: () => void
   lang: Lang
-  rdFormUrl?: string
+  /** Slug do produto/módulo cujo CTA abriu o modal — entra no identificador do
+   *  formulário, para a RD separar a origem da conversão. */
+  productSlug?: string
 }
 
-export function PreWhatsAppModal({ open, onClose, lang, rdFormUrl }: PreWhatsAppModalProps) {
+export function PreWhatsAppModal({ open, onClose, lang, productSlug }: PreWhatsAppModalProps) {
   const [form, setForm] = useState({ name: "", email: "", company: "", role: "", phone: "" })
   const [loading, setLoading] = useState(false)
+
+  const formId = `pre_whatsapp_${productSlug ?? "geral"}`
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
@@ -28,30 +32,29 @@ export function PreWhatsAppModal({ open, onClose, lang, rdFormUrl }: PreWhatsApp
     setLoading(true)
 
     try {
-      await submitPreWhatsAppLead({ ...form, source: "pre-whatsapp" })
-      trackFormSubmit("pre_whatsapp", "pre-whatsapp-modal")
+      await submitPreWhatsAppLead(
+        { ...form, source: formId, product_interest: productSlug },
+        lang
+      )
+      trackFormSubmit("pre_whatsapp", formId)
     } catch {
       // silently continue
     }
 
     onClose()
 
-    if (rdFormUrl) {
-      window.open(rdFormUrl, '_blank', 'noopener,noreferrer')
-    } else {
-      openWhatsApp(
-        {
-          name: form.name,
-          email: form.email,
-          company: form.company,
-          role: form.role,
-          phone: form.phone,
-          page: "modal",
-          language: lang,
-        },
-        lang
-      )
-    }
+    openWhatsApp(
+      {
+        name: form.name,
+        email: form.email,
+        company: form.company,
+        role: form.role,
+        phone: form.phone,
+        page: "modal",
+        language: lang,
+      },
+      lang
+    )
 
     setLoading(false)
   }
@@ -64,7 +67,7 @@ export function PreWhatsAppModal({ open, onClose, lang, rdFormUrl }: PreWhatsApp
           <DialogDescription>{t(lang, "prewhatsapp.subtitle")}</DialogDescription>
         </DialogHeader>
         <DialogBody>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form id={formId} name={formId} onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="name">{t(lang, "prewhatsapp.name")} *</Label>
             <Input
@@ -125,7 +128,7 @@ export function PreWhatsAppModal({ open, onClose, lang, rdFormUrl }: PreWhatsApp
               {t(lang, "prewhatsapp.close")}
             </Button>
             <Button type="submit" className="flex-1" disabled={loading}>
-              {loading ? t(lang, "common.loading") : rdFormUrl ? t(lang, "prewhatsapp.cta_rd") : t(lang, "prewhatsapp.cta")}
+              {loading ? t(lang, "common.loading") : t(lang, "prewhatsapp.cta")}
             </Button>
           </div>
         </form>

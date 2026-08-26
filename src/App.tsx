@@ -3,6 +3,7 @@ import { Lang, getCurrentLangFromHash, defaultLang } from "./lib/i18n"
 import { matchRoute } from "./lib/routes"
 import { captureUTMParams } from "./lib/utm"
 import { initializeGTM, setDefaultConsent, updateConsentMode } from "./lib/gtm"
+import { initializeRDStation } from "./lib/rdstation"
 import {
   initializeAnalytics,
   trackPageView,
@@ -33,7 +34,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<string>("home")
   const [params, setParams] = useState<Record<string, string>>({})
 
-  // Prevent duplicated initialization (GTM/Analytics/Scroll)
+  // Prevent duplicated initialization (Analytics/Scroll)
   const analyticsInitializedRef = useRef(false)
   const cleanupScrollRef = useRef<null | (() => void)>(null)
 
@@ -41,13 +42,20 @@ export default function App() {
     // Consent Mode: nega tudo antes de qualquer tag do Google subir
     setDefaultConsent()
 
+    // O GTM sobe em toda visita, logo após o consent default — é o modelo padrão
+    // do Google. Ele próprio não grava cookie: quem decide o que cada tag pode
+    // armazenar são os sinais do Consent Mode v2 acima, atualizados no aceite.
+    // Condicionar a carga ao aceite zerava o dado de quem ignora o banner e
+    // deixava o contêiner invisível para o Tag Assistant.
+    initializeGTM()
+
     // Capture UTMs on load (hash router case)
     captureUTMParams()
 
+    // Hotjar e Clarity não entendem Consent Mode — seguem presos ao aceite.
     const enableAnalyticsIfAllowed = () => {
       const preferences = getConsentPreferences()
       if (preferences?.analytics && !analyticsInitializedRef.current) {
-        initializeGTM()
         initializeAnalytics()
         cleanupScrollRef.current = setupScrollTracking()
         analyticsInitializedRef.current = true
@@ -66,6 +74,7 @@ export default function App() {
     const handleConsentUpdate = () => {
       const preferences = getConsentPreferences()
       if (preferences) updateConsentMode(preferences)
+      initializeRDStation()
       enableAnalyticsIfAllowed()
       disableAnalyticsIfRevoked()
     }
@@ -75,6 +84,9 @@ export default function App() {
     // Initial check — aplica a escolha já salva de visitas anteriores
     const savedPreferences = getConsentPreferences()
     if (savedPreferences) updateConsentMode(savedPreferences)
+    // O script da RD grava cookie de identificação: entra pela categoria de
+    // marketing, não pela de analytics. A própria função checa o consentimento.
+    initializeRDStation()
     enableAnalyticsIfAllowed()
 
     return () => {

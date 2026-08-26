@@ -1,4 +1,5 @@
 import { ConsentPreferences } from "./consent"
+import { GTM_CONTAINER_ID } from "./endpoints"
 
 declare global {
   interface Window {
@@ -45,9 +46,16 @@ export function updateConsentMode(preferences: ConsentPreferences): void {
   })
 }
 
+/** O valor de exemplo que acompanha os arquivos .env; não é um contêiner real. */
+const GTM_PLACEHOLDER = "GTM-XXXXXXX"
+
 export function initializeGTM(): void {
-  const gtmId = import.meta.env.VITE_GTM_ID
-  if (!gtmId || gtmId === "GTM-XXXXXXX") return
+  // A variável de ambiente vence quando traz um contêiner de verdade; caso
+  // contrário vale o do código. Assim um .env.production esquecido no valor de
+  // exemplo não derruba o tracking em silêncio, que foi o que aconteceu antes.
+  const fromEnv = import.meta.env.VITE_GTM_ID
+  const gtmId = fromEnv && fromEnv !== GTM_PLACEHOLDER ? fromEnv : GTM_CONTAINER_ID
+  if (!gtmId || gtmId === GTM_PLACEHOLDER) return
 
   if (document.getElementById("gtm-script")) return
 
