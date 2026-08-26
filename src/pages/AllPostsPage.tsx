@@ -70,10 +70,8 @@ export function AllPostsPage({ lang }: AllPostsPageProps) {
     const fetchPosts = async () => {
       setLoading(true)
       try {
-        console.log('[AllPostsPage] Fetching all posts...')
         const provider = getContentProvider()
         const postsData = await provider.getPosts(lang, 100)
-        console.log('[AllPostsPage] Posts fetched:', postsData.length)
         
         setPosts(postsData)
         setFilteredPosts(postsData)
@@ -84,7 +82,6 @@ export function AllPostsPage({ lang }: AllPostsPageProps) {
           lang, 
           t(lang, "content.category.all") || "Todos"
         )
-        console.log('[AllPostsPage] Dynamic categories:', dynamicCategories)
         setCategories(dynamicCategories)
         
       } catch (error) {
@@ -100,7 +97,6 @@ export function AllPostsPage({ lang }: AllPostsPageProps) {
   useEffect(() => {
     const params = parseHashParams(window.location.hash)
     if (params.category) {
-      console.log('[AllPostsPage] Category from URL:', params.category)
       setSelectedCategory(params.category)
     } else {
       setSelectedCategory("all")
@@ -113,7 +109,6 @@ export function AllPostsPage({ lang }: AllPostsPageProps) {
 
     // ✅ Filtro de categoria usando sistema centralizado
     result = filterPostsByCategory(result, selectedCategory)
-    console.log('[AllPostsPage] After category filter:', selectedCategory, '→', result.length, 'posts')
 
     // Filtro de busca
     if (searchQuery.trim()) {

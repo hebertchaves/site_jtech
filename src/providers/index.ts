@@ -4,14 +4,10 @@ import { StrapiContentProvider } from "./strapiContentProvider"
 import { CONTENT_TRANSPORT } from "../lib/endpoints"
 
 export function getContentProvider(): ContentProvider {
-  console.log('[getContentProvider] CONTENT_TRANSPORT:', CONTENT_TRANSPORT)
-
   if (CONTENT_TRANSPORT === "strapi") {
-    console.log('[getContentProvider] Using StrapiContentProvider')
     return new StrapiContentProvider()
   }
 
-  console.log('[getContentProvider] Using MockContentProvider')
   return new MockContentProvider()
 }
 

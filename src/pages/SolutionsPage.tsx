@@ -528,10 +528,7 @@ export function SolutionsPage({ lang }: SolutionsPageProps) {
   useEffect(() => {
     getContentProvider()
       .getProductCTAConfigs()
-      .then(configs => {
-        console.log('[CTA] configs carregados:', configs)
-        setCTAConfigs(configs)
-      })
+      .then(setCTAConfigs)
       .catch(err => console.warn('[CTA] falha ao carregar configs:', err))
   }, [])
 
