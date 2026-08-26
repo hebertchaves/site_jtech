@@ -175,22 +175,28 @@ providenciar**: sem ele, os IDs do Ads e do Analytics não têm onde ser usados.
 
 > **Não é preciso colar o snippet no HTML.** O trecho que o Google (e as agências)
 > mandam inserir no `<head>` e logo após o `<body>` **já está implementado** em
-> `src/lib/gtm.ts`: o site injeta o mesmo `<script>` e o mesmo `<noscript>`,
-> lendo o ID de uma variável. Colar o código à mão no `index.html` criaria uma
-> segunda instalação do mesmo contêiner, com eventos duplicados — e sem passar
-> pelo controle de consentimento.
+> `src/lib/gtm.ts`: o site injeta o mesmo `<script>` e o mesmo `<noscript>`.
+> Colar o código à mão no `index.html` criaria uma segunda instalação do mesmo
+> contêiner, com eventos duplicados.
 
 | | |
 |---|---|
 | **O que enviar** | O ID do contêiner do Google Tag Manager |
 | **Formato** | `GTM-XXXXXXX` — atual: `GTM-WLMW7J68` |
-| **Onde é aplicado** | Variável `FRONTEND_ENV_PRODUCTION` no GitLab, na linha `VITE_GTM_ID` |
-| **Quem aplica** | Desenvolvimento ou infraestrutura |
+| **Onde é aplicado** | `src/lib/endpoints.ts`, em `GTM_CONTAINER_ID` |
+| **Quem aplica** | Desenvolvimento |
 | **Precisa republicar?** | Sim — o valor entra no site durante a publicação |
 
-Enquanto essa variável estiver com o valor de exemplo, o site **não carrega o
-GTM**. Isso é proposital: evita que uma configuração pela metade dispare medição
-errada. Trocar o valor sem rodar a publicação também não surte efeito.
+O ID fica em código, junto dos outros identificadores de medição, e não em
+variável de ambiente. Ele não é segredo: aparece no HTML de toda página. Manter
+em variável de CI/CD exigia papel de *Maintainer* no GitLab para qualquer troca,
+e foi o que deixou o contêiner fora do ar sem ninguém perceber — o valor de
+exemplo permaneceu na configuração de produção e o site simplesmente não
+carregava o GTM.
+
+A variável `VITE_GTM_ID` continua funcionando e **tem prioridade**, desde que
+traga um contêiner de verdade. Deixada no valor de exemplo, é ignorada em favor
+do ID do código, para que uma configuração esquecida não derrube a medição.
 
 > ⚠️ **Avisar a infraestrutura antes de aplicarem a Content-Security-Policy.** A
 > política prevista bloqueia scripts de terceiros e derrubaria o GTM. Ela precisa

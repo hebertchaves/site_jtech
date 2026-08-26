@@ -37,8 +37,12 @@ export const N8N_LEADS_WEBHOOK_URL = import.meta.env.VITE_N8N_LEAD_WEBHOOK ?? ""
 // Analytics configuration
 export const ANALYTICS_TOOL: "hotjar" | "clarity" = "hotjar"
 
-// GTM Container ID - Replace with your actual GTM ID
-export const GTM_CONTAINER_ID = "GTM-XXXXXXX"
+// GTM Container ID — o contêiner do Google Tag Manager.
+// Fica em código, e não em variável de ambiente, pelo mesmo motivo dos IDs
+// abaixo: não é segredo (aparece no HTML de toda página) e alterar variável de
+// CI/CD exige papel de Maintainer no GitLab, o que travava a instalação.
+// VITE_GTM_ID, quando definida com um valor real, tem prioridade sobre esta.
+export const GTM_CONTAINER_ID = "GTM-WLMW7J68"
 
 // Script de rastreamento da RD Station — o "loader" gerado no painel da conta.
 // Não é segredo: o mesmo endereço fica visível no HTML de qualquer site que o
