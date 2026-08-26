@@ -3,6 +3,7 @@ import { Lang, getCurrentLangFromHash, defaultLang } from "./lib/i18n"
 import { matchRoute } from "./lib/routes"
 import { captureUTMParams } from "./lib/utm"
 import { initializeGTM, setDefaultConsent, updateConsentMode } from "./lib/gtm"
+import { initializeRDStation } from "./lib/rdstation"
 import {
   initializeAnalytics,
   trackPageView,
@@ -73,6 +74,7 @@ export default function App() {
     const handleConsentUpdate = () => {
       const preferences = getConsentPreferences()
       if (preferences) updateConsentMode(preferences)
+      initializeRDStation()
       enableAnalyticsIfAllowed()
       disableAnalyticsIfRevoked()
     }
@@ -82,6 +84,9 @@ export default function App() {
     // Initial check — aplica a escolha já salva de visitas anteriores
     const savedPreferences = getConsentPreferences()
     if (savedPreferences) updateConsentMode(savedPreferences)
+    // O script da RD grava cookie de identificação: entra pela categoria de
+    // marketing, não pela de analytics. A própria função checa o consentimento.
+    initializeRDStation()
     enableAnalyticsIfAllowed()
 
     return () => {

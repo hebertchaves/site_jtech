@@ -57,11 +57,21 @@ mais abaixo.
 | **Quem aplica** | Quem administra o n8n |
 | **Precisa republicar?** | Não — o token vive fora do site |
 
-> **O script de rastreamento da RD** (o que identifica a jornada do visitante
-> antes da conversão) pode ser instalado como tag de HTML personalizado **dentro
-> do GTM**, sem alteração de código. Depende do GTM estar ativo e de a
-> Content-Security-Policy liberar o domínio da RD (ver `PENDENCIAS_INFRA.md`,
-> item 4). Sob o banner de cookies, ele se enquadra em *marketing*.
+### Script de rastreamento
+
+O *loader* da conta identifica a jornada do visitante antes da conversão, ligando
+a sessão no site ao lead criado depois. **Já está instalado** (`src/lib/rdstation.ts`),
+com o endereço em `src/lib/endpoints.ts`.
+
+A RD instrui a colocá-lo antes do fechamento do `<body>`, e é onde ele entra —
+mas por código, não fixo no HTML, porque grava cookie de identificação: **só
+carrega depois do aceite da categoria de marketing** no banner. Um teste feito
+sem aceitar cookies não vai encontrá-lo na página, e isso é o comportamento
+esperado.
+
+Trocar a conta da RD significa trocar esse endereço, o que exige republicar o
+site. A Content-Security-Policy precisa liberar o domínio do loader (ver
+`PENDENCIAS_INFRA.md`, item 4).
 
 ### Landing pages externas — quando fazem sentido
 
@@ -352,6 +362,11 @@ dele.
 > **Decidido em 25/08/2026:** a conversão acontece no site, com formulário
 > nativo entregue à RD pelo n8n; landing pages externas ficam reservadas a
 > campanhas de mídia paga. O GTM carrega em toda visita, com Consent Mode v2.
+>
+> **Confirmado pelo marketing em 26/08/2026:** a convenção de nomes dos
+> formulários fica como está, e o script de rastreamento da RD foi fornecido e
+> instalado. A montagem das tags dentro do contêiner é feita por eles, depois de
+> o contêiner subir.
 
 Os valores marcados como "republicar: sim" entram no ar junto com a próxima
 publicação do site. Vale agrupá-los para não fazer três publicações seguidas.

@@ -40,6 +40,12 @@ export const ANALYTICS_TOOL: "hotjar" | "clarity" = "hotjar"
 // GTM Container ID - Replace with your actual GTM ID
 export const GTM_CONTAINER_ID = "GTM-XXXXXXX"
 
+// Script de rastreamento da RD Station — o "loader" gerado no painel da conta.
+// Não é segredo: o mesmo endereço fica visível no HTML de qualquer site que o
+// use. Sobe só após o aceite de cookies de marketing (ver src/lib/rdstation.ts).
+export const RD_STATION_LOADER_URL =
+  "https://d335luupugsy2.cloudfront.net/js/loader-scripts/aa60ae92-787d-4b4d-adcc-4bca16eacffc-loader.js"
+
 // Google Analytics 4 Measurement ID - Replace with your actual GA4 ID
 export const GA4_MEASUREMENT_ID = "G-XXXXXXXXXX"
 

@@ -148,11 +148,11 @@ CloudFront → distribuição `EU8RBW6EG8XCB` → **Response headers policy**:
 
 ```
 Content-Security-Policy: default-src 'self';
-  script-src 'self' 'unsafe-inline' https://www.googletagmanager.com;
+  script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://d335luupugsy2.cloudfront.net;
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: https://conteudo.sansys.app https://www.googletagmanager.com https://www.google-analytics.com;
   font-src 'self';
-  connect-src 'self' https://cms.jtech.com.br https://n8n.jtech.com.br https://www.google-analytics.com https://www.googletagmanager.com;
+  connect-src 'self' https://cms.jtech.com.br https://n8n.jtech.com.br https://www.google-analytics.com https://www.googletagmanager.com https://*.rdstation.com.br https://*.rdops.systems;
   frame-src https://www.youtube.com https://player.vimeo.com;
   frame-ancestors 'none'; base-uri 'self'; object-src 'none'
 Referrer-Policy: strict-origin-when-cross-origin
@@ -164,6 +164,13 @@ Permissions-Policy: geolocation=(), microphone=(), camera=()
 > tipo que ninguém relaciona à política de segurança semanas depois. Por isso os
 > domínios do Google constam acima. Se o GTM carregar outras tags (Ads, Hotjar,
 > pixels), cada domínio novo também precisa entrar.
+>
+> ⚠️ **O script de rastreamento da RD Station também já está no site.** Ele é
+> servido de `d335luupugsy2.cloudfront.net` e conversa com os domínios da RD,
+> daí as entradas acrescentadas em `script-src` e `connect-src`. O script só
+> carrega para quem aceitou a categoria de marketing no banner, então um teste
+> feito sem aceitar cookies não vai flagrar o bloqueio — conferir com o aceite
+> dado.
 
 Duas notas sobre as permissões acima:
 
