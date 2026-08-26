@@ -318,6 +318,15 @@ montar a automação sem depender de novas alterações no site:
 - **Consentimento** — o que o visitante aceitou no banner de cookies, no momento
   do envio
 - **Idioma e data/hora** do envio
+- **Rastreamento da RD** — `rd_client_tracking_id` e `rd_traffic_source`, lidos
+  dos cookies `rdtrk` e `__trf.src` que o loader grava no navegador
+
+> ⚠️ **Os dois últimos campos precisam ser repassados à API de conversões.** A
+> conversão é criada pelo n8n, do servidor, que não enxerga os cookies do
+> visitante. Sem repassá-los, o lead chega à RD **sem a origem de tráfego** —
+> e o script de rastreamento instalado no site deixa de servir para atribuição
+> de lead. Vêm vazios quando o visitante não aceitou cookies de marketing, caso
+> em que não há atribuição a preservar.
 
 > **Os e-books não dependem do n8n.** Quem preenche o formulário para baixar um
 > material fica registrado direto no Strapi, em *Ebook Lead*, com nome, e-mail,

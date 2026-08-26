@@ -2,6 +2,7 @@ import { Lang, t } from "./i18n"
 import { getAttribution, UTMParams } from "./utm"
 import { LEADS_TRANSPORT, N8N_LEADS_WEBHOOK_URL, ENVIRONMENT } from "./endpoints"
 import { getConsentPreferences } from "./consent"
+import { getRDTrackingIds, RDTrackingIds } from "./rdstation"
 
 /** Código de erro devolvido quando o transporte de leads está congelado. */
 export const LEAD_TRANSPORT_DISABLED = "lead_transport_disabled"
@@ -38,6 +39,13 @@ export interface LeadPayload {
   // Environment
   environment: string
 
+  // Rastreamento da RD Station — lido dos cookies de primeira parte do loader.
+  // O n8n repassa estes campos à API de conversões; sem eles a conversão chega
+  // sem a origem de tráfego coletada no navegador. Ausentes quando o visitante
+  // não aceitou cookies de marketing.
+  rd_client_tracking_id?: string
+  rd_traffic_source?: string
+
   // UTMs
   utm_source?: string
   utm_medium?: string
@@ -56,6 +64,7 @@ export type LeadInput = Omit<
   | "timestamp"
   | "consent_snapshot"
   | "environment"
+  | keyof RDTrackingIds
   | keyof UTMParams
 >
 
@@ -79,6 +88,7 @@ export async function submitLead(
       marketing: !!consent.marketing,
     },
     environment: ENVIRONMENT,
+    ...getRDTrackingIds(),
     ...attribution,
   }
 

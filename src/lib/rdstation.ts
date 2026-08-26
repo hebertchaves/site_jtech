@@ -26,3 +26,44 @@ export function initializeRDStation(): void {
   script.src = RD_STATION_LOADER_URL
   document.body.appendChild(script)
 }
+
+export interface RDTrackingIds {
+  rd_client_tracking_id?: string
+  rd_traffic_source?: string
+}
+
+function readCookie(name: string): string | undefined {
+  const match = document.cookie.match(
+    new RegExp("(?:^|; )" + name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "=([^;]*)")
+  )
+  return match ? decodeURIComponent(match[1]) : undefined
+}
+
+/**
+ * Identificadores que o loader da RD grava no navegador.
+ *
+ * A conversão é criada pelo n8n, do servidor, que não enxerga estes cookies —
+ * sem repassá-los, o lead chega à RD sem a origem de tráfego que o script
+ * coletou aqui, e o rastreamento não serve para atribuição.
+ *
+ * Vêm vazios quando o visitante não aceitou cookies de marketing: aí o loader
+ * não subiu e não há o que atribuir.
+ */
+export function getRDTrackingIds(): RDTrackingIds {
+  // rdtrk guarda um JSON: {"id":"<uuid>"}
+  let clientTrackingId: string | undefined
+  const rdtrk = readCookie("rdtrk")
+  if (rdtrk) {
+    try {
+      clientTrackingId = JSON.parse(rdtrk)?.id
+    } catch {
+      // formato inesperado: melhor mandar nada do que mandar lixo
+    }
+  }
+
+  return {
+    rd_client_tracking_id: clientTrackingId,
+    // __trf.src viaja como está; quem decodifica é a RD
+    rd_traffic_source: readCookie("__trf.src"),
+  }
+}
